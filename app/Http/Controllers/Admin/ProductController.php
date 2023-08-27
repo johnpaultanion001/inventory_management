@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Validator;
 use File;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailNotification;
 
 
 
@@ -138,6 +140,19 @@ class ProductController extends Controller
             ]);
             $product->stock = $request->stock;
 
+            //email sending
+            if($product->stock < 6){
+                $emailNotif = [
+                    'msg'              => "PRODUCT LOWER STOCK",
+                    'code'              =>  $product->code,
+                    'description'              =>   $product->description,
+                    'stock'              =>   $product->stock,
+                    'updated_by'              =>  auth()->user()->name,
+                ];
+
+                Mail::to('johnpaultanion001@gmail.com')
+                ->send(new EmailNotification($emailNotif));
+            }
         }
 
         $product->description = $request->description;

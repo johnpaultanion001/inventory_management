@@ -17,7 +17,7 @@ class ExcelSeeder extends Seeder
     public function run()
     {
         $con = Storage::disk('import');
-        $files = $con->files('products');
+        $files = $con->files('sales');
         foreach ($files as $file) {
             Excel::import(new DataImport, storage_path('import/'.$file));
         }

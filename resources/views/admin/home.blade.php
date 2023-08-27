@@ -10,7 +10,7 @@
 @section('content')
 <div class="container-fluid py-4">
       <div class="row">
-        
+
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
@@ -103,10 +103,46 @@
             </div>
           </div>
         </div>
+        <div class="col-xl-12 mt-3">
+          <div class="card">
+            <div class="card-body">
+            <h4 class="text-sm mb-0 text-capitalize text-primary">Product lower stock ( < 5 )</h4>
+                <div class="card-body">
+                    <div class="table-responsive">
+                            <table class="table display" cellspacing="0" width="100%">
+                                <thead class="thead-light text-center">
+                                    <tr>
+                                        <th scope="col">Product Code</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-uppercase font-weight-bold text-center">
+                                    @foreach($productsLowerStocks as $product)
+                                        <tr>
+
+                                            <td>
+                                                {{  $product->code ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{  $product->description ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{  $product->stock ?? '' }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+          </div>
+        </div>
       </div>
-   
-   
-      
+
+
+
     </div>
     @section('footer')
         @include('../partials.admin.footer')
@@ -115,7 +151,7 @@
 
 
 @section('script')
-<script> 
+<script>
   $(function(){
         var dataSales = JSON.parse(`<?php echo $sales_results; ?>`);
         var salesChart = $("#salesChart");
@@ -123,7 +159,7 @@
         var dataSold = JSON.parse(`<?php echo $sold_results; ?>`);
         var soldChart = $("#soldChart");
 
-    
+
 
         var dataSales = {
             labels: dataSales.label,
@@ -143,7 +179,7 @@
                 pointHoverBorderColor: "rgba(78, 115, 223, 1)",
                 pointHitRadius: 10,
                 pointBorderWidth: 2,
-                
+
             }
             ]
         };
@@ -166,7 +202,7 @@
                 pointHoverBorderColor: "rgba(78, 115, 223, 1)",
                 pointHitRadius: 10,
                 pointBorderWidth: 2,
-                
+
             }
             ]
         };

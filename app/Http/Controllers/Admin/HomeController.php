@@ -30,6 +30,7 @@ class HomeController extends Controller
         if($userrole != 'customer'){
 
             $products = Product::latest()->get();
+            $productsLowerStocks = Product::latest()->where('stock', '<', 6)->get();
             $products_today = Product::whereDay('created_at', '=', date('d'))->get();
 
             $customers = User::where('role', 'customer')->get();
@@ -69,7 +70,7 @@ class HomeController extends Controller
 
 
 
-            return view('admin.home', compact('products','products_today','customers','customers_today', 'orders','orders_today','sales','sales_today','sales_results','sold_results'));
+            return view('admin.home', compact('productsLowerStocks','products','products_today','customers','customers_today', 'orders','orders_today','sales','sales_today','sales_results','sold_results'));
         }
         return abort('403');
     }

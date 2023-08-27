@@ -39,7 +39,7 @@ class DataImport implements ToCollection, WithHeadingRow
                 'qty' => $row['quantity'],
                 'amount' => $row['amount'],
                 'price' => $row['price'],
-                //'created_at' => $this->parseImportDate($row['order_date']),
+                'created_at' => $this->parseImportDate($row['order_date']),
             ];
 
             $stock_histories = [

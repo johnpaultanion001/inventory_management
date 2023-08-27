@@ -26,20 +26,19 @@
 <strong class="center" style="font-size: 20px;">{{ $content['msg'] }}</strong><br><br>
 <div class="row">
     <div class="col-6">
-        <strong style="font-size: 20px;">HUNTER HERO</strong><br>
-        <strong style="font-size: 15px;">Brgy Lourdes , Antipolo City</strong>
+        <strong style="font-size: 20px;">TESTING LOGO</strong><br>
+        <strong style="font-size: 15px;">sample addres test test</strong>
         <br><br><br>
-        <strong style="font-size: 15px;">{{ $content['name'] }}</strong><br>
-        <strong style="font-size: 15px;">{{ $content['address'] }}</strong><br>
-        <strong style="font-size: 15px;">{{ $content['contact_number'] }}</strong><br>
-        <strong style="font-size: 15px;">{{ $content['email'] }}</strong>
+        <strong style="font-size: 15px;">CODE: {{ $content['code'] }}</strong><br>
+        <strong style="font-size: 15px;">DESC: {{ $content['description'] }}</strong><br>
+        <strong style="font-size: 15px;">STOCK: {{ $content['stock'] }}</strong><br>
+        <strong style="font-size: 15px;">UPDATED BY: {{ $content['updated_by'] }}</strong><br>
     </div>
 </div>
 <div class="row">
     <div class="col-6">
-        <strong style="font-size: 12px;">Order # {{ $content['order_number'] }}  <br>  Placed On {{ $content['placed_on'] }} <br> <strong style="font-size: 15px;">{{ $content['delivery'] }}</strong></strong><br><br><br>
-        <strong style="font-size: 15px;">Login into the website to more details. https://hunter-hero.com/</strong><br><br>
-        <strong style="font-size: 12px;">Thank you! <br> We appreciate your business</strong>
+         <strong style="font-size: 15px;">Login into the website to more details. https://test.com/</strong><br><br>
+        <strong style="font-size: 12px;">Thank you! <br> test email</strong>
     </div>
 </div>
 
