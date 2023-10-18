@@ -31,6 +31,7 @@ class DataImport implements ToCollection, WithHeadingRow
                 'area' => $row['area'],
                 'unit_price' => $row['unit_price'],
                 'price' => $row['price'],
+                'category_id' => "1",
             ];
 
             $order_products = [

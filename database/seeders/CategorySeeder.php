@@ -18,25 +18,13 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name'              => 'CAN FOODS',
+                'name'              => 'Food Area',
 
                 'created_at'          => date("Y-m-d H:i:s"),
                 'updated_at'          => date("Y-m-d H:i:s"),
             ],
             [
-                'name'             => 'SOFTDRINKS',
-
-                'created_at'          => date("Y-m-d H:i:s"),
-                'updated_at'          => date("Y-m-d H:i:s"),
-            ],
-            [
-                'name'             => 'SOLID FOODS',
-
-                'created_at'          => date("Y-m-d H:i:s"),
-                'updated_at'          => date("Y-m-d H:i:s"),
-            ],
-            [
-                'name'             => 'SNACKS',
+                'name'             => 'Soap Area',
 
                 'created_at'          => date("Y-m-d H:i:s"),
                 'updated_at'          => date("Y-m-d H:i:s"),

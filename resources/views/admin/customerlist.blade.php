@@ -26,8 +26,6 @@
                             <thead class="text-uppercase thead-white">
                                 <tr class="text-uppercase">
                                   <th  scope="col">Actions</th>
-                                  <th  scope="col">Account Status</th>
-                                  <th  scope="col">ID Image</th>
                                   <th  scope="col">NAME</th>
                                   <th  scope="col">EMAIL</th>
                                   <th  scope="col">CONTACT NUMBER</th>
@@ -42,27 +40,7 @@
                                   <td>
                                   <button type="button" name="edit" edit="{{  $customer->id ?? '' }}"  class="edit  btn btn-sm btn-info">Edit Info</button>
                                   </td>
-                                  <td>
-                                        <button type="button" name="status" status="{{  $customer->id ?? '' }}"
-                                            class="btn btn-sm
-                                            @if($customer->isApproved == true)
-                                                btn-success status
-                                            @else
-                                                btn-warning status
-                                            @endif">
-                                            @if($customer->isApproved == true)
-                                                APPROVED
-                                            @else
-                                                PENDING
-                                            @endif
-                                        </button>
-                                  </td>
-                                  <td>
-                                    <a href="{{URL::asset('/assets/img/id_image/'.$customer->id_image)}}" target="_blank">
-                                        <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/id_image/'.$customer->id_image)}}" />
-                                    </a>
 
-                                  </td>
                                   <td>
                                       {{  $customer->name ?? '' }}
                                   </td>

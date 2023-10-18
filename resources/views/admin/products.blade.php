@@ -25,6 +25,16 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <select name="unit_dd" id="unit_dd" class="select2" style="width: 100%;">
+                                        <option value="">FILTER UNIT</option>
+                                        <option value="PCS">PCS</option>
+                                        <option value="CS">CS</option>
+                                        <option value="CASE">CASE</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <select name="category_dd" id="category_dd" class="select2" style="width: 100%;">
                                         <option value="">FILTER CATEGORY</option>
                                         @foreach($categories as $category)
@@ -33,6 +43,8 @@
                                     </select>
                                 </div>
                             </div>
+
+
 
                         </div>
                     </div>
@@ -45,7 +57,7 @@
                                     <th  scope="col">UNIT</th>
                                     <th  scope="col">CODE</th>
                                     <th scope="col">DESCRIPTION</th>
-                                    <th scope="col">AREA</th>
+                                    <th scope="col">CATEGORY</th>
                                     <th scope="col">STOCK</th>
                                     <th scope="col">UNIT PRICE</th>
                                     <th scope="col">PRICE</th>
@@ -80,7 +92,7 @@
                                             {{\Illuminate\Support\Str::limit($product->description,50)}}
                                         </td>
                                         <td>
-                                            {{  $product->area ?? '' }}
+                                            {{  $product->category->name ?? '' }}
                                         </td>
 
                                         <td>
@@ -98,6 +110,20 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot class="text-uppercase font-weight-bold">
+                                <tr>
+                                    <th scope="col">DATE:</th>
+                                    <th scope="col">{{$ldate}}</th>
+                                    <th  scope="col">USER:</th>
+                                    <th  scope="col">{{auth()->user()->name}}</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -108,7 +134,7 @@
     <form method="post" id="myForm" class="contact-form">
         @csrf
         <div class="modal fade" id="formModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                     <h5 class="modal-title">Modal title</h5>
@@ -141,7 +167,11 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label">Unit:  <span class="text-danger">*</span></label>
-                                <input type="text" name="unit" id="unit" class="form-control disabled" >
+                                <select name="unit" id="unit" class="select2" style="width: 100%;">
+                                        <option value="PCS">PCS</option>
+                                        <option value="CS">CS</option>
+                                        <option value="CASE">CASE</option>
+                                </select>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-unit"></strong>
                                 </span>
@@ -149,10 +179,14 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="form-label">Area:  <span class="text-danger">*</span></label>
-                                <input type="text" name="area" id="area" class="form-control disabled" >
+                                <label class="form-label">Category:  <span class="text-danger">*</span></label>
+                                <select name="category" id="category" class="select2" style="width: 100%;">
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-area"></strong>
+                                    <strong id="error-category"></strong>
                                 </span>
                             </div>
                         </div>
@@ -247,7 +281,11 @@
     $('.select2').select2();
 
     $('#category_dd').on('change', function () {
-      table.columns(3).search( this.value ).draw();
+      table.columns(5).search( this.value ).draw();
+    });
+
+    $('#unit_dd').on('change', function () {
+      table.columns(2).search( this.value ).draw();
     });
 
     });

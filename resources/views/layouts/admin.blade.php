@@ -14,7 +14,7 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
-    
+
     <!-- css -->
     <!-- Icons -->
     <link href="{{ asset('/admin/css/nucleo-icons.css') }}" rel="stylesheet" />
@@ -30,8 +30,8 @@
     <!-- CSS Files -->
    <link href="{{ asset('/admin/css/material-dashboard.css?v=3.0.0') }}" type="text/css" rel="stylesheet" />
 
-    
-    
+
+
     <!-- datatables -->
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -43,7 +43,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
 
-    
+
     @yield('third_party_stylesheets')
     @stack('page_css')
 
@@ -62,7 +62,7 @@
         }
         .select2 {
             border: solid 1px gray;
-            
+
             border-radius: 4px;
             color: #111;
             padding: 0.625rem 0.75rem;
@@ -76,7 +76,7 @@
         font-weight: bold;
         position: absolute;
         }
-        
+
         .form-control:focus{
             border: solid 1px #111 !important;
         }
@@ -90,7 +90,7 @@
             padding: 0.625rem 0.75rem;
             line-height: 1.3 !important;
         }
-    
+
     </style>
 </head>
     <body class="g-sidenav-show " style="
@@ -103,13 +103,13 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
         @yield('sidebar')
 
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-               
+
                     @yield('navbar')
                     @yield('content')
                     @yield('footer')
 
-                    
-               
+
+
         </main>
 
         <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -143,7 +143,7 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
 
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-        
+
         <!-- datatables -->
         <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
@@ -156,10 +156,10 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
         <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
         <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 
-        
-        
+
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-        
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
@@ -167,9 +167,9 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
         <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://unpkg.com/@coreui/coreui@2.1.16/dist/js/coreui.min.js"></script>
-       
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-        
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
 
 
@@ -177,7 +177,7 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
         <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
         <script src="{{ asset('assets/vendor/demo/chart-area-demo.js') }}"></script>
         <script src="{{ asset('assets/vendor/demo/chart-pie-demo.js') }}"></script>
-        
+
 
 
 
@@ -199,20 +199,21 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
         language: {
             url: languages['{{ app()->getLocale() }}']
         },
-       
+
         order: [],
         scrollX: true,
         pageLength: 100,
         dom: 'lBfrtip<"actions">',
         buttons: [
-        
+
             {
             extend: 'excel',
             className: 'btn-dark btn-sm m-2',
             text: excelButtonTrans,
             exportOptions: {
                 columns: ':visible'
-            }
+            },
+            footer: true
             },
             {
             extend: 'pdf',
@@ -220,7 +221,8 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
             text: pdfButtonTrans,
             exportOptions: {
                 columns: ':visible'
-            }
+            },
+            footer: true
             },
             {
             extend: 'print',
@@ -228,17 +230,19 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
             text: printButtonTrans,
             exportOptions: {
                 columns: ':visible'
-            }
             },
-            
+            footer: true
+            },
+
             {
             extend: 'colvis',
             className: 'btn-dark btn-sm m-2',
             text: colvisButtonTrans,
             exportOptions: {
                 columns: ':visible'
-            }
-            
+            },
+            footer: true
+
             }
         ]
         });
@@ -264,7 +268,7 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
             if( itemInStock === false){
             $('.dropdown_list').show();
             itemInStock = true;
-            
+
             } else{
             $('.dropdown_list').hide();
             itemInStock = false;
@@ -283,7 +287,7 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
                     dataType:"json",
                     beforeSend:function(){
                     },
-                    
+
                     success:function(data){
                     location.href = data.success;
                     }

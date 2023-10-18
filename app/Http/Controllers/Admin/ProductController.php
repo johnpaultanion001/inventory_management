@@ -25,15 +25,17 @@ class ProductController extends Controller
 
             $products = Product::latest()->get();
             $categories = Category::latest()->get();
+            $ldate = date('M j , Y');
 
-            return view('admin.products', compact('products', 'categories'));
+            return view('admin.products', compact('products', 'categories','ldate'));
         }
         return abort('403');
     }
 
     public function detail_product()
     {
-        return view('admin.detail_product');
+        $categories = Category::latest()->get();
+        return view('admin.detail_product', compact('categories'));
     }
 
     public function scan_product($code)
@@ -42,6 +44,7 @@ class ProductController extends Controller
         return response()->json(
             [
                 "product" =>  $productWCode,
+                "category" => $productWCode->category->name,
                 "orders" =>  $productWCode->orders()->latest()->get(),
                 "stocks" =>  $productWCode->stocks()->latest()->get(),
             ],
@@ -58,7 +61,7 @@ class ProductController extends Controller
             'description' => ['required'],
             'code' => ['required'],
             'unit' => ['required'],
-            'area' => ['required'],
+            'category' => ['required'],
             'stock' => ['required','integer','min:1'],
             'unit_price' => ['required'],
             'price' => ['required'],
@@ -81,7 +84,7 @@ class ProductController extends Controller
             'description' => $request->input('description'),
             'code' => $request->input('code'),
             'unit' => $request->input('unit'),
-            'area' => $request->input('area'),
+            'category_id' => $request->input('category'),
             'stock' => $request->input('stock'),
             'unit_price' => $request->input('unit_price'),
             'price' => $request->input('price'),
@@ -108,7 +111,7 @@ class ProductController extends Controller
             'description' => ['required'],
             'code' => ['required'],
             'unit' => ['required'],
-            'area' => ['required'],
+            'category' => ['required'],
             'stock' => ['required','integer','min:1'],
             'unit_price' => ['required'],
             'price' => ['required'],
@@ -158,7 +161,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->code = $request->code;
         $product->unit = $request->unit;
-        $product->area = $request->area;
+        $product->category_id = $request->category;
 
         $product->unit_price = $request->unit_price;
         $product->price = $request->price;

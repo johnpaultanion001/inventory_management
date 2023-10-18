@@ -159,10 +159,69 @@ class OrderController extends Controller
         $labels = $chartSales->pluck('data')->toArray();
         $data = $chartSales->pluck('total_sales')->toArray();
         $datap = $chartSales->pluck('total_predict')->toArray();
+        $ldate = date('M j , Y');
 
 
-        return view('admin.sales_reports.sales_reports', compact('sales','title_filter','labels','data','datap'));
 
+        return view('admin.sales_reports.sales_reports', compact('sales','title_filter','labels','data','datap','chartSales','ldate'));
+
+    }
+
+    public function chart_reports($filter_date, Request $request){
+        $filter = $request->get('filter');
+
+        if($filter == 'daily'){
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+        }
+        elseif($filter == 'weekly'){
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+
+
+        }
+        elseif($filter == 'monthly'){
+            $list = OrderProduct::whereMonth('created_at', '=', $filter_date)->get();
+        }
+        elseif($filter == 'yearly'){
+            $list = OrderProduct::whereYear('created_at', '=', $filter_date)->get();
+
+        }
+        elseif($filter == 'all'){
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+
+        }
+        elseif($filter == 'fbd'){
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+
+        }
+        elseif($filter == 'home'){
+        $list = OrderProduct::where('product_code', '=', $filter_date)->get();
+
+        }
+        else{
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+
+        }
+
+
+
+        $sales = $list->sum('amount');
+        if($filter == 'home'){
+            $lm = OrderProduct::whereMonth(
+                'created_at', '=', Carbon::now()->subMonth()->month
+            )->get();
+            $predic = $lm->sum('amount');
+        }else{
+            $predic = $list->sum('amount') + $list->sum('price');
+        }
+
+        return response()->json(
+            [
+                'result' => $list,
+                'sales' => $sales,
+                'predic' => $predic,
+                'filter' => $filter,
+            ]
+        );
     }
 
 }

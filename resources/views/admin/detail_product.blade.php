@@ -42,7 +42,6 @@
                                     <th  scope="col">CODE</th>
                                     <th  scope="col">CATEGORY</th>
                                     <th scope="col">DESCRIPTION</th>
-                                    <th scope="col">AREA</th>
                                     <th scope="col">STOCK</th>
                                     <th scope="col">UNIT PRICE</th>
                                     <th scope="col">PRICE</th>
@@ -75,9 +74,6 @@
                                         </td>
 
                                         <td id="td_description">
-
-                                        </td>
-                                        <td  id="td_area">
 
                                         </td>
 
@@ -262,7 +258,11 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label">Unit:  <span class="text-danger">*</span></label>
-                                <input type="text" name="unit" id="unit" class="form-control disabled" >
+                                <select name="unit" id="unit" class="select2" style="width: 100%;">
+                                        <option value="PCS">PCS</option>
+                                        <option value="CS">CS</option>
+                                        <option value="CASE">CASE</option>
+                                </select>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-unit"></strong>
                                 </span>
@@ -270,10 +270,14 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="form-label">Area:  <span class="text-danger">*</span></label>
-                                <input type="text" name="area" id="area" class="form-control disabled" >
+                                <label class="form-label">Category:  <span class="text-danger">*</span></label>
+                                <select name="category" id="category" class="select2" style="width: 100%;">
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-area"></strong>
+                                    <strong id="error-category"></strong>
                                 </span>
                             </div>
                         </div>
@@ -355,6 +359,8 @@
 @section('script')
 <script>
     $(function () {
+
+
         $('#scan_code').focus();
 
         $('#scan_code').on("input", function() {
@@ -389,6 +395,7 @@
                                 $('#td_action').empty().append(buttons);
 
                             }
+                            $('#td_category').text(data.category);
                     })
                     var list_orders = "";
 
@@ -400,7 +407,7 @@
                                         <td>`+value.price+`</td>
                                         <td>`+value.qty+`</td>
                                         <td>`+value.amount+`</td>
-                                        <td>`+value.created_at+`</td>
+                                        <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
                                     </tr>
                             `;
                             console.log(value)
@@ -415,7 +422,7 @@
                                         <td>`+value.id+`</td>
                                         <td>`+value.stock+`</td>
                                         <td>`+value.remarks+`</td>
-                                        <td>`+value.created_at+`</td>
+                                        <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
                                     </tr>
                             `;
                             console.log(value)
@@ -435,7 +442,6 @@
             $('.input-group').addClass('is-filled');
             $('.current_img').show();
             $('.disabled').attr('readonly', false);
-            $('#category').attr('disabled', false);
             $('#added_section').hide();
             $('#image-section').show();
             var id = $(this).attr('edit');

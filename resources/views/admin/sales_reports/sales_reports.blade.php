@@ -82,6 +82,16 @@
                                         </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot class="text-uppercase font-weight-bold">
+                                <tr>
+                                    <th>DATE:</th>
+                                    <th>{{$ldate}}</th>
+                                    <th >USER:</th>
+                                    <th >{{auth()->user()->name}}</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -96,6 +106,84 @@
     </div>
 
 
+    <div class="modal fade" id="modalChart" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-uppercase">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-primary"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                            <div class="card-header p-3 pt-2">
+                                <div class="text-center pt-1 bg-gradient-primary shadow-primary text-white">
+                                    <h4 class="mb-0 text-white" id="sales">02</h4>
+                                    <p class="text-sm mb-0 text-capitalize">SALES</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                            <div class="card-header p-3 pt-2">
+                                <div class="text-center pt-1 bg-gradient-info shadow-primary text-white">
+                                    <h4 class="mb-0 text-white" id="predic">02</h4>
+                                    <p class="text-sm mb-0 text-capitalize">PREDICTION</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Product Orders</h3>
+                <div class="table-responsive">
+                    <table class="table display" id="table_chart" width="100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>ORDER ID</th>
+                                <th>PRODUCT</th>
+                                <th>PRICE</th>
+                                <th>SOLD</th>
+                                <th>AMOUNT</th>
+                                <th>ORDER AT</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-uppercase font-weight-bold" id="list_chart">
+                           <tr>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
 
     @section('footer')
         @include('../partials.admin.footer')
@@ -104,6 +192,7 @@
 
 
 @section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script src="{{ asset('js/chart.js') }}"></script>
 <script>
@@ -163,8 +252,8 @@ $(function () {
         },
     });
 
-    var ctx = document.getElementById('salesChart').getContext('2d');
-        var salesChart = new Chart(ctx, {
+    let ctx = document.getElementById('salesChart');
+     let salesChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: @json($labels),
@@ -193,15 +282,99 @@ $(function () {
                 }
             }
         });
+
+
+
+        ctx.addEventListener('click', function(evt) {
+        var firstPoint = salesChart.getElementAtEvent(evt)[0];
+            if (firstPoint) {
+                var label = salesChart.data.labels[firstPoint._index];
+                var value = salesChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+
+                // alert('Label: ' + label + "\nValue: " + value);
+
+                $('#modalChart').modal('show');
+                $('.modal-title').text('FILTER DATE: '+ label);
+
+                $.ajax({
+                    url :"/admin/chart_reports/"+label,
+                    data: { filter : $('#filter_dd').val()},
+                    dataType:"json",
+                    beforeSend:function(){
+                        //$("#action_button").attr("disabled", true);
+                    },
+                    success:function(data){
+                        //$("#action_button").attr("disabled", false);
+                        var chart_data = "";
+                        $('#sales').text(number_format(data.sales, 2,'.', ','));
+                        $('#predic').text(number_format(data.predic, 2,'.', ','));
+                        console.log(data.filter);
+                        $.each(data.result, function(key,value){
+                           var new_date = moment(value.created_at).format('DD-MM-YYYY');
+                            chart_data += `
+                                        <tr>
+                                            <td>
+                                                `+value.id+`
+                                            </td>
+                                            <td>
+                                                `+value.description+`
+                                            </td>
+                                            <td>
+                                                `+value.price+`
+                                            </td>
+                                            <td>
+                                                `+value.qty+`
+                                            </td>
+                                            <td>
+                                                `+value.amount+`
+                                            </td>
+                                            <td>
+                                                `+new_date+`
+                                            </td>
+                                        </tr>
+                            `;
+                        })
+                        $('#list_chart').empty().append(chart_data);
+                        $('#table_chart').DataTable({
+                            bDestroy: true,
+                            responsive: true,
+                            scrollY: 500,
+                            scrollCollapse: true,
+                            buttons: [
+                                {
+                                    extend: 'excel',
+                                    className: 'd-none',
+                                    title: title,
+                                    exportOptions: {
+                                        columns: ':visible'
+                                    }
+                                },
+                                {
+                                    extend: 'print',
+                                    title:  '<center>' + header + '</center>',
+                                    className: 'd-none',
+
+                                }
+                            ],
+                        });
+
+                    }
+                })
+            }
+
+
+        });
+
+
 });
 
 
 
-
+var filter_type = "";
 $('#filter_dd').on("change", function(event){
-        var date = $(this).val();
+        filter_type = $(this).val();
 
-        window.location.href = '/admin/sales_reports/'+date+'/'+date+'/'+date;
+        window.location.href = '/admin/sales_reports/'+filter_type+'/'+filter_type+'/'+filter_type;
 
 });
 

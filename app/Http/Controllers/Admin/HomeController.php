@@ -26,6 +26,8 @@ class HomeController extends Controller
 
     public function index()
     {
+        $ldate = date('M j , Y h:i A');
+
         $userrole = auth()->user()->role;
         if($userrole != 'customer'){
 
@@ -47,6 +49,7 @@ class HomeController extends Controller
             \DB::raw("SUM(amount) as amount"),
             \DB::raw("SUM(qty) as sold"),
             \DB::raw("product_code as product"))
+
             ->groupBy('product')
             ->orderBy('product', 'ASC')
             ->get();
@@ -54,14 +57,12 @@ class HomeController extends Controller
         $result_sold = [];
 
         foreach($data as $row) {
-            $product_name = Product::where('id', $row->product)->first();
-            $result_sales['label'][] = $product_name->description ?? '';
+            $result_sales['label'][] = $row->product ?? 'test';
             $result_sales['data'][] =  $row->amount;
         }
 
         foreach($data as $row) {
-            $product_name = Product::where('id', $row->product)->first();
-            $result_sold['label'][] = $product_name->description ?? '';
+            $result_sold['label'][] = $row->product ?? 'test';
             $result_sold['data'][] =  $row->sold;
         }
 
@@ -70,7 +71,7 @@ class HomeController extends Controller
 
 
 
-            return view('admin.home', compact('productsLowerStocks','products','products_today','customers','customers_today', 'orders','orders_today','sales','sales_today','sales_results','sold_results'));
+            return view('admin.home', compact('productsLowerStocks','products','products_today','customers','customers_today', 'orders','orders_today','sales','sales_today','sales_results','sold_results','ldate'));
         }
         return abort('403');
     }
