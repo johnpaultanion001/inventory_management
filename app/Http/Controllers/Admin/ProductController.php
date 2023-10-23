@@ -65,8 +65,7 @@ class ProductController extends Controller
             'stock' => ['required','integer','min:1'],
             'unit_price' => ['required'],
             'price' => ['required'],
-
-
+            'expiration' => ['required','date', 'after:today'],
             'image1' =>  ['mimes:png,jpg,jpeg,svg,bmp,ico'],
         ]);
 
@@ -88,6 +87,7 @@ class ProductController extends Controller
             'stock' => $request->input('stock'),
             'unit_price' => $request->input('unit_price'),
             'price' => $request->input('price'),
+            'expiration' => $request->input('expiration'),
 
             'image1' => $file_name_to_save1 ?? "",
         ]);
@@ -104,6 +104,13 @@ class ProductController extends Controller
         ]);
     }
 
+    public function stock(Product $product)
+    {
+        return response()->json([
+            'stock' =>   $product->stock,
+        ]);
+    }
+
     public function updateproduct(Request $request, Product $product)
     {
         date_default_timezone_set('Asia/Manila');
@@ -112,9 +119,7 @@ class ProductController extends Controller
             'code' => ['required'],
             'unit' => ['required'],
             'category' => ['required'],
-            'stock' => ['required','integer','min:1'],
-            'unit_price' => ['required'],
-            'price' => ['required'],
+            'expiration' => ['required','date', 'after:today'],
 
 
             'image1' =>  ['mimes:png,jpg,jpeg,svg,bmp,ico'],
@@ -135,13 +140,59 @@ class ProductController extends Controller
 
             $product->image1 = $file_name_to_save1;
         }
-        if($request->input('stock') != $product->stock){
+
+        $product->description = $request->description;
+        $product->code = $request->code;
+        $product->unit = $request->unit;
+        $product->category_id = $request->category;
+
+        $product->expiration = $request->expiration;
+        $product->save();
+
+        return response()->json([
+            'success' => 'Product Updated Successfully.',
+            "product" =>  $product,
+            "stocks" =>  $product->stocks()->latest()->get(),
+            "category" => $product->category->name,
+        ]);
+    }
+
+    public function update_stock(Request $request, Product $product)
+    {
+        date_default_timezone_set('Asia/Manila');
+        $validated =  Validator::make($request->all(), [
+            'manage_stock' => ['required','integer','min:1'],
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+
+        if($request->input('manage_stock') != $product->stock){
             \App\Models\StockHistory::create([
-                'product_code' => $request->code,
-                'stock' => $request->stock,
-                'remarks' => "Stock change from ".$product->stock." to ". $request->stock,
+                'product_code' => $product->code,
+                'stock' => $request->manage_stock,
+                'remarks' => "Stock change from ".$product->stock." to ". $request->manage_stock,
             ]);
-            $product->stock = $request->stock;
+
+            $manage_stock = (float)$request->input('manage_stock');
+            $stock = (float)$product->stock;
+
+            if($stock > $manage_stock){
+                $qty = $stock - $manage_stock;
+                $amount = $qty * $product->price;
+
+                \App\Models\OrderProduct::create([
+                    'product_code' => $product->code,
+                    'description' => $product->description,
+                    'qty' => $qty,
+                    'amount' => $amount,
+                    'price' => $product->price,
+                    'category' => $product->category->name,
+                ]);
+
+            }
+
 
             //email sending
             if($product->stock < 6){
@@ -156,33 +207,27 @@ class ProductController extends Controller
                 Mail::to('johnpaultanion001@gmail.com')
                 ->send(new EmailNotification($emailNotif));
             }
+            $product->stock = $request->manage_stock;
+            $product->save();
+
+
         }
 
-        $product->description = $request->description;
-        $product->code = $request->code;
-        $product->unit = $request->unit;
-        $product->category_id = $request->category;
-
-        $product->unit_price = $request->unit_price;
-        $product->price = $request->price;
-
-        $product->save();
 
         return response()->json([
-            'success' => 'Product Updated Successfully.',
+            'success' => 'Stock Updated Successfully.',
             "product" =>  $product,
             "stocks" =>  $product->stocks()->latest()->get(),
+            "orders" => $product->orders()->latest()->get(),
+            "category" => $product->category->name,
         ]);
     }
+
 
 
     public function destroy(Product $product)
     {
         File::delete(public_path('assets/img/products/'.$product->image1));
-        File::delete(public_path('assets/img/products/'.$product->image2));
-        File::delete(public_path('assets/img/products/'.$product->image3));
-        File::delete(public_path('assets/img/products/'.$product->image4));
-        File::delete(public_path('assets/img/products/'.$product->image5));
         $product->delete();
         return response()->json(['success' =>  'Product Removed Successfully.']);
     }

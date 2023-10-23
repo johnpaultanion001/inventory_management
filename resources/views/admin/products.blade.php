@@ -61,6 +61,7 @@
                                     <th scope="col">STOCK</th>
                                     <th scope="col">UNIT PRICE</th>
                                     <th scope="col">PRICE</th>
+                                    <th scope="col">Expiration</th>
                                     <th scope="col">CREATED AT</th>
                                 </tr>
                             </thead>
@@ -103,6 +104,9 @@
                                         </td>
                                         <td>
                                             {{ $product->price ?? '' }}
+                                        </td>
+                                        <td>
+                                            {{ $product->expiration ?? '' }}
                                         </td>
                                         <td>
                                             {{ $product->created_at->format('M j , Y h:i A') }}
@@ -217,15 +221,22 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Expiration:  <span class="text-danger">*</span></label>
+                                <input type="date" name="expiration" id="expiration" class="form-control disabled" >
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-expiration"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group" id="image-section">
                                 <label class="form-label">Image : <span class="text-danger">*</span></label>
-                                <div class="input-group input-group-outline my-3">
                                 <input type="file" name="image1" class="form-control image1" accept="image/*" >
                                     <span class="invalid-feedback" role="alert">
                                         <strong id="error-image1"></strong>
                                     </span>
-                                </div>
                             </div>
 
                             <div class="current_img pt-4">
@@ -256,6 +267,8 @@
             </div>
         </div>
     </form>
+
+
     @section('footer')
         @include('../partials.admin.footer')
     @endsection
@@ -348,22 +361,7 @@ $('#myForm').on('submit', function(event){
                         $('.image1').addClass('is-invalid')
                         $('#error-image1').text(value)
                     }
-                    if(key == 'image2'){
-                        $('.image2').addClass('is-invalid')
-                        $('#error-image2').text(value)
-                    }
-                    if(key == 'image3'){
-                        $('.image3').addClass('is-invalid')
-                        $('#error-image3').text(value)
-                    }
-                    if(key == 'image4'){
-                        $('.image4').addClass('is-invalid')
-                        $('#error-image4').text(value)
-                    }
-                    if(key == 'image5'){
-                        $('.image5').addClass('is-invalid')
-                        $('#error-image5').text(value)
-                    }
+
                 })
             }
             if(data.success){
@@ -391,125 +389,6 @@ $('#myForm').on('submit', function(event){
         }
     });
 });
-
-$(document).on('click', '.edit', function(){
-    $('#formModal').modal('show');
-    $('.modal-title').text('Edit Prorduct');
-    $('#myForm')[0].reset();
-    $('.form-control').removeClass('is-invalid');
-    $('.input-group').addClass('is-filled');
-    $('.current_img').show();
-    $('.disabled').attr('readonly', false);
-    $('#category').attr('disabled', false);
-    $('#added_section').hide();
-    $('#image-section').show();
-    var id = $(this).attr('edit');
-
-    $.ajax({
-        url :"/admin/products/"+id+"/edit",
-        dataType:"json",
-        beforeSend:function(){
-            $("#action_button").attr("disabled", true);
-            $("#action_button").attr("value", "Loading..");
-        },
-        success:function(data){
-            if($('#action').val() == 'Edit'){
-                $("#action_button").attr("disabled", false);
-                $("#action_button").attr("value", "Update");
-            }else{
-                $("#action_button").attr("disabled", false);
-                $("#action_button").attr("value", "Submit");
-            }
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).val(value)
-                }
-                if(key == 'category_id'){
-                    $("#category").select2("trigger", "select", {
-                        data: { id: value }
-                    });
-                }
-
-
-
-                if(key == 'image1'){
-                    $('#current_image1').attr("src", '/assets/img/products/'  + value);
-                }
-                if(key == 'image2'){
-                    $('#current_image2').attr("src", '/assets/img/products/'  + value);
-                }
-                if(key == 'image3'){
-                    $('#current_image3').attr("src", '/assets/img/products/'  + value);
-                }
-                if(key == 'image4'){
-                    $('#current_image4').attr("src", '/assets/img/products/'  + value);
-                }
-                if(key == 'image5'){
-                    $('#current_image5').attr("src", '/assets/img/products/'  + value);
-                }
-            })
-            $('#hidden_id').val(id);
-            $('#action_button').val('Update');
-            $('#action').val('Edit');
-        }
-    })
-});
-
-$(document).on('click', '.remove', function(){
-  var id = $(this).attr('remove');
-  $.confirm({
-      title: 'Confirmation',
-      content: 'You really want to remove this record?',
-      type: 'red',
-      buttons: {
-          confirm: {
-              text: 'confirm',
-              btnClass: 'btn-blue',
-              keys: ['enter', 'shift'],
-              action: function(){
-                  return $.ajax({
-                      url:"products/"+id,
-                      method:'DELETE',
-                      data: {
-                          _token: '{!! csrf_token() !!}',
-                      },
-                      dataType:"json",
-                      beforeSend:function(){
-                        $('#titletable').text('Loading...');
-                      },
-                      success:function(data){
-                          if(data.success){
-                            $.confirm({
-                              title: 'Confirmation',
-                              content: data.success,
-                              type: 'green',
-                              buttons: {
-                                      confirm: {
-                                          text: 'confirm',
-                                          btnClass: 'btn-blue',
-                                          keys: ['enter', 'shift'],
-                                          action: function(){
-                                              location.reload();
-                                          }
-                                      },
-
-                                  }
-                              });
-                          }
-                      }
-                  })
-              }
-          },
-          cancel:  {
-              text: 'cancel',
-              btnClass: 'btn-red',
-              keys: ['enter', 'shift'],
-          }
-      }
-  });
-
-});
-
 
 
 $('#formModal').on('shown.bs.modal', function () {

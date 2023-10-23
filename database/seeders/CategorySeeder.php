@@ -29,6 +29,30 @@ class CategorySeeder extends Seeder
                 'created_at'          => date("Y-m-d H:i:s"),
                 'updated_at'          => date("Y-m-d H:i:s"),
             ],
+            [
+                'name'             => 'Personal Care',
+
+                'created_at'          => date("Y-m-d H:i:s"),
+                'updated_at'          => date("Y-m-d H:i:s"),
+            ],
+            [
+                'name'             => 'Canned Foods',
+
+                'created_at'          => date("Y-m-d H:i:s"),
+                'updated_at'          => date("Y-m-d H:i:s"),
+            ],
+            [
+                'name'             => 'Beverages',
+
+                'created_at'          => date("Y-m-d H:i:s"),
+                'updated_at'          => date("Y-m-d H:i:s"),
+            ],
+            [
+                'name'             => 'Frozen Foods',
+
+                'created_at'          => date("Y-m-d H:i:s"),
+                'updated_at'          => date("Y-m-d H:i:s"),
+            ],
 
         ];
 

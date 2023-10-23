@@ -14,6 +14,7 @@ class OrderProduct extends Model
         'description',
         'qty',
         'amount',
+        'category',
         'price',
         'discounted',
     ];

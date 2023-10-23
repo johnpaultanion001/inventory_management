@@ -31,8 +31,18 @@ class DataImport implements ToCollection, WithHeadingRow
                 'area' => $row['area'],
                 'unit_price' => $row['unit_price'],
                 'price' => $row['price'],
-                'category_id' => "1",
+                'category_id' => rand(1, 6),
+                'expiration' => '2024/12/1',
             ];
+
+            $categories = array(
+                'Food Area',
+                'Soap Area',
+                'Personal Care',
+                'Canned Foods',
+                'Beverages',
+                'Frozen Foods'
+              );
 
             $order_products = [
                 'product_code' => $row['code'],
@@ -40,7 +50,8 @@ class DataImport implements ToCollection, WithHeadingRow
                 'qty' => $row['quantity'],
                 'amount' => $row['amount'],
                 'price' => $row['price'],
-                'created_at' => $this->parseImportDate($row['order_date']),
+                'category' => $categories[array_rand($categories)],
+                'created_at' => Carbon::today()->subMonths(rand(0, 12))->subYears(rand(0, 2)),
             ];
 
             $stock_histories = [

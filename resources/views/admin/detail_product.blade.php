@@ -45,6 +45,7 @@
                                     <th scope="col">STOCK</th>
                                     <th scope="col">UNIT PRICE</th>
                                     <th scope="col">PRICE</th>
+                                    <th scope="col">EXPIRATION</th>
                                     <th scope="col">CREATED AT</th>
                                 </tr>
                             </thead>
@@ -88,7 +89,9 @@
                                         <td  id="td_price">
 
                                         </td>
+                                        <td id="td_expiration">
 
+                                        </td>
                                         <td id="td_created_at">
 
                                         </td>
@@ -284,7 +287,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label">Stock:  <span class="text-danger">*</span></label>
-                                <input type="number" name="stock" id="stock" class="form-control disabled"  step="any">
+                                <input type="number" name="stock" id="stock" class="form-control disabled"  step="any" disabled>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-stock"></strong>
                                 </span>
@@ -293,7 +296,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label">Unit Price:  <span class="text-danger">*</span></label>
-                                <input type="number" name="unit_price" id="unit_price" class="form-control disabled"  step="any">
+                                <input type="number" name="unit_price" id="unit_price" class="form-control disabled"  step="any" disabled>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-unit_price"></strong>
                                 </span>
@@ -302,21 +305,28 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label">Price:  <span class="text-danger">*</span></label>
-                                <input type="number" name="price" id="price" class="form-control disabled" step="any">
+                                <input type="number" name="price" id="price" class="form-control disabled" step="any" disabled>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-price"></strong>
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Expiration:  <span class="text-danger">*</span></label>
+                                <input type="date" name="expiration" id="expiration" class="form-control disabled" >
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-expiration"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group" id="image-section">
                                 <label class="form-label">Image : <span class="text-danger">*</span></label>
-                                <div class="input-group input-group-outline my-3">
                                 <input type="file" name="image1" class="form-control image1" accept="image/*" >
                                     <span class="invalid-feedback" role="alert">
                                         <strong id="error-image1"></strong>
                                     </span>
-                                </div>
                             </div>
 
                             <div class="current_img pt-4">
@@ -328,7 +338,7 @@
                                             <small>Current Image:</small>
                                     </div>
                                     <div class="col-6">
-                                            <img style="vertical-align: bottom;" id="current_image1"  height="150" width="150" src="" />
+                                            <img alt="no image" style="vertical-align: bottom;" id="current_image1"  height="150" width="150" src="" />
                                     </div>
                                 </div>
                             </div>
@@ -341,6 +351,42 @@
                     </div>
                     <div class="modal-footer">
                         <input type="submit" name="action_button" id="action_button" class="btn  btn-primary" value="Save" />
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form method="post" id="myFormStock" class="contact-form">
+        @csrf
+        <div class="modal fade" id="formModalStock" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times text-primary"></i>
+                    </button>
+
+                    </div>
+                    <div class="modal-body row">
+
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Stock:  <span class="text-danger">*</span></label>
+                                <input type="number" name="manage_stock" id="manage_stock" class="form-control disabled"  step="any">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-manage_stock"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hidden_id_stock" id="hidden_id_stock" />
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" name="action_button_stock" id="action_button_stock" class="btn  btn-primary" value="Save" />
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
                     </div>
                 </div>
@@ -362,6 +408,7 @@
 
 
         $('#scan_code').focus();
+        $('.select2').select2();
 
         $('#scan_code').on("input", function() {
             var code = this.value;
@@ -390,6 +437,7 @@
 
                             if(key == "id"){
                                 var buttons = '<button type="button" name="edit" edit="'+value+'"  class="edit btn btn-sm btn-success form-control">Edit</button> <br>'
+                                    buttons += '<button type="button" name="stock" stock="'+value+'" class="stock btn btn-sm btn-warning form-control">Manage Stock</button> <br>'
                                     buttons += '<button type="button" name="remove" remove="'+value+'" class="remove btn btn-sm btn-danger form-control">Remove</button> <br>'
 
                                 $('#td_action').empty().append(buttons);
@@ -404,9 +452,9 @@
                                     <tr>
                                         <td>`+value.id+`</td>
                                         <td>`+value.description+`</td>
-                                        <td>`+value.price+`</td>
+                                        <td>`+number_format(value.price, 2,'.', ',')+`</td>
                                         <td>`+value.qty+`</td>
-                                        <td>`+value.amount+`</td>
+                                        <td>`+number_format(value.amount, 2,'.', ',')+`</td>
                                         <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
                                     </tr>
                             `;
@@ -465,6 +513,13 @@
                         if(key == $('#'+key).attr('id')){
                             $('#'+key).val(value)
                         }
+
+                        if(key == 'image1'){
+                            $('#current_image1').attr("src", '/assets/img/products/'  + value);
+                        }
+                        if(key == 'expiration'){
+                            console.log(value)
+                        }
                         if(key == 'category_id'){
                             $("#category").select2("trigger", "select", {
                                 data: { id: value }
@@ -473,9 +528,7 @@
 
 
 
-                        if(key == 'image1'){
-                            $('#current_image1').attr("src", '/assets/img/products/'  + value);
-                        }
+
 
                     })
                     $('#hidden_id').val(id);
@@ -485,21 +538,40 @@
             })
         });
 
+        $(document).on('click', '.stock', function(){
+            $('#formModalStock').modal('show');
+            $('.modal-title').text('Manage Stock');
+            $('#myFormStock')[0].reset();
+            $('.form-control').removeClass('is-invalid');
 
+            var id = $(this).attr('stock');
 
+            $.ajax({
+                url :"/admin/products/"+id+"/stock",
+                dataType:"json",
+                beforeSend:function(){
+                    $("#action_button_stock").attr("disabled", true);
+                    $("#action_button_stock").attr("value", "Loading..");
+                },
+                success:function(data){
+                    $("#action_button_stock").attr("disabled", false);
+                    $("#action_button_stock").attr("value", "Submit");
 
+                    $('#manage_stock').val(data.stock);
+                    $('#hidden_id_stock').val(id);
+                }
+            })
+        });
 
         $('#myForm').on('submit', function(event){
             event.preventDefault();
             $('.form-control').removeClass('is-invalid')
-            var action_url = "{{ route('admin.products.store') }}";
+
+
+            var id = $('#hidden_id').val();
+            var action_url = "/admin/products/update/" + id;
             var type = "POST";
 
-            if($('#action').val() == 'Edit'){
-                var id = $('#hidden_id').val();
-                action_url = "/admin/products/update/" + id;
-                type = "POST";
-            }
 
             $.ajax({
                 url: action_url,
@@ -567,7 +639,7 @@
 
                                                 }
                                         })
-
+                                        $('#td_category').text(data.category);
                                         var list_stocks = "";
 
                                         $.each(data.stocks, function(key,value){
@@ -588,6 +660,112 @@
                             }
                         });
                         $('#formModal').modal('hide');
+                    }
+
+                }
+            });
+        });
+
+        $('#myFormStock').on('submit', function(event){
+            event.preventDefault();
+            $('.form-control').removeClass('is-invalid')
+            var id = $('#hidden_id_stock').val();
+            var action_url = "/admin/stock/" + id;
+            var type = "POST";
+
+            $.ajax({
+                url: action_url,
+                method:type,
+                data:  new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+
+                dataType:"json",
+                beforeSend:function(){
+                    $("#action_button_stock").attr("disabled", true);
+                    $("#action_button_stock").attr("value", "Loading..");
+                },
+                success:function(data){
+
+                        $("#action_button_stock").attr("disabled", false);
+                        $("#action_button_stock").attr("value", "Submit");
+
+                    if(data.errors){
+                        $.each(data.errors, function(key,value){
+                            if(key == $('#'+key).attr('id')){
+                                $('#'+key).addClass('is-invalid')
+                                $('#error-'+key).text(value)
+                            }
+                        })
+                    }
+                    if(data.success){
+                        $('.form-control').removeClass('is-invalid')
+                        $('#myForm')[0].reset();
+                        $.confirm({
+                        title: 'Confirmation',
+                        content: data.success,
+                        type: 'green',
+                        buttons: {
+                                confirm: {
+                                    text: 'confirm',
+                                    btnClass: 'btn-blue',
+                                    keys: ['enter', 'shift'],
+                                    action: function(){
+                                        $.each(data.product, function(key,value){
+                                                $('#td_'+key).text(value)
+                                                if(key == "image1"){
+                                                    if(value != null){
+                                                        var img = '<img style="vertical-align: bottom;"  height="100" width="100" src="/assets/img/products/'+value+'" />'
+                                                    }else{
+                                                        var img = '<img style="vertical-align: bottom;"  height="100" width="100" src="/assets/img/products/no_image.png" />'
+                                                    }
+                                                    $('#td_'+key).empty().append(img);
+
+                                                }
+
+                                        })
+                                        $('#td_category').text(data.category);
+
+                                        var list_orders = "";
+
+                                        $.each(data.orders, function(key,value){
+                                            list_orders += `
+                                                        <tr>
+                                                            <td>`+value.id+`</td>
+                                                            <td>`+value.description+`</td>
+                                                            <td>`+number_format(value.price, 2,'.', ',')+`</td>
+                                                            <td>`+value.qty+`</td>
+                                                            <td>`+number_format(value.amount, 2,'.', ',')+`</td>
+                                                            <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                                        </tr>
+                                                `;
+                                                console.log(value)
+                                        })
+                                        $('#list_orders').empty().append(list_orders);
+
+                                        var list_stocks = "";
+
+                                        $.each(data.stocks, function(key,value){
+                                            list_stocks += `
+                                                        <tr>
+                                                            <td>`+value.id+`</td>
+                                                            <td>`+value.stock+`</td>
+                                                            <td>`+value.remarks+`</td>
+                                                            <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                                        </tr>
+                                                `;
+                                                console.log(value)
+                                        })
+                                        $('#list_stocks').empty().append(list_stocks);
+
+                                        console.log(data.order);
+                                    }
+                                },
+
+                            }
+                        });
+                        $('#formModalStock').modal('hide');
                     }
 
                 }

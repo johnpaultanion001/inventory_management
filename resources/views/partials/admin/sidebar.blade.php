@@ -3,8 +3,8 @@
   <div class="sidenav-header">
     <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
     <a class="navbar-brand m-0 text-center" href="/admin/dashboard">
-    <!-- <img src="/assets/img/sample_image/logo_black.png" width="100" height="70" class="d-inline-block align-top" alt=""> -->
-    <h5>LOGO</h5>
+    <img src="/assets/img/logo.jpeg" width="100" height="500" class="d-inline-block align-top" alt="">
+
     </a>
   </div>
   <hr class="horizontal light mt-0 mb-2">

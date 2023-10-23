@@ -155,30 +155,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                        <div class="card">
-                            <div class="card-header p-3 pt-2">
-                                <div class="text-center pt-1 bg-gradient-primary shadow-primary text-white">
-                                    <h4 class="mb-0 text-white" id="sales">02</h4>
-                                    <p class="text-sm mb-0 text-capitalize">SALES</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                        <div class="card">
-                            <div class="card-header p-3 pt-2">
-                                <div class="text-center pt-1 bg-gradient-info shadow-primary text-white">
-                                    <h4 class="mb-0 text-white" id="predic">02</h4>
-                                    <p class="text-sm mb-0 text-capitalize">SALES LAST MONTH</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <h3>Product Orders</h3>
                 <div class="table-responsive">
@@ -302,7 +278,7 @@
                     bodyFontColor: "#858796",
                     titleMarginBottom: 10,
                     titleFontColor: '#6e707e',
-                    titleFontSize: 14,
+                    titleFontSize: 15,
                     borderColor: '#dddfeb',
                     borderWidth: 1,
                     displayColors: false,
@@ -316,7 +292,9 @@
         let sales = new Chart(salesChart, {
             type: "line",
             data: dataSales,
-            options: options
+            options: options,
+
+
         });
 
         let sold =  new Chart(soldChart, {
@@ -334,11 +312,11 @@
                 // alert('Label: ' + label + "\nValue: " + value);
 
                 $('#modalChart').modal('show');
-                $('.modal-title').text('PRODUCT CODE: '+ label);
+                $('.modal-title').text('CATEGORY: '+ label);
 
                 $.ajax({
                     url :"/admin/chart_reports/"+label,
-                    data: { filter : "home"},
+                    data: { filter : "modal_data"},
                     dataType:"json",
                     beforeSend:function(){
                         //$("#action_button").attr("disabled", true);
@@ -351,6 +329,7 @@
                         console.log(data.filter);
                         $.each(data.result, function(key,value){
                            var new_date = moment(value.created_at).format('DD-MM-YYYY');
+
                             chart_data += `
                                         <tr>
                                             <td>
@@ -413,11 +392,11 @@
                 // alert('Label: ' + label + "\nValue: " + value);
 
                 $('#modalChart').modal('show');
-                $('.modal-title').text('PRODUCT CODE: '+ label);
+                $('.modal-title').text('CATEGORY '+ label);
 
                 $.ajax({
                     url :"/admin/chart_reports/"+label,
-                    data: { filter : "home"},
+                    data: { filter : "modal_data"},
                     dataType:"json",
                     beforeSend:function(){
                         //$("#action_button").attr("disabled", true);

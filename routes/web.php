@@ -16,8 +16,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Inventories
     Route::resource('products', 'ProductController');
+    Route::get('products/{product}/stock', 'ProductController@stock')->name('products.get_stock');
+    Route::post('stock/{product}', 'ProductController@update_stock')->name('products.update_stock');
+
     Route::post('products/update/{product}', 'ProductController@updateproduct')->name('products.updateproduct');
-    Route::post('products/stock/{product}', 'ProductController@addedstock')->name('products.addedproduct');
+
     Route::get('products/product/detail', 'ProductController@detail_product')->name('products.detail_product');
     Route::get('products/product/detail/{code}', 'ProductController@scan_product')->name('products.scan_product');
 

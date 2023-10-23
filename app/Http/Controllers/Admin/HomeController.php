@@ -48,21 +48,21 @@ class HomeController extends Controller
         $data = OrderProduct::select(
             \DB::raw("SUM(amount) as amount"),
             \DB::raw("SUM(qty) as sold"),
-            \DB::raw("product_code as product"))
+            \DB::raw("category as cat"))
 
-            ->groupBy('product')
-            ->orderBy('product', 'ASC')
+            ->groupBy('cat')
+            ->orderBy('cat', 'ASC')
             ->get();
         $result_sales = [];
         $result_sold = [];
 
         foreach($data as $row) {
-            $result_sales['label'][] = $row->product ?? 'test';
+            $result_sales['label'][] = $row->cat;
             $result_sales['data'][] =  $row->amount;
         }
 
         foreach($data as $row) {
-            $result_sold['label'][] = $row->product ?? 'test';
+            $result_sold['label'][] = $row->cat;
             $result_sold['data'][] =  $row->sold;
         }
 

@@ -202,7 +202,7 @@ background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+
 
         order: [],
         scrollX: true,
-        pageLength: 100,
+        pageLength: 10,
         dom: 'lBfrtip<"actions">',
         buttons: [
 

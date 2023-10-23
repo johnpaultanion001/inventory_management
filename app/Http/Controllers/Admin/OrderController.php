@@ -11,6 +11,7 @@ use Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailNotification;
+use App\Models\Category;
 
 class OrderController extends Controller
 {
@@ -101,9 +102,7 @@ class OrderController extends Controller
             $sales = OrderProduct::latest()->whereDate('created_at', Carbon::today())
                                 ->get();
 
-            $chartSales  = OrderProduct::selectRaw('sum(amount) as total_sales, DATE(created_at) as data, sum(amount) + sum(price)  as total_predict')
-                                ->groupBy('data')
-                                ->get();
+
         }
         elseif($filter == 'weekly'){
             $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
@@ -156,14 +155,156 @@ class OrderController extends Controller
 
 
 
-        $labels = $chartSales->pluck('data')->toArray();
-        $data = $chartSales->pluck('total_sales')->toArray();
-        $datap = $chartSales->pluck('total_predict')->toArray();
+
         $ldate = date('M j , Y');
 
+        $chartSales  = OrderProduct::selectRaw('sum(qty) as sold, sum(amount) as total_sales, DATE(created_at) as data, sum(amount) + sum(price)  as total_predict')
+                            ->groupBy('data')->get();
+
+        OrderProduct::whereMonth('created_at', '=', 1)->sum('qty');
+
+        $montly_sold = [];
+        $montly_sold2021 = [];
+        $montly_sold2022 = [];
+        $montly_sold2024 = [];
+
+        $categories = Category::orderBy('name')->get();
+        foreach ($categories as $category) {
+            //2023
+            array_push($montly_sold, [
+                   $jan2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 1)->sum('qty'),
+                   $feb2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 2)->sum('qty'),
+                   $mar2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 3)->sum('qty'),
+                   $apr2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 4)->sum('qty'),
+                   $may2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 5)->sum('qty'),
+                   $june2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 6)->sum('qty'),
+                   $july2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 7)->sum('qty'),
+                   $aug2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 8)->sum('qty'),
+                   $sept2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 9)->sum('qty'),
+                   $oct2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 10)->sum('qty'),
+                   $nov2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 11)->sum('qty'),
+                   $dec2023 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 12)->sum('qty'),
+                    $category->name,
+            ]);
+            //2021
+            array_push($montly_sold2021, [
+                $jan2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 1)->sum('qty'),
+                $feb2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 2)->sum('qty'),
+                $mar2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 3)->sum('qty'),
+                $apr2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 4)->sum('qty'),
+                $may2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 5)->sum('qty'),
+                $june2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 6)->sum('qty'),
+                $july2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 7)->sum('qty'),
+                $aug2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 8)->sum('qty'),
+                $sept2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 9)->sum('qty'),
+                $oct2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 10)->sum('qty'),
+                $nov2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 11)->sum('qty'),
+                $dec2021 = OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2021')->whereMonth('created_at', '=', 12)->sum('qty'),
+                $category->name,
+            ]);
+            //2022
+            array_push($montly_sold2022, [
+                $jan2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 1)->sum('qty'),
+                $feb2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 2)->sum('qty'),
+                $mar2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 3)->sum('qty'),
+                $apr2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 4)->sum('qty'),
+                $may2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 5)->sum('qty'),
+                $june2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 6)->sum('qty'),
+                $july2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 7)->sum('qty'),
+                $aug2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 8)->sum('qty'),
+                $sept2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 9)->sum('qty'),
+                $oct2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 10)->sum('qty'),
+                $nov2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 11)->sum('qty'),
+                $dec2022 =  OrderProduct::where('category', $category->name)->whereYear('created_at', '=', '2022')->whereMonth('created_at', '=', 12)->sum('qty'),
+                $category->name,
+            ]);
+            //2024
+            array_push($montly_sold2024, [
+                ($jan2023 + $jan2021 + $jan2022) / 3,
+                ($feb2023 + $feb2021 + $feb2022) / 3,
+                ($mar2023 + $mar2021 + $mar2022) / 3,
+                ($apr2023 + $apr2021 + $apr2022) / 3,
+                ($may2023 + $may2021 + $may2022) / 3,
+                ($june2023 + $june2021 + $june2022) / 3,
+                ($july2023 + $july2021 + $july2022) / 3,
+                ($aug2023 + $aug2021 + $aug2022) / 3,
+                ($sept2023 + $sept2021 + $sept2022) / 3,
+                ($oct2023 + $oct2021 + $oct2022) / 3,
+                ($nov2023 + $nov2021 + $nov2022) / 3,
+                ($dec2023 + $dec2021 + $dec2022) / 3,
+                $category->name,
+            ]);
+        }
+        //2023
+        array_push($montly_sold, [
+                $jan2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 1)->sum('qty'),
+                $feb2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 2)->sum('qty'),
+                $mar2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 3)->sum('qty'),
+                $apr2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 4)->sum('qty'),
+                $may2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 5)->sum('qty'),
+               $june2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 6)->sum('qty'),
+               $july2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 7)->sum('qty'),
+                $aug2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 8)->sum('qty'),
+               $sept2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 9)->sum('qty'),
+                $oct2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 10)->sum('qty'),
+                $nov2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 11)->sum('qty'),
+                $dec2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 12)->sum('qty'),
+                'others',
+        ]);
+        //2021
+        array_push($montly_sold2021, [
+            $jan2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 1)->sum('qty'),
+            $feb2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 2)->sum('qty'),
+            $mar2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 3)->sum('qty'),
+            $apr2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 4)->sum('qty'),
+            $may2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 5)->sum('qty'),
+           $june2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 6)->sum('qty'),
+           $july2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 7)->sum('qty'),
+            $aug2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 8)->sum('qty'),
+           $sept2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 9)->sum('qty'),
+            $oct2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 10)->sum('qty'),
+            $nov2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 11)->sum('qty'),
+            $dec2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 12)->sum('qty'),
+            'others',
+        ]);
+        //2022
+        array_push($montly_sold2022, [
+            $jan2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 1)->sum('qty'),
+            $feb2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 2)->sum('qty'),
+            $mar2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 3)->sum('qty'),
+            $apr2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 4)->sum('qty'),
+            $may2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 5)->sum('qty'),
+           $june2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 6)->sum('qty'),
+           $july2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 7)->sum('qty'),
+            $aug2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 8)->sum('qty'),
+           $sept2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 9)->sum('qty'),
+            $oct2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 10)->sum('qty'),
+            $nov2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 11)->sum('qty'),
+            $dec2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 12)->sum('qty'),
+            'others',
+        ]);
+        //2024
+        array_push($montly_sold2024, [
+            ($jan2023 + $jan2021 + $jan2022) / 3,
+            ($feb2023 + $feb2021 + $feb2022) / 3,
+            ($mar2023 + $mar2021 + $mar2022) / 3,
+            ($apr2023 + $apr2021 + $apr2022) / 3,
+            ($may2023 + $may2021 + $may2022) / 3,
+            ($june2023 + $june2021 + $june2022) / 3,
+            ($july2023 + $july2021 + $july2022) / 3,
+            ($aug2023 + $aug2021 + $aug2022) / 3,
+            ($sept2023 + $sept2021 + $sept2022) / 3,
+            ($oct2023 + $oct2021 + $oct2022) / 3,
+            ($nov2023 + $nov2021 + $nov2022) / 3,
+            ($dec2023 + $dec2021 + $dec2022) / 3,
+            $category->name,
+        ]);
 
 
-        return view('admin.sales_reports.sales_reports', compact('sales','title_filter','labels','data','datap','chartSales','ldate'));
+    $chart_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
+
+
+        return view('admin.sales_reports.sales_reports', compact('sales','title_filter','ldate','montly_sold','chart_filter','montly_sold2021','montly_sold2022','montly_sold2024'));
 
     }
 
@@ -171,34 +312,34 @@ class OrderController extends Controller
         $filter = $request->get('filter');
 
         if($filter == 'daily'){
-            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->latest()->get();
         }
         elseif($filter == 'weekly'){
-            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->latest()->get();
 
 
         }
         elseif($filter == 'monthly'){
-            $list = OrderProduct::whereMonth('created_at', '=', $filter_date)->get();
+            $list = OrderProduct::whereMonth('created_at', '=', $filter_date)->latest()->get();
         }
         elseif($filter == 'yearly'){
-            $list = OrderProduct::whereYear('created_at', '=', $filter_date)->get();
+            $list = OrderProduct::whereYear('created_at', '=', $filter_date)->latest()->get();
 
         }
         elseif($filter == 'all'){
-            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->latest()->get();
 
         }
         elseif($filter == 'fbd'){
-            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->latest()->get();
 
         }
-        elseif($filter == 'home'){
-        $list = OrderProduct::where('product_code', '=', $filter_date)->get();
+        elseif($filter == 'modal_data'){
+        $list = OrderProduct::where('category', '=', $filter_date)->latest()->get();
 
         }
         else{
-            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->get();
+            $list = OrderProduct::whereDate('created_at', '=', $filter_date)->latest()->get();
 
         }
 

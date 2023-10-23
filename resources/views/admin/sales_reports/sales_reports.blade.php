@@ -48,12 +48,13 @@
                         <table class="table datatable-table display" width="100%">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>ORDER ID</th>
-                                    <th>PRODUCT</th>
-                                    <th>PRICE</th>
-                                    <th>SOLD</th>
-                                    <th>AMOUNT</th>
-                                    <th>ORDER AT</th>
+                                    <th scope="col">ORDER ID</th>
+                                    <th scope="col">CATEGORY</th>
+                                    <th scope="col">PRODUCT</th>
+                                    <th scope="col">PRICE</th>
+                                    <th scope="col">SOLD</th>
+                                    <th scope="col">AMOUNT</th>
+                                    <th scope="col">ORDER AT</th>
                                 </tr>
                             </thead>
                             <tbody class="text-uppercase font-weight-bold">
@@ -61,6 +62,9 @@
                                         <tr>
                                             <td>
                                                 {{$order->id ?? ''}}
+                                            </td>
+                                            <td>
+                                                {{$order->category ?? ''}}
                                             </td>
                                             <td>
                                                 {{$order->product->description ?? ''}}
@@ -84,25 +88,62 @@
                             </tbody>
                             <tfoot class="text-uppercase font-weight-bold">
                                 <tr>
-                                    <th>DATE:</th>
-                                    <th>{{$ldate}}</th>
-                                    <th >USER:</th>
-                                    <th >{{auth()->user()->name}}</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th scope="col">DATE:</th>
+                                    <th scope="col">{{$ldate}}</th>
+                                    <th  scope="col">USER:</th>
+                                    <th  scope="col">{{auth()->user()->name}}</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-12 mt-2">
-                    <div class = "card p-3">
-                        <canvas id="salesChart"></canvas>
-                    </div>
+                <div class = "card p-3">
+                        <div >
+                            <h6>FILTER BY YEAR:</h6>
+                            <input type="checkbox" class="btn-check" id="btn-check-2021"  autocomplete="off">
+                            <label class="btn btn-outline-dark" for="btn-check-2021">2021</label>
+
+                            <input type="checkbox" class="btn-check" id="btn-check-2022"  autocomplete="off">
+                            <label class="btn btn-outline-dark" for="btn-check-2022">2022</label>
+
+                            <input type="checkbox" class="btn-check" id="btn-check-2023" checked autocomplete="off">
+                            <label class="btn btn-outline-dark" for="btn-check-2023">2023</label>
+
+                            <input type="checkbox" class="btn-check" id="btn-check-2024"  autocomplete="off">
+                            <label class="btn btn-outline-dark" for="btn-check-2024">2024</label>
+                        </div>
+
+                        <div class="row">
+                            <div class="chart_2023">
+                                <h5>PRODUCT DEMAND (2023)</h5>
+                                <h6>From: Jan 1, 2023 To: Dec 31, 2023</h6>
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                            <div class="chart_2024">
+                                <h5>PRODUCT DEMAND (2024)</h5>
+                                <h6>From: Jan 1, 2024 To: Dec 31, 2024</h6>
+                                <canvas id="salesChart2024"></canvas>
+                            </div>
+                            <div class="chart_2021">
+                                <h5>PRODUCT DEMAND (2021)</h5>
+                                <h6>From: Jan 1, 2021 To: Dec 31, 2021</h6>
+                                <canvas id="salesChart2021"></canvas>
+                            </div>
+                            <div class="chart_2022">
+                                <h5>PRODUCT DEMAND (2022)</h5>
+                                <h6>From: Jan 1, 2022 To: Dec 31, 2022</h6>
+                                <canvas id="salesChart2022"></canvas>
+                            </div>
+                        </div>
+
+
+                </div>
             </div>
-        </div>
     </div>
 
 
@@ -117,28 +158,37 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                        <div class="card">
-                            <div class="card-header p-3 pt-2">
-                                <div class="text-center pt-1 bg-gradient-primary shadow-primary text-white">
-                                    <h4 class="mb-0 text-white" id="sales">02</h4>
-                                    <p class="text-sm mb-0 text-capitalize">SALES</p>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                        <div class="card">
-                            <div class="card-header p-3 pt-2">
-                                <div class="text-center pt-1 bg-gradient-info shadow-primary text-white">
-                                    <h4 class="mb-0 text-white" id="predic">02</h4>
-                                    <p class="text-sm mb-0 text-capitalize">PREDICTION</p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table display" id="table_chart" width="100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>ORDER ID</th>
+                                <th>CATEGORY</th>
+                                <th>PRODUCT</th>
+                                <th>PRICE</th>
+                                <th>SOLD</th>
+                                <th>AMOUNT</th>
+                                <th>ORDER AT</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-uppercase font-weight-bold" id="list_chart">
+                           <tr>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <h3>Product Orders</h3>
@@ -147,6 +197,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>ORDER ID</th>
+                                <th>CATEGORY</th>
                                 <th>PRODUCT</th>
                                 <th>PRICE</th>
                                 <th>SOLD</th>
@@ -199,6 +250,43 @@
 
 
 $(function () {
+    $('.chart_2023').show();
+    $('.chart_2024').hide();
+    $('.chart_2021').hide();
+    $('.chart_2022').hide();
+
+    $("#btn-check-2021").on("click", function(){
+        if($("#btn-check-2021").is(":checked")) {
+            $('.chart_2021').show();
+        } else {
+            $('.chart_2021').hide();
+
+        }
+    });
+
+    $("#btn-check-2022").on("click", function(){
+        if($("#btn-check-2022").is(":checked")) {
+            $('.chart_2022').show();
+        } else {
+            $('.chart_2022').hide();
+        }
+    });
+
+    $("#btn-check-2023").on("click", function(){
+        if($("#btn-check-2023").is(":checked")) {
+            $('.chart_2023').show();
+        } else {
+            $('.chart_2023').hide();
+        }
+    });
+
+    $("#btn-check-2024").on("click", function(){
+        if($("#btn-check-2024").is(":checked")) {
+            $('.chart_2024').show();
+        } else {
+            $('.chart_2024').hide();
+        }
+    });
 
     var title = 'title';
     var header =  'title';
@@ -231,80 +319,300 @@ $(function () {
 
 
             total = api
-                .column(5)
+                .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
             }, 0);
 
             profit = api
-                .column(6)
+                .column(5)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
             }, 0);
 
 
-            $(api.column(5).footer()).html(number_format(total, 2,'.', ','));
-            $(api.column(6).footer()).html(number_format(profit, 2,'.', ','));
+            $(api.column(4).footer()).html(number_format(total, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(profit, 2,'.', ','));
 
 
         },
     });
 
+    //2023
     let ctx = document.getElementById('salesChart');
-     let salesChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: @json($labels),
-                datasets: [
-                    {
-                        label: 'Sales Chart',
-                        data: @json($data),
-                        backgroundColor: "rgba(78, 115, 223, 0.05)",
-                        borderColor: "rgba(78, 115, 223, 1)",
-                        borderWidth: 3
-                    },
-                    {
-                        label: 'Prediction',
-                        data: @json($datap),
-                        backgroundColor: "rgba(19, 161, 52, 0.13)",
-                        borderColor: "rgba(19, 161, 52, 0.13)",
-                        borderWidth: 3
-                    },
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    let salesChart = new Chart(ctx, {
+        type: 'bar',
+        fill: true,
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Beverages',
+                    data: @json($montly_sold[0]),
+                    borderColor: "gold",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Canned Foods',
+                    data: @json($montly_sold[1]),
+                    borderColor: "pink",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Food Area',
+                    data: @json($montly_sold[2]),
+                    borderColor: "blue",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Frozen Foods',
+                    data: @json($montly_sold[3]),
+                    borderColor: "rgba(153, 102, 255, 0.2)",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Personal Care',
+                    data: @json($montly_sold[4]),
+                    borderColor: "green",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Soap Area',
+                    data: @json($montly_sold[5]),
+                    borderColor: "yellow",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Others',
+                    data: @json($montly_sold[6]),
+                    borderColor: "#111",
+                    borderWidth: 3
+                },
+
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
+
+    //2021
+    let ctx2021 = document.getElementById('salesChart2021');
+    let salesChart2021 = new Chart(ctx2021, {
+        type: 'bar',
+        fill: true,
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Beverages',
+                    data: @json($montly_sold2021[0]),
+                    borderColor: "gold",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Canned Foods',
+                    data: @json($montly_sold2021[1]),
+                    borderColor: "pink",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Food Area',
+                    data: @json($montly_sold2021[2]),
+                    borderColor: "blue",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Frozen Foods',
+                    data: @json($montly_sold2021[3]),
+                    borderColor: "rgba(153, 102, 255, 0.2)",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Personal Care',
+                    data: @json($montly_sold2021[4]),
+                    borderColor: "green",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Soap Area',
+                    data: @json($montly_sold2021[5]),
+                    borderColor: "yellow",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Others',
+                    data: @json($montly_sold2021[6]),
+                    borderColor: "#111",
+                    borderWidth: 3
+                },
+
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    //2022
+    let ctx2022 = document.getElementById('salesChart2022');
+    let salesChart2022 = new Chart(ctx2022, {
+        type: 'bar',
+        fill: true,
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Beverages',
+                    data: @json($montly_sold2022[0]),
+                    borderColor: "gold",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Canned Foods',
+                    data: @json($montly_sold2022[1]),
+                    borderColor: "pink",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Food Area',
+                    data: @json($montly_sold2022[2]),
+                    borderColor: "blue",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Frozen Foods',
+                    data: @json($montly_sold2022[3]),
+                    borderColor: "rgba(153, 102, 255, 0.2)",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Personal Care',
+                    data: @json($montly_sold2022[4]),
+                    borderColor: "green",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Soap Area',
+                    data: @json($montly_sold2022[5]),
+                    borderColor: "yellow",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Others',
+                    data: @json($montly_sold2022[6]),
+                    borderColor: "#111",
+                    borderWidth: 3
+                },
+
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    //2024
+    let ctx2024 = document.getElementById('salesChart2024');
+    let salesChart2024 = new Chart(ctx2024, {
+        type: 'bar',
+        fill: true,
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Beverages',
+                    data: @json($montly_sold2024[0]),
+                    borderColor: "gold",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Canned Foods',
+                    data: @json($montly_sold2024[1]),
+                    borderColor: "pink",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Food Area',
+                    data: @json($montly_sold2024[2]),
+                    borderColor: "blue",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Frozen Foods',
+                    data: @json($montly_sold2024[3]),
+                    borderColor: "rgba(153, 102, 255, 0.2)",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Personal Care',
+                    data: @json($montly_sold2024[4]),
+                    borderColor: "green",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Soap Area',
+                    data: @json($montly_sold2024[5]),
+                    borderColor: "yellow",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Others',
+                    data: @json($montly_sold2024[6]),
+                    borderColor: "#111",
+                    borderWidth: 3
+                },
+
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 
 
 
         ctx.addEventListener('click', function(evt) {
-        var firstPoint = salesChart.getElementAtEvent(evt)[0];
+         var firstPoint = salesChart.getElementAtEvent(evt)[0];
             if (firstPoint) {
                 var label = salesChart.data.labels[firstPoint._index];
                 var value = salesChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+                var legend =  salesChart.data.datasets[firstPoint._datasetIndex].label;
 
                 // alert('Label: ' + label + "\nValue: " + value);
 
                 $('#modalChart').modal('show');
-                $('.modal-title').text('FILTER DATE: '+ label);
+                $('.modal-title').text('CATEGORY: '+ legend);
+                console.log(value)
 
                 $.ajax({
-                    url :"/admin/chart_reports/"+label,
-                    data: { filter : $('#filter_dd').val()},
+                    url :"/admin/chart_reports/"+legend,
+                    data: { filter : "modal_data"},
                     dataType:"json",
                     beforeSend:function(){
                         //$("#action_button").attr("disabled", true);
                     },
                     success:function(data){
                         //$("#action_button").attr("disabled", false);
+
                         var chart_data = "";
                         $('#sales').text(number_format(data.sales, 2,'.', ','));
                         $('#predic').text(number_format(data.predic, 2,'.', ','));
@@ -315,6 +623,9 @@ $(function () {
                                         <tr>
                                             <td>
                                                 `+value.id+`
+                                            </td>
+                                            <td>
+                                                `+value.category+`
                                             </td>
                                             <td>
                                                 `+value.description+`
@@ -335,28 +646,8 @@ $(function () {
                             `;
                         })
                         $('#list_chart').empty().append(chart_data);
-                        $('#table_chart').DataTable({
-                            bDestroy: true,
-                            responsive: true,
-                            scrollY: 500,
-                            scrollCollapse: true,
-                            buttons: [
-                                {
-                                    extend: 'excel',
-                                    className: 'd-none',
-                                    title: title,
-                                    exportOptions: {
-                                        columns: ':visible'
-                                    }
-                                },
-                                {
-                                    extend: 'print',
-                                    title:  '<center>' + header + '</center>',
-                                    className: 'd-none',
-
-                                }
-                            ],
-                        });
+                        $('#table_chart').DataTable(
+                        );
 
                     }
                 })
@@ -364,7 +655,6 @@ $(function () {
 
 
         });
-
 
 });
 

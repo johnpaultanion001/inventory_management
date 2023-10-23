@@ -21,6 +21,7 @@ class Product extends Model
         'retailed_price',
         'category_id',
         'discount',
+        'expiration',
     ];
 
     public function category()
