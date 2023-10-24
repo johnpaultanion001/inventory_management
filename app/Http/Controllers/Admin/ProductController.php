@@ -59,7 +59,7 @@ class ProductController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'description' => ['required'],
-            'code' => ['required'],
+            'code' => ['required','unique:products'],
             'unit' => ['required'],
             'category' => ['required'],
             'stock' => ['required','integer','min:1'],
