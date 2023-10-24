@@ -45,14 +45,14 @@
                 <span class="nav-link-text ms-1 text-uppercase">Categories</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link text-dark {{ request()->is('admin/customer_list') || request()->is('admin/customer_list/*') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.customer") }}">
                 <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10 {{ request()->is('admin/customer_list') || request()->is('admin/customer_list/*') ? 'text-white' : '' }}">person</i>
                 </div>
                 <span class="nav-link-text ms-1 text-uppercase">Customers</span>
                 </a>
-            </li>
+            </li> -->
             @if(Auth()->user()->role == 'admin')
                 <li class="nav-item">
                     <a class="nav-link text-dark {{ request()->is('admin/staff_list') || request()->is('admin/staff_list/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/staff_list">

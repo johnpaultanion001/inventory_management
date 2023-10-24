@@ -159,37 +159,7 @@
             <div class="modal-body">
                 <div class="row">
 
-                <div class="table-responsive">
-                    <table class="table display" id="table_chart" width="100%">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>ORDER ID</th>
-                                <th>CATEGORY</th>
-                                <th>PRODUCT</th>
-                                <th>PRICE</th>
-                                <th>SOLD</th>
-                                <th>AMOUNT</th>
-                                <th>ORDER AT</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-uppercase font-weight-bold" id="list_chart">
-                           <tr>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+
 
                 <h3>Product Orders</h3>
                 <div class="table-responsive">

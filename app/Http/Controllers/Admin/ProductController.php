@@ -63,8 +63,8 @@ class ProductController extends Controller
             'unit' => ['required'],
             'category' => ['required'],
             'stock' => ['required','integer','min:1'],
-            'unit_price' => ['required'],
-            'price' => ['required'],
+            'unit_price' => ['required','integer','min:1'],
+            //'price' => ['required'],
             'expiration' => ['required','date', 'after:today'],
             'image1' =>  ['mimes:png,jpg,jpeg,svg,bmp,ico'],
         ]);
@@ -79,6 +79,8 @@ class ProductController extends Controller
             $imgs1->move('assets/img/products/', $file_name_to_save1);
         }
 
+        $total_price = $request->input('unit_price') * $request->input('stock');
+
         $product = Product::create([
             'description' => $request->input('description'),
             'code' => $request->input('code'),
@@ -86,7 +88,7 @@ class ProductController extends Controller
             'category_id' => $request->input('category'),
             'stock' => $request->input('stock'),
             'unit_price' => $request->input('unit_price'),
-            'price' => $request->input('price'),
+            'price' => $total_price,
             'expiration' => $request->input('expiration'),
 
             'image1' => $file_name_to_save1 ?? "",
@@ -180,14 +182,14 @@ class ProductController extends Controller
 
             if($stock > $manage_stock){
                 $qty = $stock - $manage_stock;
-                $amount = $qty * $product->price;
+                $amount = $qty * $product->unit_price;
 
                 \App\Models\OrderProduct::create([
                     'product_code' => $product->code,
                     'description' => $product->description,
                     'qty' => $qty,
                     'amount' => $amount,
-                    'price' => $product->price,
+                    'price' => $product->unit_price,
                     'category' => $product->category->name,
                 ]);
 

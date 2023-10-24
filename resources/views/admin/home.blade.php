@@ -139,6 +139,42 @@
             </div>
           </div>
         </div>
+        <div class="col-xl-12 mt-3">
+          <div class="card">
+            <div class="card-body">
+            <h4 class="text-sm mb-0 text-capitalize text-primary">Expiration date ( < 5 )</h4>
+                <div class="card-body">
+                    <div class="table-responsive">
+                            <table class="table display" cellspacing="0" width="100%">
+                                <thead class="thead-light text-center">
+                                    <tr>
+                                        <th scope="col">Product Code</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-uppercase font-weight-bold text-center">
+                                    @foreach($productsLowerStocks as $product)
+                                        <tr>
+
+                                            <td>
+                                                {{  $product->code ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{  $product->description ?? '' }}
+                                            </td>
+                                            <td>
+                                                {{  $product->stock ?? '' }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+          </div>
+        </div>
       </div>
 
 

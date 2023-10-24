@@ -60,7 +60,7 @@
                                     <th scope="col">CATEGORY</th>
                                     <th scope="col">STOCK</th>
                                     <th scope="col">UNIT PRICE</th>
-                                    <th scope="col">PRICE</th>
+                                    <th scope="col">TOTAL PRICE</th>
                                     <th scope="col">Expiration</th>
                                     <th scope="col">CREATED AT</th>
                                 </tr>
@@ -214,15 +214,6 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="form-label">Price:  <span class="text-danger">*</span></label>
-                                <input type="number" name="price" id="price" class="form-control disabled" step="any">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-price"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
                                 <label class="form-label">Expiration:  <span class="text-danger">*</span></label>
                                 <input type="date" name="expiration" id="expiration" class="form-control disabled" >
                                 <span class="invalid-feedback" role="alert">
@@ -230,7 +221,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group" id="image-section">
                                 <label class="form-label">Image : <span class="text-danger">*</span></label>
                                 <input type="file" name="image1" class="form-control image1" accept="image/*" >
