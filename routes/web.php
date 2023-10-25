@@ -42,30 +42,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // chart_reports
     Route::get('chart_reports/{filter_date}', 'OrderController@chart_reports')->name('chart_reports');
 
-     // CustomerList
-     Route::get('customer_list', 'CustomerListController@index')->name('customer');
-     Route::get('customer_list/{user}/edit', 'CustomerListController@edit')->name('customer.edit');
-     Route::get('customer_list/{user}/status', 'CustomerListController@status')->name('customer.status');
-
-     Route::put('customer_list/{user}', 'CustomerListController@update')->name('customer.update');
-     Route::put('customer_list/{user}/dpass', 'CustomerListController@defaultPassowrd')->name('customer.dpass');
 
      // Admin List
      Route::get('staff_list', 'CustomerListController@staff_index')->name('staff');
      Route::post('staff_list', 'CustomerListController@staff_store')->name('staff.store');
      Route::put('staff_list/{staff}', 'CustomerListController@staff_update')->name('staff.update');
 
-     // Change Status
-     Route::put('customer/status/{user}', 'CustomerListController@status')->name('customer.status12');
+
 
      // Categories
      Route::resource('categories', 'CategoryController');
 
+
      // activities
      Route::resource('activities', 'ActivityController');
 
-
-    Route::get('styles', 'LayoutStyleController@index')->name('styles.index');
-    Route::post('styles', 'LayoutStyleController@update')->name('styles.update');
-
+     Route::resource('roles', 'RolesController');
+     Route::resource('accounts', 'AccountController');
 });

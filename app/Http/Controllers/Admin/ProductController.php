@@ -11,6 +11,8 @@ use Validator;
 use File;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailNotification;
+use App\Models\Activity;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -19,16 +21,15 @@ class ProductController extends Controller
 
     public function index()
     {
-        $userrole = auth()->user()->role;
-        if($userrole != 'customer'){
-            date_default_timezone_set('Asia/Manila');
 
-            $products = Product::latest()->get();
-            $categories = Category::latest()->get();
-            $ldate = date('M j , Y');
+        date_default_timezone_set('Asia/Manila');
 
-            return view('admin.products', compact('products', 'categories','ldate'));
-        }
+        $products = Product::latest()->get();
+        $categories = Category::latest()->get();
+        $ldate = date('M j , Y');
+
+        return view('admin.products', compact('products', 'categories','ldate'));
+
         return abort('403');
     }
 
@@ -94,6 +95,11 @@ class ProductController extends Controller
             'image1' => $file_name_to_save1 ?? "",
         ]);
 
+        Activity::create([
+            'activity' => 'Created product',
+            'user_id' => Auth::user()->id
+        ]);
+
 
         return response()->json(['success' => 'Product Added Successfully.']);
     }
@@ -151,6 +157,11 @@ class ProductController extends Controller
         $product->expiration = $request->expiration;
         $product->save();
 
+        Activity::create([
+            'activity' => 'Updated product',
+            'user_id' => Auth::user()->id
+        ]);
+
         return response()->json([
             'success' => 'Product Updated Successfully.',
             "product" =>  $product,
@@ -206,14 +217,20 @@ class ProductController extends Controller
                     'updated_by'              =>  auth()->user()->name,
                 ];
 
-                Mail::to('johnpaultanion001@gmail.com')
-                ->send(new EmailNotification($emailNotif));
+                // Mail::to('johnpaultanion001@gmail.com')
+                // ->send(new EmailNotification($emailNotif));
             }
             $product->stock = $request->manage_stock;
             $product->save();
-
-
+            $critStock = 1;
+        }else{
+            $critStock = 0;
         }
+
+        Activity::create([
+            'activity' => 'Updated stock',
+            'user_id' => Auth::user()->id
+        ]);
 
 
         return response()->json([
@@ -222,6 +239,7 @@ class ProductController extends Controller
             "stocks" =>  $product->stocks()->latest()->get(),
             "orders" => $product->orders()->latest()->get(),
             "category" => $product->category->name,
+            "critStock" => $critStock,
         ]);
     }
 
@@ -231,6 +249,10 @@ class ProductController extends Controller
     {
         File::delete(public_path('assets/img/products/'.$product->image1));
         $product->delete();
+        Activity::create([
+            'activity' => 'Delete product',
+            'user_id' => Auth::user()->id
+        ]);
         return response()->json(['success' =>  'Product Removed Successfully.']);
     }
 }

@@ -17,12 +17,9 @@ class OrderController extends Controller
 {
     public function orders()
     {
-        $userrole = auth()->user()->role;
-        if($userrole != 'customer'){
             $orders = Order::latest()->get();
             return view('admin.orders' ,compact('orders'));
-        }
-        return abort('403');
+
     }
 
     public function receipt(Order $order){

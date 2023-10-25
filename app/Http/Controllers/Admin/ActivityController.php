@@ -11,14 +11,13 @@ class ActivityController extends Controller
 
     public function index()
     {
-        $userrole = auth()->user()->role;
-        if($userrole != 'customer'){
-            date_default_timezone_set('Asia/Manila');
-            $activities = Activity::latest()->get();
-            $ldate = date('M j , Y');
 
-            return view('admin.activities', compact('activities','ldate'));
-        }
+        date_default_timezone_set('Asia/Manila');
+        $activities = Activity::latest()->get();
+        $ldate = date('M j , Y');
+
+        return view('admin.activities', compact('activities','ldate'));
+
         return abort('403');
     }
 

@@ -6,25 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Validator;
+use App\Models\Activity;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $userrole = auth()->user()->role;
-        if($userrole != 'customer'){
-            date_default_timezone_set('Asia/Manila');
-            $categories = Category::latest()->get();
 
-            return view('admin.categories', compact('categories'));
-        }
+        date_default_timezone_set('Asia/Manila');
+        $categories = Category::latest()->get();
+
+        return view('admin.categories', compact('categories'));
+
         return abort('403');
-    }
-
-   
-    public function create()
-    {
-        //
     }
 
     public function store(Request $request)
@@ -41,6 +36,10 @@ class CategoryController extends Controller
         Category::create([
             'name' => $request->input('name'),
         ]);
+        Activity::create([
+            'activity' => 'Created category',
+            'user_id' => Auth::user()->id
+        ]);
 
         return response()->json(['success' => 'Added Successfully.']);
     }
@@ -54,7 +53,7 @@ class CategoryController extends Controller
         }
     }
 
-    
+
     public function update(Request $request, Category $category)
     {
         date_default_timezone_set('Asia/Manila');
@@ -69,11 +68,15 @@ class CategoryController extends Controller
         Category::find($category->id)->update([
             'name' => $request->input('name'),
         ]);
+        Activity::create([
+            'activity' => 'Updated category',
+            'user_id' => Auth::user()->id
+        ]);
 
         return response()->json(['success' => 'Updated Successfully.']);
     }
 
-   
+
     public function destroy(Category $category)
     {
         $category->delete();

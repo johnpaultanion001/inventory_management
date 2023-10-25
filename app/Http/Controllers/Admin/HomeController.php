@@ -29,20 +29,25 @@ class HomeController extends Controller
         $ldate = date('M j , Y h:i A');
 
         $userrole = auth()->user()->role;
-        if($userrole != 'customer'){
 
             $products = Product::latest()->get();
             $productsLowerStocks = Product::latest()->where('stock', '<', 6)->get();
-            $products_today = Product::whereDay('created_at', '=', date('d'))->get();
 
-            $customers = User::where('role', 'customer')->get();
-            $customers_today = User::where('role', 'customer')->whereDay('created_at', '=', date('d'))->get();
 
-            $orders = Order::latest()->get();
-            $orders_today = Order::whereDay('created_at', '=', date('d'))->get();
+
+            $productsExpiration = Product::where("expiration","<", Carbon::now()->addMonths(1))->get();
+            $exp_label  = 'From: ' . date('F d, Y') . ' To: ' . Carbon::now()->addMonths(1)->format('F d, Y');
+
+            $products_today = Product::whereDate('created_at', Carbon::today())->get();
+
+            $sold = OrderProduct::sum('qty');
+            $sold_today = OrderProduct::whereDate('created_at', Carbon::today())->sum('qty');
+
+            $orders = OrderProduct::latest()->get();
+            $orders_today = OrderProduct::whereDate('created_at', Carbon::today())->get();
 
             $sales = OrderProduct::sum('amount');
-            $sales_today = OrderProduct::whereDay('created_at', '=', date('d'))->sum('amount');
+            $sales_today = OrderProduct::whereDate('created_at', Carbon::today())->sum('amount');
 
 
         $data = OrderProduct::select(
@@ -71,8 +76,7 @@ class HomeController extends Controller
 
 
 
-            return view('admin.home', compact('productsLowerStocks','products','products_today','customers','customers_today', 'orders','orders_today','sales','sales_today','sales_results','sold_results','ldate'));
-        }
-        return abort('403');
+        return view('admin.home', compact('productsExpiration','productsLowerStocks','products','products_today','sold','sold_today', 'orders','orders_today','sales','sales_today','sales_results','sold_results','ldate','exp_label'));
+
     }
 }

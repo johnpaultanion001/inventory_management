@@ -8,175 +8,255 @@
 @endsection
 
 @section('content')
-<div class="container-fluid py-4">
-      <div class="row">
 
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-            <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-primary text-center mt-n4 position-absolute">
-                <i class="fas fa-list" style="font-size: 17px"></i>
-              </div>
-              <div class="text-end pt-1">
-                <p class="text-sm mb-0 text-capitalize">PRODUCTS FOR TODAY</p>
-                <h4 class="mb-0">{{$products_today->count()}}</h4>
-              </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-              <p class="mb-0">Total Product <span class="text-success text-sm font-weight-bolder">{{$products->count()}}</span></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-            <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-success text-center mt-n4 position-absolute">
-                <i class="material-icons opacity-10 text-primary">person</i>
-              </div>
-              <div class="text-end pt-1">
-                <p class="text-sm mb-0 text-capitalize">CUSTOMER FOR TODAY</p>
-                <h4 class="mb-0">{{$customers_today->count()}}</h4>
-              </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-              <p class="mb-0">Total Customer <span class="text-success text-sm font-weight-bolder">{{$customers->count()}}</span></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-            <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center mt-n4 position-absolute">
-                <i class="fas fa-shopping-cart text-dark" style="font-size: 17px"></i>
-              </div>
-              <div class="text-end pt-1">
-                <p class="text-sm mb-0 text-capitalize">ORDERS FOR TODAY</p>
-                <h4 class="mb-0">{{$orders_today->count()}}</h4>
-              </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-              <p class="mb-0">Total Order <span class="text-success text-sm font-weight-bolder">{{$orders->count()}}</span></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-            <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center mt-n4 position-absolute">
-                <i class="fas fa-shopping-cart text-info" style="font-size: 17px"></i>
-              </div>
-              <div class="text-end pt-1">
-                <p class="text-sm mb-0 text-capitalize">SALES AS OF TODAY</p>
-                <h4 class="mb-0">{{ number_format($sales_today ?? '0' , 2, '.', ',') }}</h4>
-              </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-              <p class="mb-0">Total Sales <span class="text-success text-sm font-weight-bolder">{{ number_format($sales ?? '0' , 2, '.', ',') }}</span></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-12 mt-3">
-          <div class="card">
-            <div class="card-body">
-            <h4 class="text-sm mb-0 text-uppercase text-primary">Sold product as of today ({{$ldate}})</h4>
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="soldChart"></canvas>
+    <div class="container-fluid py-4">
+        @can('dashboard_access')
+            <div class="row">
+
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header p-3 pt-2">
+                    <div class="icon icon-lg icon-shape bg-gradient-dark shadow-primary text-center mt-n4 position-absolute">
+                        <i class="fas fa-list" style="font-size: 17px"></i>
+                    </div>
+                    <div class="text-end pt-1">
+                        <p class="text-sm mb-0 text-capitalize">PRODUCTS FOR TODAY</p>
+                        <h4 class="mb-0">{{$products_today->count()}}</h4>
+                    </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                    <p class="mb-0">Total Product <span class="text-success text-sm font-weight-bolder">{{$products->count()}}</span></p>
                     </div>
                 </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-12 mt-3">
-          <div class="card">
-            <div class="card-body">
-            <h4 class="text-sm mb-0 text-uppercase text-primary">Sales product as of today ({{$ldate}})</h4>
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="salesChart"></canvas>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header p-3 pt-2">
+                    <div class="icon icon-lg icon-shape bg-gradient-dark shadow-success text-center mt-n4 position-absolute">
+                        <i class="material-icons opacity-10 text-primary">person</i>
+                    </div>
+                    <div class="text-end pt-1">
+                        <p class="text-sm mb-0 text-capitalize">SOLD FOR TODAY</p>
+                        <h4 class="mb-0">{{$sold_today}}</h4>
+                    </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                    <p class="mb-0">Total SOLD <span class="text-success text-sm font-weight-bolder">{{$sold}}</span></p>
                     </div>
                 </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-12 mt-3">
-          <div class="card">
-            <div class="card-body">
-            <h4 class="text-sm mb-0 text-capitalize text-primary">Product lower stock ( < 5 )</h4>
-                <div class="card-body">
-                    <div class="table-responsive">
-                            <table class="table display" cellspacing="0" width="100%">
-                                <thead class="thead-light text-center">
-                                    <tr>
-                                        <th scope="col">Product Code</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Stock</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-uppercase font-weight-bold text-center">
-                                    @foreach($productsLowerStocks as $product)
-                                        <tr>
-
-                                            <td>
-                                                {{  $product->code ?? '' }}
-                                            </td>
-                                            <td>
-                                                {{  $product->description ?? '' }}
-                                            </td>
-                                            <td>
-                                                {{  $product->stock ?? '' }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header p-3 pt-2">
+                    <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center mt-n4 position-absolute">
+                        <i class="fas fa-shopping-cart text-dark" style="font-size: 17px"></i>
+                    </div>
+                    <div class="text-end pt-1">
+                        <p class="text-sm mb-0 text-capitalize">ORDERS FOR TODAY</p>
+                        <h4 class="mb-0">{{$orders_today->count()}}</h4>
+                    </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                    <p class="mb-0">Total Order <span class="text-success text-sm font-weight-bolder">{{$orders->count()}}</span></p>
+                    </div>
+                </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header p-3 pt-2">
+                    <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center mt-n4 position-absolute">
+                        <i class="fas fa-shopping-cart text-info" style="font-size: 17px"></i>
+                    </div>
+                    <div class="text-end pt-1">
+                        <p class="text-sm mb-0 text-capitalize">SALES AS OF TODAY</p>
+                        <h4 class="mb-0">{{ number_format($sales_today ?? '0' , 2, '.', ',') }}</h4>
+                    </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-3">
+                    <p class="mb-0">Total Sales <span class="text-success text-sm font-weight-bolder">{{ number_format($sales ?? '0' , 2, '.', ',') }}</span></p>
+                    </div>
+                </div>
+                </div>
+                <div class="col-xl-12 mt-3">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="text-sm mb-0 text-uppercase text-primary">Sold product as of today ({{$ldate}})</h4>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="soldChart"></canvas>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-xl-12 mt-3">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="text-sm mb-0 text-uppercase text-primary">Sales product as of today ({{$ldate}})</h4>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-xl-12 mt-3">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="text-sm mb-0 text-capitalize text-primary">Product lower stock ( < 5 )</h4>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                    <table class="table display datatable-table" cellspacing="0" width="100%">
+                                        <thead class="thead-light text-center">
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">IMAGE</th>
+                                                <th  scope="col">UNIT</th>
+                                                <th  scope="col">CODE</th>
+                                                <th scope="col">DESCRIPTION</th>
+                                                <th scope="col">CATEGORY</th>
+                                                <th scope="col">STOCK</th>
+                                                <th scope="col">UNIT PRICE</th>
+                                                <th scope="col">TOTAL PRICE</th>
+                                                <th scope="col">Expiration</th>
+                                                <th scope="col">CREATED AT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-uppercase font-weight-bold text-center">
+                                            @foreach($productsLowerStocks as $product)
+                                                <tr>
+                                                    <td>
+                                                    {{  $product->id ?? '' }}
+                                                    </td>
+
+                                                    <td>
+                                                    @if($product->image1 == null)
+                                                    <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/products/no_image.png')}}" />
+                                                    @else
+                                                    <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/products/'.$product->image1)}}" />
+                                                    @endif
+
+                                                    </td>
+                                                    <td>
+                                                    {{  $product->unit ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge bg-warning">{{  $product->code ?? '' }}</span>
+                                                    </td>
+
+                                                    <td>
+                                                    {{\Illuminate\Support\Str::limit($product->description,50)}}
+                                                    </td>
+                                                    <td>
+                                                    {{  $product->category->name ?? '' }}
+                                                    </td>
+
+                                                    <td>
+                                                    {{ $product->stock ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->unit_price ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->price ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->expiration->format('M j , Y') }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->created_at->format('M j , Y h:i A') }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-xl-12 mt-3">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="text-sm mb-0 text-capitalize text-primary">1 month before expiration ( {{$exp_label}} )</h4>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                    <table class="table datatable-table display" cellspacing="0" width="100%">
+                                        <thead class="thead-light text-center">
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">IMAGE</th>
+                                                <th  scope="col">UNIT</th>
+                                                <th  scope="col">CODE</th>
+                                                <th scope="col">DESCRIPTION</th>
+                                                <th scope="col">CATEGORY</th>
+                                                <th scope="col">STOCK</th>
+                                                <th scope="col">UNIT PRICE</th>
+                                                <th scope="col">TOTAL PRICE</th>
+                                                <th scope="col">Expiration</th>
+                                                <th scope="col">CREATED AT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-uppercase font-weight-bold text-center">
+                                            @foreach($productsExpiration as $product)
+                                                <tr>
+                                                    <td>
+                                                    {{  $product->id ?? '' }}
+                                                    </td>
+
+                                                    <td>
+                                                    @if($product->image1 == null)
+                                                    <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/products/no_image.png')}}" />
+                                                    @else
+                                                    <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/products/'.$product->image1)}}" />
+                                                    @endif
+
+                                                    </td>
+                                                    <td>
+                                                    {{  $product->unit ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    <span class="badge bg-warning">{{  $product->code ?? '' }}</span>
+                                                    </td>
+
+                                                    <td>
+                                                    {{\Illuminate\Support\Str::limit($product->description,50)}}
+                                                    </td>
+                                                    <td>
+                                                    {{  $product->category->name ?? '' }}
+                                                    </td>
+
+                                                    <td>
+                                                    {{ $product->stock ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->unit_price ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->price ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->expiration->format('M j , Y') }}
+                                                    </td>
+                                                    <td>
+                                                    {{ $product->created_at->format('M j , Y h:i A') }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
-          </div>
-        </div>
-        <div class="col-xl-12 mt-3">
-          <div class="card">
-            <div class="card-body">
-            <h4 class="text-sm mb-0 text-capitalize text-primary">Expiration date ( < 5 )</h4>
-                <div class="card-body">
-                    <div class="table-responsive">
-                            <table class="table display" cellspacing="0" width="100%">
-                                <thead class="thead-light text-center">
-                                    <tr>
-                                        <th scope="col">Product Code</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Stock</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-uppercase font-weight-bold text-center">
-                                    @foreach($productsLowerStocks as $product)
-                                        <tr>
-
-                                            <td>
-                                                {{  $product->code ?? '' }}
-                                            </td>
-                                            <td>
-                                                {{  $product->description ?? '' }}
-                                            </td>
-                                            <td>
-                                                {{  $product->stock ?? '' }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+        @endcan
 
 
     </div>
@@ -496,6 +576,19 @@
                 })
             }
 
+        });
+
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+
+        $.extend(true, $.fn.dataTable.defaults, {
+        pageLength: 10,
+        'columnDefs': [{ 'orderable': false, 'targets': 0 }],
+        });
+
+        var table = $('.datatable-table:not(.ajaxTable)').DataTable({ buttons: dtButtons });
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
         });
 
 

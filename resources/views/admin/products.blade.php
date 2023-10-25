@@ -106,7 +106,7 @@
                                             {{ $product->price ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $product->expiration ?? '' }}
+                                            {{ $product->expiration->format('M j , Y') }}
                                         </td>
                                         <td>
                                             {{ $product->created_at->format('M j , Y h:i A') }}
@@ -268,7 +268,7 @@
 
 @section('script')
 <script>
-    $(function () {
+$(function () {
     let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
     $.extend(true, $.fn.dataTable.defaults, {
@@ -285,14 +285,14 @@
     $('.select2').select2();
 
     $('#category_dd').on('change', function () {
-      table.columns(5).search( this.value ).draw();
+    table.columns(5).search( this.value ).draw();
     });
 
     $('#unit_dd').on('change', function () {
-      table.columns(2).search( this.value ).draw();
+    table.columns(2).search( this.value ).draw();
     });
 
-    });
+});
 
 $(document).on('click', '#create_record', function(){
     $('#formModal').modal('show');

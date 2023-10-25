@@ -225,6 +225,7 @@
         </div>
     </div>
 
+
     <form method="post" id="myForm" class="contact-form">
         @csrf
         <div class="modal fade" id="formModal" tabindex="-1" role="dialog">
@@ -396,6 +397,7 @@
 
 
 
+
     @section('footer')
         @include('../partials.admin.footer')
     @endsection
@@ -405,7 +407,6 @@
 @section('script')
 <script>
     $(function () {
-
 
         $('#scan_code').focus();
         $('.select2').select2();
@@ -633,6 +634,7 @@
 
                                                 if(key == "id"){
                                                     var buttons = '<button type="button" name="edit" edit="'+value+'"  class="edit btn btn-sm btn-success form-control">Edit</button> <br>'
+                                                    buttons += '<button type="button" name="stock" stock="'+value+'" class="stock btn btn-sm btn-warning form-control">Manage Stock</button> <br>'
                                                         buttons += '<button type="button" name="remove" remove="'+value+'" class="remove btn btn-sm btn-danger form-control">Remove</button> <br>'
 
                                                     $('#td_action').empty().append(buttons);
@@ -699,6 +701,26 @@
                             }
                         })
                     }
+                    if(data.critStock == 1){
+                        $.confirm({
+                        title: 'Confirmation',
+                        content: 'This product has been critical stock',
+                        type: 'red',
+                        buttons: {
+                                confirm: {
+                                    text: 'confirm',
+                                    btnClass: 'btn-blue',
+                                    keys: ['enter', 'shift'],
+                                    action: function(){
+
+
+                                    }
+                                },
+
+                            }
+                        });
+                    }
+
                     if(data.success){
                         $('.form-control').removeClass('is-invalid')
                         $('#myForm')[0].reset();
@@ -766,7 +788,9 @@
                             }
                         });
                         $('#formModalStock').modal('hide');
+
                     }
+
 
                 }
             });

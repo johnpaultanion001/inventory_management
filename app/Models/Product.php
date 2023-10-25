@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $dates = [
+        'expiration',
+
+    ];
 
     protected $fillable = [
         'image1',

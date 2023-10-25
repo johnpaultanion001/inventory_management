@@ -39,11 +39,9 @@ class LoginController extends Controller
         ]);
 
 
-         if(Auth::user()->role == 'customer'){
-             $redirectTo = '/';
-         }else{
-             $redirectTo = '/admin/dashboard';
-         }
+
+        $redirectTo = '/admin/dashboard';
+
 
          return $request->wantsJson()
                      ? new JsonResponse([], 204)
