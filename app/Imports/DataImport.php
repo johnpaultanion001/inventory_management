@@ -50,7 +50,7 @@ class DataImport implements ToCollection, WithHeadingRow
                 'qty' => $row['quantity'],
                 'amount' => $row['amount'],
                 'price' => $row['price'],
-                'category' => $categories[array_rand($categories)],
+                'category' => $row['category'],
                 'created_at' => Carbon::today()->subMonths(rand(0, 12))->subYears(rand(0, 2)),
             ];
 
