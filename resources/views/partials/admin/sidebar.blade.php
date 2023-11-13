@@ -10,7 +10,7 @@
   <hr class="horizontal light mt-0 mb-2">
   <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
-      @can('dashboard_access')
+      @can('dashboard')
         <li class="nav-item">
             <a class="nav-link text-dark {{ request()->is('admin/dashboard') || request()->is('admin/dashboard/*') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.dashboard") }}">
             <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -20,7 +20,7 @@
             </a>
         </li>
       @endcan
-      @can('inventories_access')
+      @can('inventories')
       <li class="nav-item"  data-toggle="collapse" data-target="#products" class="collapsed active">
         <a class="nav-link text-dark" href="#">
           <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -33,7 +33,7 @@
       @endcan
 
         <div class="sub-menu collapse show" id="products">
-            @can('inventories_access')
+            @can('inventories')
                 <li class="nav-item">
                     <a class="nav-link text-dark {{ request()->is('admin/products') || request()->is('admin/products/*') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.products.index") }}">
                         <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -43,7 +43,7 @@
                     </a>
                 </li>
             @endcan
-            @can('categories_access')
+            @can('categories')
             <li class="nav-item">
                 <a class="nav-link text-dark {{ request()->is('admin/categories') || request()->is('admin/categories/*') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.categories.index") }}">
                 <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -56,7 +56,7 @@
         </div>
 
 
-        @can('salesforcast_access')
+        @can('salesforcast')
         <li class="nav-item">
           <a class="nav-link text-dark {{ request()->is('admin/sales_reports') || request()->is('admin/sales_reports/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/sales_reports/daily/daily/daily">
             <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -66,7 +66,7 @@
           </a>
         </li>
         @endcan
-        @can('activities_access')
+        @can('activities')
         <li class="nav-item">
           <a class="nav-link text-dark {{ request()->is('admin/activities') || request()->is('admin/activities/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/activities">
             <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -76,7 +76,7 @@
           </a>
         </li>
         @endcan
-        @can('accounts_access')
+        @can('accounts')
         <li class="nav-item"  data-toggle="collapse" data-target="#accounts" class="collapsed active">
             <a class="nav-link text-dark" href="#">
             <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -89,7 +89,7 @@
        @endcan
 
         <div class="sub-menu collapse show" id="accounts">
-            @can('roles_access')
+            @can('roles')
                 <li class="nav-item">
                     <a class="nav-link text-dark {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.roles.index") }}">
                     <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -99,7 +99,7 @@
                     </a>
                 </li>
             @endcan
-            @can('accounts_access')
+            @can('accounts')
             <li classW="nav-item">
                 <a class="nav-link text-dark {{ request()->is('admin/accounts') || request()->is('admin/accounts/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/accounts">
                     <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">

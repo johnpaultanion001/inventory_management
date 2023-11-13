@@ -84,25 +84,25 @@ class UserSeeder extends Seeder
 
         $permissions = [
             [
-                'title' => 'dashboard_access',
+                'title' => 'dashboard',
             ],
             [
-                'title' => 'inventories_access',
+                'title' => 'inventories',
             ],
             [
-                'title' => 'categories_access',
+                'title' => 'categories',
             ],
             [
-                'title' => 'salesforcast_access',
+                'title' => 'salesforcast',
             ],
             [
-                'title' => 'activities_access',
+                'title' => 'activities',
             ],
             [
-                'title' => 'roles_access',
+                'title' => 'roles',
             ],
             [
-                'title' => 'accounts_access',
+                'title' => 'accounts',
             ],
 
         ];

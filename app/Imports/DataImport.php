@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Category;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\OrderProduct;
@@ -23,7 +24,25 @@ class DataImport implements ToCollection, WithHeadingRow
             DB::beginTransaction();
 
             //$user = User::find(15);
-            $product_data = [
+            $cat = Category::where('name' ,$row['category'])->first();
+            if($cat){
+                $product_data = [
+                    'stock' => 250,
+                    'unit' => $row['unit'],
+                    'code' => $row['code'],
+                    'description' => $row['description'],
+                    'area' => $row['area'],
+                    'unit_price' => $row['unit_price'],
+                    'price' => $row['price'],
+                    'category_id' => $cat->id,
+                    'expiration' => '2024/12/1',
+                ];
+            }else{
+               $new_cat = Category::create([
+                'name' => $row['category'],
+               ]);
+
+               $product_data = [
                 'stock' => 250,
                 'unit' => $row['unit'],
                 'code' => $row['code'],
@@ -31,18 +50,11 @@ class DataImport implements ToCollection, WithHeadingRow
                 'area' => $row['area'],
                 'unit_price' => $row['unit_price'],
                 'price' => $row['price'],
-                'category_id' => rand(1, 6),
+                'category_id' => $new_cat->id,
                 'expiration' => '2024/12/1',
             ];
+            }
 
-            $categories = array(
-                'Food Area',
-                'Soap Area',
-                'Personal Care',
-                'Canned Foods',
-                'Beverages',
-                'Frozen Foods'
-              );
 
             $order_products = [
                 'product_code' => $row['code'],
@@ -60,12 +72,12 @@ class DataImport implements ToCollection, WithHeadingRow
             ];
 
             $product = Product::updateOrCreate(
-                    [
-                        'code' => $row['code'],
-                    ],
-                    $product_data
+                [
+                    'code' => $row['code'],
+                ],
+                $product_data
 
-                );
+            );
 
             $stocks = \App\Models\StockHistory::updateOrCreate(
                 [
@@ -76,6 +88,8 @@ class DataImport implements ToCollection, WithHeadingRow
             );
 
             $orders = OrderProduct::create($order_products);
+
+
 
             DB::commit();
 

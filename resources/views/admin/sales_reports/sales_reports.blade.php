@@ -337,7 +337,7 @@ $(function () {
                     borderWidth: 3
                 },
                 {
-                    label: 'Frozen Foods',
+                    label: 'Condiments',
                     data: @json($montly_sold[3]),
                     borderColor: "rgba(153, 102, 255, 0.2)",
                     borderWidth: 3
@@ -399,7 +399,7 @@ $(function () {
                     borderWidth: 3
                 },
                 {
-                    label: 'Frozen Foods',
+                    label: 'Condiments',
                     data: @json($montly_sold2021[3]),
                     borderColor: "rgba(153, 102, 255, 0.2)",
                     borderWidth: 3
@@ -461,7 +461,7 @@ $(function () {
                     borderWidth: 3
                 },
                 {
-                    label: 'Frozen Foods',
+                    label: 'Condiments',
                     data: @json($montly_sold2022[3]),
                     borderColor: "rgba(153, 102, 255, 0.2)",
                     borderWidth: 3
@@ -523,7 +523,7 @@ $(function () {
                     borderWidth: 3
                 },
                 {
-                    label: 'Frozen Foods',
+                    label: 'Condiments',
                     data: @json($montly_sold2024[3]),
                     borderColor: "rgba(153, 102, 255, 0.2)",
                     borderWidth: 3
