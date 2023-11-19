@@ -795,6 +795,61 @@
                 }
             });
         });
+
+        $(document).on('click', '.remove', function(){
+            var id = $(this).attr('remove');
+            $.confirm({
+                title: 'Confirmation',
+                content: 'You really want to remove this record?',
+                type: 'red',
+                buttons: {
+                    confirm: {
+                        text: 'confirm',
+                        btnClass: 'btn-blue',
+                        keys: ['enter', 'shift'],
+                        action: function(){
+                            return $.ajax({
+                                url:"/admin/products/"+id,
+                                method:'DELETE',
+                                data: {
+                                    _token: '{!! csrf_token() !!}',
+                                },
+                                dataType:"json",
+                                beforeSend:function(){
+                                    $('#titletable').text('Loading...');
+                                },
+                                success:function(data){
+                                    if(data.success){
+                                        $.confirm({
+                                        title: 'Confirmation',
+                                        content: data.success,
+                                        type: 'green',
+                                        buttons: {
+                                                confirm: {
+                                                    text: 'confirm',
+                                                    btnClass: 'btn-blue',
+                                                    keys: ['enter', 'shift'],
+                                                    action: function(){
+                                                        location.reload();
+                                                    }
+                                                },
+
+                                            }
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    },
+                    cancel:  {
+                        text: 'cancel',
+                        btnClass: 'btn-red',
+                        keys: ['enter', 'shift'],
+                    }
+                }
+            });
+
+            });
     });
 </script>
 @endsection

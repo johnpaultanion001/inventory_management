@@ -162,17 +162,17 @@
 
 
                 <h3>Product Orders</h3>
-                <div class="table-responsive">
+                <div class="table-responsive" style="overflow:scroll; height:500px;">
                     <table class="table display" id="table_chart" width="100%">
                         <thead class="thead-light">
                             <tr>
-                                <th>ORDER ID</th>
-                                <th>CATEGORY</th>
-                                <th>PRODUCT</th>
-                                <th>PRICE</th>
-                                <th>SOLD</th>
-                                <th>AMOUNT</th>
-                                <th>ORDER AT</th>
+                                <th  scope="col">ORDER ID</th>
+                                <th  scope="col">CATEGORY</th>
+                                <th  scope="col">PRODUCT</th>
+                                <th  scope="col">PRICE</th>
+                                <th  scope="col">SOLD</th>
+                                <th  scope="col">AMOUNT</th>
+                                <th  scope="col">ORDER AT</th>
                             </tr>
                         </thead>
                         <tbody class="text-uppercase font-weight-bold" id="list_chart">
@@ -224,6 +224,7 @@ $(function () {
     $('.chart_2024').hide();
     $('.chart_2021').hide();
     $('.chart_2022').hide();
+
 
     $("#btn-check-2021").on("click", function(){
         if($("#btn-check-2021").is(":checked")) {
@@ -560,73 +561,226 @@ $(function () {
 
 
 
-        ctx.addEventListener('click', function(evt) {
-         var firstPoint = salesChart.getElementAtEvent(evt)[0];
-            if (firstPoint) {
-                var label = salesChart.data.labels[firstPoint._index];
-                var value = salesChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
-                var legend =  salesChart.data.datasets[firstPoint._datasetIndex].label;
+    ctx.addEventListener('click', function(evt) {
+        var firstPoint = salesChart.getElementAtEvent(evt)[0];
+        if (firstPoint) {
+            var label = salesChart.data.labels[firstPoint._index];
+            var value = salesChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+            var legend =  salesChart.data.datasets[firstPoint._datasetIndex].label;
 
-                // alert('Label: ' + label + "\nValue: " + value);
+            // alert('Label: ' + label + "\nValue: " + value);
 
-                $('#modalChart').modal('show');
-                $('.modal-title').text('CATEGORY: '+ legend);
-                console.log(value)
+            $('#modalChart').modal('show');
+            $('.modal-title').text('CATEGORY: '+ legend);
+            console.log(value)
 
-                $.ajax({
-                    url :"/admin/chart_reports/"+legend,
-                    data: { filter : "modal_data"},
-                    dataType:"json",
-                    beforeSend:function(){
-                        //$("#action_button").attr("disabled", true);
-                    },
-                    success:function(data){
-                        //$("#action_button").attr("disabled", false);
+            $.ajax({
+                url :"/admin/chart_reports/"+legend,
+                data: { filter : "modal_data" ,category: legend, month: label, year: '2023' },
+                dataType:"json",
+                beforeSend:function(){
+                    //$("#action_button").attr("disabled", true);
+                },
+                success:function(data){
+                    //$("#action_button").attr("disabled", false);
+                    var chart_data = "";
+                    $('#sales').text(number_format(data.sales, 2,'.', ','));
+                    $('#predic').text(number_format(data.predic, 2,'.', ','));
+                    // console.log(data.filter);
+                    // console.log('month:' + label)
+                    // console.log('category:' + legend)
+                    // console.log('year 2023')
+                    // console.log(data.result)
 
-                        var chart_data = "";
-                        $('#sales').text(number_format(data.sales, 2,'.', ','));
-                        $('#predic').text(number_format(data.predic, 2,'.', ','));
-                        console.log(data.filter);
-                        $.each(data.result, function(key,value){
-                           var new_date = moment(value.created_at).format('DD-MM-YYYY');
-                            chart_data += `
-                                        <tr>
-                                            <td>
-                                                `+value.id+`
-                                            </td>
-                                            <td>
-                                                `+value.category+`
-                                            </td>
-                                            <td>
-                                                `+value.description+`
-                                            </td>
-                                            <td>
-                                                `+value.price+`
-                                            </td>
-                                            <td>
-                                                `+value.qty+`
-                                            </td>
-                                            <td>
-                                                `+value.amount+`
-                                            </td>
-                                            <td>
-                                                `+new_date+`
-                                            </td>
-                                        </tr>
-                            `;
-                        })
-                        $('#list_chart').empty().append(chart_data);
-                        $('#table_chart').DataTable(
-                        );
+                    $.each(data.result, function(key,value){
+                        var new_date = moment(value.created_at).format('DD-MM-YYYY');
+                        chart_data += `
+                                    <tr>
+                                        <td>
+                                            `+value.id+`
+                                        </td>
+                                        <td>
+                                            `+value.category+`
+                                        </td>
+                                        <td>
+                                            `+value.description+`
+                                        </td>
+                                        <td>
+                                            `+value.price+`
+                                        </td>
+                                        <td>
+                                            `+value.qty+`
+                                        </td>
+                                        <td>
+                                            `+value.amount+`
+                                        </td>
+                                        <td>
+                                            `+new_date+`
+                                        </td>
+                                    </tr>
+                        `;
+                    })
+                    $('#list_chart').empty().append(chart_data);
+                    console.log(data.sold)
+                    // table_chart();
 
-                    }
-                })
-            }
+                }
+            })
+        }
 
 
-        });
+    });
+
+    ctx2021.addEventListener('click', function(evt) {
+        var firstPoint = salesChart2021.getElementAtEvent(evt)[0];
+        if (firstPoint) {
+            var label = salesChart2021.data.labels[firstPoint._index];
+            var value = salesChart2021.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+            var legend =  salesChart2021.data.datasets[firstPoint._datasetIndex].label;
+
+            // alert('Label: ' + label + "\nValue: " + value);
+
+            $('#modalChart').modal('show');
+            $('.modal-title').text('CATEGORY: '+ legend);
+            console.log(value)
+
+            $.ajax({
+                url :"/admin/chart_reports/"+legend,
+                data: { filter : "modal_data" ,category: legend, month: label, year: '2021' },
+                dataType:"json",
+                beforeSend:function(){
+                    //$("#action_button").attr("disabled", true);
+                },
+                success:function(data){
+                    //$("#action_button").attr("disabled", false);
+                    var chart_data = "";
+                    $('#sales').text(number_format(data.sales, 2,'.', ','));
+                    $('#predic').text(number_format(data.predic, 2,'.', ','));
+                    // console.log(data.filter);
+                    // console.log('month:' + label)
+                    // console.log('category:' + legend)
+                    // console.log('year 2023')
+                    // console.log(data.result)
+
+                    $.each(data.result, function(key,value){
+                        var new_date = moment(value.created_at).format('DD-MM-YYYY');
+                        chart_data += `
+                                    <tr>
+                                        <td>
+                                            `+value.id+`
+                                        </td>
+                                        <td>
+                                            `+value.category+`
+                                        </td>
+                                        <td>
+                                            `+value.description+`
+                                        </td>
+                                        <td>
+                                            `+value.price+`
+                                        </td>
+                                        <td>
+                                            `+value.qty+`
+                                        </td>
+                                        <td>
+                                            `+value.amount+`
+                                        </td>
+                                        <td>
+                                            `+new_date+`
+                                        </td>
+                                    </tr>
+                        `;
+                    })
+                    $('#list_chart').empty().append(chart_data);
+                    console.log(data.sold)
+                    // table_chart();
+
+                }
+            })
+        }
+
+
+    });
+    ctx2022.addEventListener('click', function(evt) {
+        var firstPoint = salesChart2022.getElementAtEvent(evt)[0];
+        if (firstPoint) {
+            var label = salesChart2022.data.labels[firstPoint._index];
+            var value = salesChart2022.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+            var legend =  salesChart2022.data.datasets[firstPoint._datasetIndex].label;
+
+            // alert('Label: ' + label + "\nValue: " + value);
+
+            $('#modalChart').modal('show');
+            $('.modal-title').text('CATEGORY: '+ legend);
+            console.log(value)
+
+            $.ajax({
+                url :"/admin/chart_reports/"+legend,
+                data: { filter : "modal_data" ,category: legend, month: label, year: '2022' },
+                dataType:"json",
+                beforeSend:function(){
+                    //$("#action_button").attr("disabled", true);
+                },
+                success:function(data){
+                    //$("#action_button").attr("disabled", false);
+                    var chart_data = "";
+                    $('#sales').text(number_format(data.sales, 2,'.', ','));
+                    $('#predic').text(number_format(data.predic, 2,'.', ','));
+                    // console.log(data.filter);
+                    // console.log('month:' + label)
+                    // console.log('category:' + legend)
+                    // console.log('year 2023')
+                    // console.log(data.result)
+
+                    $.each(data.result, function(key,value){
+                        var new_date = moment(value.created_at).format('DD-MM-YYYY');
+                        chart_data += `
+                                    <tr>
+                                        <td>
+                                            `+value.id+`
+                                        </td>
+                                        <td>
+                                            `+value.category+`
+                                        </td>
+                                        <td>
+                                            `+value.description+`
+                                        </td>
+                                        <td>
+                                            `+value.price+`
+                                        </td>
+                                        <td>
+                                            `+value.qty+`
+                                        </td>
+                                        <td>
+                                            `+value.amount+`
+                                        </td>
+                                        <td>
+                                            `+new_date+`
+                                        </td>
+                                    </tr>
+                        `;
+                    })
+                    $('#list_chart').empty().append(chart_data);
+                    console.log(data.sold)
+                    // table_chart();
+
+                }
+            })
+        }
+
+
+    });
 
 });
+
+function table_chart(){
+    $('#table_chart').DataTable({
+        bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
+    });
+}
+
 
 
 

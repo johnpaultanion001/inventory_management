@@ -234,50 +234,50 @@ class OrderController extends Controller
         }
         //2023
         array_push($montly_sold, [
-                $jan2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 1)->sum('qty'),
-                $feb2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 2)->sum('qty'),
-                $mar2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 3)->sum('qty'),
-                $apr2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 4)->sum('qty'),
-                $may2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 5)->sum('qty'),
-               $june2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 6)->sum('qty'),
-               $july2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 7)->sum('qty'),
-                $aug2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 8)->sum('qty'),
-               $sept2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 9)->sum('qty'),
-                $oct2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 10)->sum('qty'),
-                $nov2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 11)->sum('qty'),
-                $dec2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 12)->sum('qty'),
+                $jan2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 1)->sum('qty'),
+                $feb2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 2)->sum('qty'),
+                $mar2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 3)->sum('qty'),
+                $apr2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 4)->sum('qty'),
+                $may2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 5)->sum('qty'),
+               $june2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 6)->sum('qty'),
+               $july2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 7)->sum('qty'),
+                $aug2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 8)->sum('qty'),
+               $sept2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 9)->sum('qty'),
+                $oct2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 10)->sum('qty'),
+                $nov2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 11)->sum('qty'),
+                $dec2023 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=', date('Y'))->whereMonth('created_at', '=', 12)->sum('qty'),
                 'others',
         ]);
         //2021
         array_push($montly_sold2021, [
-            $jan2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 1)->sum('qty'),
-            $feb2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 2)->sum('qty'),
-            $mar2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 3)->sum('qty'),
-            $apr2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 4)->sum('qty'),
-            $may2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 5)->sum('qty'),
-           $june2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 6)->sum('qty'),
-           $july2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 7)->sum('qty'),
-            $aug2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 8)->sum('qty'),
-           $sept2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 9)->sum('qty'),
-            $oct2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 10)->sum('qty'),
-            $nov2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 11)->sum('qty'),
-            $dec2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 12)->sum('qty'),
+            $jan2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 1)->sum('qty'),
+            $feb2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 2)->sum('qty'),
+            $mar2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 3)->sum('qty'),
+            $apr2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 4)->sum('qty'),
+            $may2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 5)->sum('qty'),
+           $june2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 6)->sum('qty'),
+           $july2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 7)->sum('qty'),
+            $aug2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 8)->sum('qty'),
+           $sept2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 9)->sum('qty'),
+            $oct2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 10)->sum('qty'),
+            $nov2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 11)->sum('qty'),
+            $dec2021 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2021')->whereMonth('created_at', '=', 12)->sum('qty'),
             'others',
         ]);
         //2022
         array_push($montly_sold2022, [
-            $jan2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 1)->sum('qty'),
-            $feb2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 2)->sum('qty'),
-            $mar2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 3)->sum('qty'),
-            $apr2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 4)->sum('qty'),
-            $may2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 5)->sum('qty'),
-           $june2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 6)->sum('qty'),
-           $july2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 7)->sum('qty'),
-            $aug2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 8)->sum('qty'),
-           $sept2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 9)->sum('qty'),
-            $oct2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 10)->sum('qty'),
-            $nov2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 11)->sum('qty'),
-            $dec2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Frozen Foods','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 12)->sum('qty'),
+            $jan2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 1)->sum('qty'),
+            $feb2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 2)->sum('qty'),
+            $mar2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 3)->sum('qty'),
+            $apr2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 4)->sum('qty'),
+            $may2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 5)->sum('qty'),
+           $june2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 6)->sum('qty'),
+           $july2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 7)->sum('qty'),
+            $aug2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 8)->sum('qty'),
+           $sept2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 9)->sum('qty'),
+            $oct2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 10)->sum('qty'),
+            $nov2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 11)->sum('qty'),
+            $dec2022 =  OrderProduct::whereNotIn('category',['Beverages','Canned Foods','Food Area','Condiments','Personal Care','Soap Area'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 12)->sum('qty'),
             'others',
         ]);
         //2024
@@ -332,8 +332,16 @@ class OrderController extends Controller
 
         }
         elseif($filter == 'modal_data'){
-        $list = OrderProduct::where('category', '=', $filter_date)->latest()->get();
+        $category = $request->get('category');
+        $month = date("m", strtotime($request->get('month')));
+        $year = $request->get('year');
 
+
+        $list = OrderProduct::where('category', '=', $category)
+                                ->whereMonth('created_at', '=', $month)
+                                ->whereYear('created_at', '=', $year)
+                                ->latest()->get();
+        $sold = $list->sum('sold');
         }
         else{
             $list = OrderProduct::whereDate('created_at', '=', $filter_date)->latest()->get();
@@ -355,6 +363,7 @@ class OrderController extends Controller
         return response()->json(
             [
                 'result' => $list,
+                'sold' => $sold,
                 'sales' => $sales,
                 'predic' => $predic,
                 'filter' => $filter,
