@@ -208,7 +208,7 @@ class ProductController extends Controller
 
 
             //email sending
-            if($product->stock < 6){
+            if($manage_stock < 6){
                 $emailNotif = [
                     'msg'              => "PRODUCT LOWER STOCK",
                     'code'              =>  $product->code,
@@ -216,22 +216,21 @@ class ProductController extends Controller
                     'stock'              =>   $product->stock,
                     'updated_by'              =>  auth()->user()->name,
                 ];
-
+                $critStock = 1;
                 // Mail::to('johnpaultanion001@gmail.com')
                 // ->send(new EmailNotification($emailNotif));
+            }else{
+                $critStock = 0;
             }
+
+            Activity::create([
+                'activity' => 'Updated stock',
+                'user_id' => Auth::user()->id
+            ]);
+
             $product->stock = $request->manage_stock;
             $product->save();
-            $critStock = 1;
-        }else{
-            $critStock = 0;
         }
-
-        Activity::create([
-            'activity' => 'Updated stock',
-            'user_id' => Auth::user()->id
-        ]);
-
 
         return response()->json([
             'success' => 'Stock Updated Successfully.',
@@ -239,7 +238,7 @@ class ProductController extends Controller
             "stocks" =>  $product->stocks()->latest()->get(),
             "orders" => $product->orders()->latest()->get(),
             "category" => $product->category->name,
-            "critStock" => $critStock,
+            "critStock" => $critStock
         ]);
     }
 

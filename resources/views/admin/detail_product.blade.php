@@ -426,6 +426,12 @@
                     console.log(data.product);
                     $.each(data.product, function(key,value){
                             $('#td_'+key).text(value)
+                            if(key == "expiration"){
+                                $('#td_expiration').text(moment(value).format('DD-MM-YYYY'));
+                            }
+                            if(key == "created_at"){
+                                $('#td_created_at').text(moment(value).format('DD-MM-YYYY'));
+                            }
                             if(key == "image1"){
                                 if(value != null){
                                     var img = '<img style="vertical-align: bottom;"  height="100" width="100" src="/assets/img/products/'+value+'" />'
@@ -701,7 +707,8 @@
                             }
                         })
                     }
-                    if(data.critStock == 1){
+                    console.log("test "+data.critStock)
+                    if(data.critStock === 1){
                         $.confirm({
                         title: 'Confirmation',
                         content: 'This product has been critical stock',
