@@ -332,15 +332,15 @@ $(function () {
                     borderWidth: 3
                 },
                 {
-                    label: 'Food Area',
+                    label: 'Condiments',
                     data: @json($montly_sold[2]),
-                    borderColor: "blue",
+                    borderColor: "rgba(153, 102, 255, 0.2)",
                     borderWidth: 3
                 },
                 {
-                    label: 'Condiments',
+                    label: 'Food Area',
                     data: @json($montly_sold[3]),
-                    borderColor: "rgba(153, 102, 255, 0.2)",
+                    borderColor: "blue",
                     borderWidth: 3
                 },
                 {
@@ -372,6 +372,7 @@ $(function () {
             }
         }
     });
+
 
     //2021
     let ctx2021 = document.getElementById('salesChart2021');
