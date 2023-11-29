@@ -163,6 +163,61 @@
 
     <div class="container-fluid py-4">
         <div class="row">
+            <div class="col-md-12">
+                <div class="card p-2">
+                    <div class="card-header border-0">
+                        <div class="row ">
+                            <div class="col-md-10">
+                                <h4 class="mb-0 text-uppercase" id="titletable">Expiration History</h4>
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+
+                        </div>
+
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table datatable-table display text-center" cellspacing="0" width="100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>STOCKS</th>
+                                    <th>Expiration</th>
+                                    <th>CREATED AT</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-uppercase font-weight-bold text-center" id="list_expiration">
+                                    <tr>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td>
+
+                                        </td>
+
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid py-4">
+        <div class="row">
         <div class="col-md-12">
                 <div class="card p-2">
                     <div class="card-header border-0">
@@ -224,6 +279,7 @@
             </div>
         </div>
     </div>
+
 
 
     <form method="post" id="myForm" class="contact-form">
@@ -483,6 +539,20 @@
                             console.log(value)
                     })
                     $('#list_stocks').empty().append(list_stocks);
+
+                    var list_expi = "";
+                    $.each(data.expirations, function(key,value){
+                        list_expi += `
+                                    <tr>
+                                        <td>`+value.id+`</td>
+                                        <td>`+value.stock_expi+`</td>
+                                        <td>`+moment(value.expiration).format('DD-MM-YYYY')+`</td>
+                                        <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                    </tr>
+                            `;
+                            console.log(value)
+                    })
+                    $('#list_expiration').empty().append(list_expi);
 
 
                 }

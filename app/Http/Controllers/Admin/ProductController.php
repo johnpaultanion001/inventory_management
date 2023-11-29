@@ -48,6 +48,8 @@ class ProductController extends Controller
                 "category" => $productWCode->category->name,
                 "orders" =>  $productWCode->orders()->latest()->get(),
                 "stocks" =>  $productWCode->stocks()->latest()->get(),
+                "expirations" =>  $productWCode->stocksWExpi()->latest()->get(),
+
             ],
 
         );

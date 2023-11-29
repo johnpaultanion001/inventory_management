@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailNotification;
 use App\Models\Category;
+use App\Models\Forcast;
+use League\Flysystem\Plugin\ForcedCopy;
 
 class OrderController extends Controller
 {
@@ -144,6 +146,11 @@ class OrderController extends Controller
                                     ->groupBy('data')
                                     ->get();
         }
+        elseif($filter == 'setup'){
+            $forcasts = Forcast::all();
+            $categories = Category::orderBy('name')->get();
+            return view('admin.sales_reports.setup', compact('forcasts','categories'));
+        }
         else{
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
             $sales = OrderProduct::latest()->whereDate('created_at', Carbon::today())
@@ -216,20 +223,36 @@ class OrderController extends Controller
                 $category->name,
             ]);
             //2024
+            // array_push($montly_sold2024, [
+            //     ($jan2023 + $jan2021 + $jan2022) / 3,
+            //     ($feb2023 + $feb2021 + $feb2022) / 3,
+            //     ($mar2023 + $mar2021 + $mar2022) / 3,
+            //     ($apr2023 + $apr2021 + $apr2022) / 3,
+            //     ($may2023 + $may2021 + $may2022) / 3,
+            //     ($june2023 + $june2021 + $june2022) / 3,
+            //     ($july2023 + $july2021 + $july2022) / 3,
+            //     ($aug2023 + $aug2021 + $aug2022) / 3,
+            //     ($sept2023 + $sept2021 + $sept2022) / 3,
+            //     ($oct2023 + $oct2021 + $oct2022) / 3,
+            //     ($nov2023 + $nov2021 + $nov2022) / 3,
+            //     ($dec2023 + $dec2021 + $dec2022) / 3,
+            //     $category->name,
+            // ]);
+
             array_push($montly_sold2024, [
-                ($jan2023 + $jan2021 + $jan2022) / 3,
-                ($feb2023 + $feb2021 + $feb2022) / 3,
-                ($mar2023 + $mar2021 + $mar2022) / 3,
-                ($apr2023 + $apr2021 + $apr2022) / 3,
-                ($may2023 + $may2021 + $may2022) / 3,
-                ($june2023 + $june2021 + $june2022) / 3,
-                ($july2023 + $july2021 + $july2022) / 3,
-                ($aug2023 + $aug2021 + $aug2022) / 3,
-                ($sept2023 + $sept2021 + $sept2022) / 3,
-                ($oct2023 + $oct2021 + $oct2022) / 3,
-                ($nov2023 + $nov2021 + $nov2022) / 3,
-                ($dec2023 + $dec2021 + $dec2022) / 3,
-                $category->name,
+                   $jan2024 = Forcast::where('category', $category->name)->where('month', '=', 1)->sum('total'),
+                   $feb2024 = Forcast::where('category', $category->name)->where('month', '=', 2)->sum('total'),
+                   $mar2024 = Forcast::where('category', $category->name)->where('month', '=', 3)->sum('total'),
+                   $apr2024 = Forcast::where('category', $category->name)->where('month', '=', 4)->sum('total'),
+                   $may2024 = Forcast::where('category', $category->name)->where('month', '=', 5)->sum('total'),
+                   $june2024 = Forcast::where('category', $category->name)->where('month', '=', 6)->sum('total'),
+                   $july2024 = Forcast::where('category', $category->name)->where('month', '=', 7)->sum('total'),
+                   $aug2024 = Forcast::where('category', $category->name)->where('month', '=', 8)->sum('total'),
+                   $sept2024 = Forcast::where('category', $category->name)->where('month', '=', 9)->sum('total'),
+                   $oct2024 = Forcast::where('category', $category->name)->where('month', '=', 10)->sum('total'),
+                   $nov2024 = Forcast::where('category', $category->name)->where('month', '=', 11)->sum('total'),
+                   $dec2024 = Forcast::where('category', $category->name)->where('month', '=', 12)->sum('total'),
+                   $category->name,
             ]);
         }
         //2023
@@ -280,22 +303,21 @@ class OrderController extends Controller
             $dec2022 =  OrderProduct::whereNotIn('category',['BEVERAGES','CANNED FOODS','FOOD AREA','CONDIMENTS','PERSONAL CARE','SOAP AREA'])->whereYear('created_at', '=','2022')->whereMonth('created_at', '=', 12)->sum('qty'),
             'others',
         ]);
-        //2024
         array_push($montly_sold2024, [
-            ($jan2023 + $jan2021 + $jan2022) / 3,
-            ($feb2023 + $feb2021 + $feb2022) / 3,
-            ($mar2023 + $mar2021 + $mar2022) / 3,
-            ($apr2023 + $apr2021 + $apr2022) / 3,
-            ($may2023 + $may2021 + $may2022) / 3,
-            ($june2023 + $june2021 + $june2022) / 3,
-            ($july2023 + $july2021 + $july2022) / 3,
-            ($aug2023 + $aug2021 + $aug2022) / 3,
-            ($sept2023 + $sept2021 + $sept2022) / 3,
-            ($oct2023 + $oct2021 + $oct2022) / 3,
-            ($nov2023 + $nov2021 + $nov2022) / 3,
-            ($dec2023 + $dec2021 + $dec2022) / 3,
-            $category->name,
-        ]);
+            $jan2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 1)->sum('total'),
+            $feb2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 2)->sum('total'),
+            $mar2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 3)->sum('total'),
+            $apr2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 4)->sum('total'),
+            $may2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 5)->sum('total'),
+            $june2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 6)->sum('total'),
+            $july2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 7)->sum('total'),
+            $aug2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 8)->sum('total'),
+            $sept2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 9)->sum('total'),
+            $oct2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 10)->sum('total'),
+            $nov2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 11)->sum('total'),
+            $dec2024 = Forcast::where('category', 'OTHERS')->where('month', '=', 12)->sum('total'),
+            'OTHERS',
+     ]);
 
 
     $chart_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
@@ -369,6 +391,21 @@ class OrderController extends Controller
                 'filter' => $filter,
             ]
         );
+    }
+
+    public function chart_category($category, $m, $y, Request $request){
+        $month = date("m", strtotime($m));
+        $year = $y;
+        $ldate = date('M j , Y');
+
+
+        $sales = OrderProduct::where('category', '=', $category)
+                                ->whereMonth('created_at', '=', $month)
+                                ->whereYear('created_at', '=', $year)
+                                ->latest()->get();
+        $title_filter = "Category: " .$category ." Month/Year: ". $m ."/". $y;
+
+        return view('admin.sales_reports.data_chart', compact('sales','ldate','title_filter'));
     }
 
 }

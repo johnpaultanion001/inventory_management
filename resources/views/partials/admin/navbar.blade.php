@@ -15,7 +15,9 @@
         @elseif(request()->is('admin/categories'))
         <li class="breadcrumb-item text-sm text-white active" aria-current="page">Collections</li>
         @elseif(request()->is('admin/sales_reports/*'))
-        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Sales Reports</li>
+        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Salesforcast</li>
+        @elseif(request()->is('admin/salesforcast/*'))
+        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Salesforcast</li>
         @elseif(request()->is('admin/styles'))
         <li class="breadcrumb-item text-sm text-white active" aria-current="page">Styles</li>
         @endif
@@ -32,19 +34,21 @@
       @elseif(request()->is('admin/categories'))
         <h6 class="font-weight-bolder mb-0 text-white">Collections</h6>
       @elseif(request()->is('admin/sales_reports/*'))
-        <h6 class="font-weight-bolder mb-0 text-white">Sales Reports</h6>
+        <h6 class="font-weight-bolder mb-0 text-white">Salesforcast</h6>
+      @elseif(request()->is('admin/salesforcast/*'))
+        <h6 class="font-weight-bolder mb-0 text-white">Salesforcast</h6>
       @elseif(request()->is('admin/styles'))
       <h6 class="font-weight-bolder mb-0 text-white">Manage Styles</h6>
       @endif
-      
+
     </nav>
     <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
       <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-        
+
       </div>
       <ul class="navbar-nav  justify-content-end">
         <li class="nav-item d-flex align-items-center">
-          
+
 
         </li>
         <li class="nav-item d-xl-none  d-flex align-items-center p-2">
@@ -56,23 +60,23 @@
             </div>
           </a>
         </li>
-       
+
         <li class="nav-item dropdown pe-2 d-flex align-items-center">
           <a href="javascript:;" class="nav-link text-body p-0 text-white" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-           
+
             <i class="fas fa-users p-2 text-white"></i> <span class="text-uppercase text-white">{{Auth()->user()->name}}</span>  <i class="fas fa-angle-down  text-white"></i>
-            
+
           </a>
           <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-           
+
             <li class="mb-2">
               <a href="#" class="dropdown-item border-radius-md"  onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                 <i class="fas fa-sign-out-alt fa-lg p-2"></i>
                 <span>Logout</span>
               </a>
             </li>
-           
-            
+
+
           </ul>
         </li>
       </ul>

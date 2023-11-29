@@ -69,6 +69,9 @@ class DataImport implements ToCollection, WithHeadingRow
             $stock_histories = [
                 'product_code' => $row['code'],
                 'stock' => 250,
+                'stock_expi' => 250,
+                'isOrder' => false,
+                'expiration' =>  '2024/12/1',
             ];
 
             $product = Product::updateOrCreate(

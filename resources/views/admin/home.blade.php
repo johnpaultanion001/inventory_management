@@ -419,164 +419,164 @@
             options: options
         });
 
-        salesChart.addEventListener('click', function(evt) {
-            var firstPoint = sales.getElementAtEvent(evt)[0];
-            if (firstPoint) {
-                var label = sales.data.labels[firstPoint._index];
-                var value = sales.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+        // salesChart.addEventListener('click', function(evt) {
+        //     var firstPoint = sales.getElementAtEvent(evt)[0];
+        //     if (firstPoint) {
+        //         var label = sales.data.labels[firstPoint._index];
+        //         var value = sales.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
 
-                // alert('Label: ' + label + "\nValue: " + value);
+        //         // alert('Label: ' + label + "\nValue: " + value);
 
-                $('#modalChart').modal('show');
-                $('.modal-title').text('CATEGORY: '+ label);
+        //         $('#modalChart').modal('show');
+        //         $('.modal-title').text('CATEGORY: '+ label);
 
-                $.ajax({
-                    url :"/admin/chart_reports/"+label,
-                    data: { filter : "modal_data"},
-                    dataType:"json",
-                    beforeSend:function(){
-                        //$("#action_button").attr("disabled", true);
-                    },
-                    success:function(data){
-                        //$("#action_button").attr("disabled", false);
-                        var chart_data = "";
-                        $('#sales').text(number_format(data.sales, 2,'.', ','));
-                        $('#predic').text(number_format(data.predic, 2,'.', ','));
-                        console.log(data.filter);
-                        $.each(data.result, function(key,value){
-                           var new_date = moment(value.created_at).format('DD-MM-YYYY');
+        //         $.ajax({
+        //             url :"/admin/chart_reports/"+label,
+        //             data: { filter : "modal_data"},
+        //             dataType:"json",
+        //             beforeSend:function(){
+        //                 //$("#action_button").attr("disabled", true);
+        //             },
+        //             success:function(data){
+        //                 //$("#action_button").attr("disabled", false);
+        //                 var chart_data = "";
+        //                 $('#sales').text(number_format(data.sales, 2,'.', ','));
+        //                 $('#predic').text(number_format(data.predic, 2,'.', ','));
+        //                 console.log(data.filter);
+        //                 $.each(data.result, function(key,value){
+        //                    var new_date = moment(value.created_at).format('DD-MM-YYYY');
 
-                            chart_data += `
-                                        <tr>
-                                            <td>
-                                                `+value.id+`
-                                            </td>
-                                            <td>
-                                                `+value.description+`
-                                            </td>
-                                            <td>
-                                                `+value.price+`
-                                            </td>
-                                            <td>
-                                                `+value.qty+`
-                                            </td>
-                                            <td>
-                                                `+value.amount+`
-                                            </td>
-                                            <td>
-                                                `+new_date+`
-                                            </td>
-                                        </tr>
-                            `;
-                        })
-                        $('#list_chart').empty().append(chart_data);
-                        $('#table_chart').DataTable({
-                            bDestroy: true,
-                            responsive: true,
-                            scrollY: 500,
-                            scrollCollapse: true,
-                            buttons: [
-                                {
-                                    extend: 'excel',
-                                    className: 'd-none',
-                                    title: title,
-                                    exportOptions: {
-                                        columns: ':visible'
-                                    }
-                                },
-                                {
-                                    extend: 'print',
-                                    title:  '<center>' + header + '</center>',
-                                    className: 'd-none',
+        //                     chart_data += `
+        //                                 <tr>
+        //                                     <td>
+        //                                         `+value.id+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.description+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.price+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.qty+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.amount+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+new_date+`
+        //                                     </td>
+        //                                 </tr>
+        //                     `;
+        //                 })
+        //                 $('#list_chart').empty().append(chart_data);
+        //                 $('#table_chart').DataTable({
+        //                     bDestroy: true,
+        //                     responsive: true,
+        //                     scrollY: 500,
+        //                     scrollCollapse: true,
+        //                     buttons: [
+        //                         {
+        //                             extend: 'excel',
+        //                             className: 'd-none',
+        //                             title: title,
+        //                             exportOptions: {
+        //                                 columns: ':visible'
+        //                             }
+        //                         },
+        //                         {
+        //                             extend: 'print',
+        //                             title:  '<center>' + header + '</center>',
+        //                             className: 'd-none',
 
-                                }
-                            ],
-                        });
+        //                         }
+        //                     ],
+        //                 });
 
-                    }
-                })
-            }
+        //             }
+        //         })
+        //     }
 
-        });
+        // });
 
-        soldChart.addEventListener('click', function(evt) {
-            var firstPoint = sold.getElementAtEvent(evt)[0];
-            if (firstPoint) {
-                var label = sold.data.labels[firstPoint._index];
-                var value = sold.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+        // soldChart.addEventListener('click', function(evt) {
+        //     var firstPoint = sold.getElementAtEvent(evt)[0];
+        //     if (firstPoint) {
+        //         var label = sold.data.labels[firstPoint._index];
+        //         var value = sold.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
 
-                // alert('Label: ' + label + "\nValue: " + value);
+        //         // alert('Label: ' + label + "\nValue: " + value);
 
-                $('#modalChart').modal('show');
-                $('.modal-title').text('CATEGORY '+ label);
+        //         $('#modalChart').modal('show');
+        //         $('.modal-title').text('CATEGORY '+ label);
 
-                $.ajax({
-                    url :"/admin/chart_reports/"+label,
-                    data: { filter : "modal_data"},
-                    dataType:"json",
-                    beforeSend:function(){
-                        //$("#action_button").attr("disabled", true);
-                    },
-                    success:function(data){
-                        //$("#action_button").attr("disabled", false);
-                        var chart_data = "";
-                        $('#sales').text(number_format(data.sales, 2,'.', ','));
-                        $('#predic').text(number_format(data.predic, 2,'.', ','));
-                        console.log(data.filter);
-                        $.each(data.result, function(key,value){
-                           var new_date = moment(value.created_at).format('DD-MM-YYYY');
-                            chart_data += `
-                                        <tr>
-                                            <td>
-                                                `+value.id+`
-                                            </td>
-                                            <td>
-                                                `+value.description+`
-                                            </td>
-                                            <td>
-                                                `+value.price+`
-                                            </td>
-                                            <td>
-                                                `+value.qty+`
-                                            </td>
-                                            <td>
-                                                `+value.amount+`
-                                            </td>
-                                            <td>
-                                                `+new_date+`
-                                            </td>
-                                        </tr>
-                            `;
-                        })
-                        $('#list_chart').empty().append(chart_data);
-                        $('#table_chart').DataTable({
-                            bDestroy: true,
-                            responsive: true,
-                            scrollY: 500,
-                            scrollCollapse: true,
-                            buttons: [
-                                {
-                                    extend: 'excel',
-                                    className: 'd-none',
-                                    title: title,
-                                    exportOptions: {
-                                        columns: ':visible'
-                                    }
-                                },
-                                {
-                                    extend: 'print',
-                                    title:  '<center>' + header + '</center>',
-                                    className: 'd-none',
+        //         $.ajax({
+        //             url :"/admin/chart_reports/"+label,
+        //             data: { filter : "modal_data"},
+        //             dataType:"json",
+        //             beforeSend:function(){
+        //                 //$("#action_button").attr("disabled", true);
+        //             },
+        //             success:function(data){
+        //                 //$("#action_button").attr("disabled", false);
+        //                 var chart_data = "";
+        //                 $('#sales').text(number_format(data.sales, 2,'.', ','));
+        //                 $('#predic').text(number_format(data.predic, 2,'.', ','));
+        //                 console.log(data.filter);
+        //                 $.each(data.result, function(key,value){
+        //                    var new_date = moment(value.created_at).format('DD-MM-YYYY');
+        //                     chart_data += `
+        //                                 <tr>
+        //                                     <td>
+        //                                         `+value.id+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.description+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.price+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.qty+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+value.amount+`
+        //                                     </td>
+        //                                     <td>
+        //                                         `+new_date+`
+        //                                     </td>
+        //                                 </tr>
+        //                     `;
+        //                 })
+        //                 $('#list_chart').empty().append(chart_data);
+        //                 $('#table_chart').DataTable({
+        //                     bDestroy: true,
+        //                     responsive: true,
+        //                     scrollY: 500,
+        //                     scrollCollapse: true,
+        //                     buttons: [
+        //                         {
+        //                             extend: 'excel',
+        //                             className: 'd-none',
+        //                             title: title,
+        //                             exportOptions: {
+        //                                 columns: ':visible'
+        //                             }
+        //                         },
+        //                         {
+        //                             extend: 'print',
+        //                             title:  '<center>' + header + '</center>',
+        //                             className: 'd-none',
 
-                                }
-                            ],
-                        });
+        //                         }
+        //                     ],
+        //                 });
 
-                    }
-                })
-            }
+        //             }
+        //         })
+        //     }
 
-        });
+        // });
 
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 

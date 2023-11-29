@@ -39,8 +39,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Sales Reports
     Route::get('sales_reports/{filter}/{from}/{to}', 'OrderController@sales_reports')->name('sales_reports');
+
     // chart_reports
     Route::get('chart_reports/{filter_date}', 'OrderController@chart_reports')->name('chart_reports');
+    Route::get('salesforcast/{category}/{m}/{y}', 'OrderController@chart_category')->name('chart_category');
 
 
      // Admin List
@@ -56,6 +58,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
      // activities
      Route::resource('activities', 'ActivityController');
+
+     // forcast
+     Route::resource('forcast', 'ForcastController');
 
      Route::resource('roles', 'RolesController');
      Route::resource('accounts', 'AccountController');

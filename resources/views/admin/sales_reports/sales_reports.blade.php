@@ -14,8 +14,8 @@
                 <div class="card p-2">
                     <div class="card-header border-0">
                         <div class="row ">
-                            <div class="col-md-4">
-                                <h4 class="mb-0 text-uppercase" id="titletable">Sales Reports</h4>
+                            <div class="col-md-5">
+                                <h4 class="mb-0 text-uppercase" id="titletable">Salesforcast</h4>
                                 <b class="mb-0 text-uppercase">{{$title_filter}}</b>
                             </div>
                             <div class="col-md-4">
@@ -30,7 +30,7 @@
                                 @endif
 
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <select name="filter_dd" id="filter_dd" class="select2" style="width: 100%;">
                                         <option value="fbd" {{ request()->is('admin/sales_reports/fbd/*') ? 'selected' : '' }}>FILTER BY FROM AND TO DATE</option>
@@ -147,62 +147,44 @@
     </div>
 
 
-    <div class="modal fade" id="modalChart" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-uppercase">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times text-primary"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
+    <div class="modal fade" id="formModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times text-primary"></i>
+                    </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark text-center">
+                                <tr>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Month</th>
+                                    <th scope="col">Demand</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center" id="list_2024">
+
+                            </tbody>
+                        </table>
 
 
+                        <input type="hidden" name="action" id="action" value="Add" />
+                        <input type="hidden" name="hidden_id" id="hidden_id" />
 
-                <h3>Product Orders</h3>
-                <div class="table-responsive" style="overflow:scroll; height:500px;">
-                    <table class="table display" id="table_chart" width="100%">
-                        <thead class="thead-light">
-                            <tr>
-                                <th  scope="col">ORDER ID</th>
-                                <th  scope="col">CATEGORY</th>
-                                <th  scope="col">PRODUCT</th>
-                                <th  scope="col">PRICE</th>
-                                <th  scope="col">SOLD</th>
-                                <th  scope="col">AMOUNT</th>
-                                <th  scope="col">ORDER AT</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-uppercase font-weight-bold" id="list_chart">
-                           <tr>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                    </div>
                 </div>
-
-            </div>
-
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
-            </div>
             </div>
         </div>
-    </div>
+
+
 
 
 
@@ -224,6 +206,7 @@ $(function () {
     $('.chart_2024').hide();
     $('.chart_2021').hide();
     $('.chart_2022').hide();
+
 
 
     $("#btn-check-2021").on("click", function(){
@@ -352,7 +335,7 @@ $(function () {
                 {
                     label: 'Soap Area',
                     data: @json($montly_sold[5]),
-                    borderColor: "yellow",
+                    borderColor: "red",
                     borderWidth: 3
                 },
                 {
@@ -372,6 +355,9 @@ $(function () {
             }
         }
     });
+
+
+
 
 
     //2021
@@ -395,17 +381,18 @@ $(function () {
                     borderWidth: 3
                 },
                 {
-                    label: 'Food Area',
-                    data: @json($montly_sold2021[2]),
-                    borderColor: "blue",
-                    borderWidth: 3
-                },
-                {
                     label: 'Condiments',
                     data: @json($montly_sold2021[3]),
                     borderColor: "rgba(153, 102, 255, 0.2)",
                     borderWidth: 3
                 },
+                {
+                    label: 'Food Area',
+                    data: @json($montly_sold2021[2]),
+                    borderColor: "blue",
+                    borderWidth: 3
+                },
+
                 {
                     label: 'Personal Care',
                     data: @json($montly_sold2021[4]),
@@ -415,7 +402,7 @@ $(function () {
                 {
                     label: 'Soap Area',
                     data: @json($montly_sold2021[5]),
-                    borderColor: "yellow",
+                    borderColor: "red",
                     borderWidth: 3
                 },
                 {
@@ -456,16 +443,17 @@ $(function () {
                     borderColor: "pink",
                     borderWidth: 3
                 },
-                {
-                    label: 'Food Area',
-                    data: @json($montly_sold2022[2]),
-                    borderColor: "blue",
-                    borderWidth: 3
-                },
+
                 {
                     label: 'Condiments',
                     data: @json($montly_sold2022[3]),
                     borderColor: "rgba(153, 102, 255, 0.2)",
+                    borderWidth: 3
+                },
+                {
+                    label: 'Food Area',
+                    data: @json($montly_sold2022[2]),
+                    borderColor: "blue",
                     borderWidth: 3
                 },
                 {
@@ -477,7 +465,7 @@ $(function () {
                 {
                     label: 'Soap Area',
                     data: @json($montly_sold2022[5]),
-                    borderColor: "yellow",
+                    borderColor: "red",
                     borderWidth: 3
                 },
                 {
@@ -519,17 +507,18 @@ $(function () {
                     borderWidth: 3
                 },
                 {
-                    label: 'Food Area',
-                    data: @json($montly_sold2024[2]),
-                    borderColor: "blue",
-                    borderWidth: 3
-                },
-                {
                     label: 'Condiments',
                     data: @json($montly_sold2024[3]),
                     borderColor: "rgba(153, 102, 255, 0.2)",
                     borderWidth: 3
                 },
+                {
+                    label: 'Food Area',
+                    data: @json($montly_sold2024[2]),
+                    borderColor: "blue",
+                    borderWidth: 3
+                },
+
                 {
                     label: 'Personal Care',
                     data: @json($montly_sold2024[4]),
@@ -539,7 +528,7 @@ $(function () {
                 {
                     label: 'Soap Area',
                     data: @json($montly_sold2024[5]),
-                    borderColor: "yellow",
+                    borderColor: "red",
                     borderWidth: 3
                 },
                 {
@@ -560,6 +549,8 @@ $(function () {
         }
     });
 
+    console.log("test:"+@json($montly_sold2024));
+
 
 
     ctx.addEventListener('click', function(evt) {
@@ -569,64 +560,9 @@ $(function () {
             var value = salesChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
             var legend =  salesChart.data.datasets[firstPoint._datasetIndex].label;
 
-            // alert('Label: ' + label + "\nValue: " + value);
 
-            $('#modalChart').modal('show');
-            $('.modal-title').text('CATEGORY: '+ legend);
-            console.log(value)
+            window.open("/admin/salesforcast/"+legend+"/"+label+"/2023");
 
-            $.ajax({
-                url :"/admin/chart_reports/"+legend,
-                data: { filter : "modal_data" ,category: legend, month: label, year: '2023' },
-                dataType:"json",
-                beforeSend:function(){
-                    //$("#action_button").attr("disabled", true);
-                },
-                success:function(data){
-                    //$("#action_button").attr("disabled", false);
-                    var chart_data = "";
-                    $('#sales').text(number_format(data.sales, 2,'.', ','));
-                    $('#predic').text(number_format(data.predic, 2,'.', ','));
-                    // console.log(data.filter);
-                    // console.log('month:' + label)
-                    // console.log('category:' + legend)
-                    // console.log('year 2023')
-                    // console.log(data.result)
-
-                    $.each(data.result, function(key,value){
-                        var new_date = moment(value.created_at).format('DD-MM-YYYY');
-                        chart_data += `
-                                    <tr>
-                                        <td>
-                                            `+value.id+`
-                                        </td>
-                                        <td>
-                                            `+value.category+`
-                                        </td>
-                                        <td>
-                                            `+value.description+`
-                                        </td>
-                                        <td>
-                                            `+value.price+`
-                                        </td>
-                                        <td>
-                                            `+value.qty+`
-                                        </td>
-                                        <td>
-                                            `+value.amount+`
-                                        </td>
-                                        <td>
-                                            `+new_date+`
-                                        </td>
-                                    </tr>
-                        `;
-                    })
-                    $('#list_chart').empty().append(chart_data);
-                    console.log(data.sold)
-                    // table_chart();
-
-                }
-            })
         }
 
 
@@ -640,63 +576,7 @@ $(function () {
             var legend =  salesChart2021.data.datasets[firstPoint._datasetIndex].label;
 
             // alert('Label: ' + label + "\nValue: " + value);
-
-            $('#modalChart').modal('show');
-            $('.modal-title').text('CATEGORY: '+ legend);
-            console.log(value)
-
-            $.ajax({
-                url :"/admin/chart_reports/"+legend,
-                data: { filter : "modal_data" ,category: legend, month: label, year: '2021' },
-                dataType:"json",
-                beforeSend:function(){
-                    //$("#action_button").attr("disabled", true);
-                },
-                success:function(data){
-                    //$("#action_button").attr("disabled", false);
-                    var chart_data = "";
-                    $('#sales').text(number_format(data.sales, 2,'.', ','));
-                    $('#predic').text(number_format(data.predic, 2,'.', ','));
-                    // console.log(data.filter);
-                    // console.log('month:' + label)
-                    // console.log('category:' + legend)
-                    // console.log('year 2023')
-                    // console.log(data.result)
-
-                    $.each(data.result, function(key,value){
-                        var new_date = moment(value.created_at).format('DD-MM-YYYY');
-                        chart_data += `
-                                    <tr>
-                                        <td>
-                                            `+value.id+`
-                                        </td>
-                                        <td>
-                                            `+value.category+`
-                                        </td>
-                                        <td>
-                                            `+value.description+`
-                                        </td>
-                                        <td>
-                                            `+value.price+`
-                                        </td>
-                                        <td>
-                                            `+value.qty+`
-                                        </td>
-                                        <td>
-                                            `+value.amount+`
-                                        </td>
-                                        <td>
-                                            `+new_date+`
-                                        </td>
-                                    </tr>
-                        `;
-                    })
-                    $('#list_chart').empty().append(chart_data);
-                    console.log(data.sold)
-                    // table_chart();
-
-                }
-            })
+            window.open("/admin/salesforcast/"+legend+"/"+label+"/2021");
         }
 
 
@@ -708,69 +588,52 @@ $(function () {
             var value = salesChart2022.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
             var legend =  salesChart2022.data.datasets[firstPoint._datasetIndex].label;
 
-            // alert('Label: ' + label + "\nValue: " + value);
-
-            $('#modalChart').modal('show');
-            $('.modal-title').text('CATEGORY: '+ legend);
-            console.log(value)
-
-            $.ajax({
-                url :"/admin/chart_reports/"+legend,
-                data: { filter : "modal_data" ,category: legend, month: label, year: '2022' },
-                dataType:"json",
-                beforeSend:function(){
-                    //$("#action_button").attr("disabled", true);
-                },
-                success:function(data){
-                    //$("#action_button").attr("disabled", false);
-                    var chart_data = "";
-                    $('#sales').text(number_format(data.sales, 2,'.', ','));
-                    $('#predic').text(number_format(data.predic, 2,'.', ','));
-                    // console.log(data.filter);
-                    // console.log('month:' + label)
-                    // console.log('category:' + legend)
-                    // console.log('year 2023')
-                    // console.log(data.result)
-
-                    $.each(data.result, function(key,value){
-                        var new_date = moment(value.created_at).format('DD-MM-YYYY');
-                        chart_data += `
-                                    <tr>
-                                        <td>
-                                            `+value.id+`
-                                        </td>
-                                        <td>
-                                            `+value.category+`
-                                        </td>
-                                        <td>
-                                            `+value.description+`
-                                        </td>
-                                        <td>
-                                            `+value.price+`
-                                        </td>
-                                        <td>
-                                            `+value.qty+`
-                                        </td>
-                                        <td>
-                                            `+value.amount+`
-                                        </td>
-                                        <td>
-                                            `+new_date+`
-                                        </td>
-                                    </tr>
-                        `;
-                    })
-                    $('#list_chart').empty().append(chart_data);
-                    console.log(data.sold)
-                    // table_chart();
-
-                }
-            })
+            window.open("/admin/salesforcast/"+legend+"/"+label+"/2022");
         }
 
 
     });
 
+    ctx2024.addEventListener('click', function(evt) {
+        var firstPoint = salesChart2024.getElementAtEvent(evt)[0];
+        if (firstPoint) {
+            var label = salesChart2024.data.labels[firstPoint._index];
+            var value = salesChart2024.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+            var legend =  salesChart2024.data.datasets[firstPoint._datasetIndex].label;
+
+            $('#formModal').modal('show');
+            $('.modal-title').text('View Chart');
+            $.ajax({
+                url :"/admin/forcast/2024/edit",
+                dataType:"json",
+                data:{'month':label, 'category':legend},
+                beforeSend:function(){
+                },
+                success:function(data){
+
+                    var list_2024 = "";
+                    $.each(data.forcasting, function(key,value){
+                        list_2024 += `
+                                    <tr class=`+value.class+`>
+                                        <td>`+value.category+`</td>
+                                        <td>`+value.year+`</td>
+                                        <td>`+value.month+`</td>
+                                        <td>`+value.demand+`</td>
+                                    </tr>
+                            `;
+                    })
+                    $('#list_2024').empty().append(list_2024);
+
+                    console.log(data.forcasting);
+
+
+                }
+            })
+
+        }
+
+
+    });
 });
 
 function table_chart(){

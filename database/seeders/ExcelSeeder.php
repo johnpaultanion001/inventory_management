@@ -16,10 +16,11 @@ class ExcelSeeder extends Seeder
      */
     public function run()
     {
-        $con = Storage::disk('import');
-        $files = $con->files('sales');
-        foreach ($files as $file) {
-            Excel::import(new DataImport, storage_path('import/'.$file));
-        }
+        //$con = Storage::disk('import');
+        //$files = $con->files('sales');
+        Excel::import(new DataImport, storage_path('import/sales/sales-data-01.xlsx'));
+        // foreach ($files as $file) {
+        //     Excel::import(new DataImport, storage_path('import/'.$file));
+        // }
     }
 }
