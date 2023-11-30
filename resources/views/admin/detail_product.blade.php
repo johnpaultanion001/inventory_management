@@ -183,14 +183,18 @@
                         <table class="table datatable-table display text-center" cellspacing="0" width="100%">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>STOCKS</th>
-                                    <th>Expiration</th>
-                                    <th>CREATED AT</th>
+                                    <th scope="col" width="10">ACTION</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">STOCKS</th>
+                                    <th scope="col">Expiration</th>
+                                    <th scope="col">CREATED AT</th>
                                 </tr>
                             </thead>
                             <tbody class="text-uppercase font-weight-bold text-center" id="list_expiration">
                                     <tr>
+                                        <td>
+
+                                        </td>
                                         <td>
 
                                         </td>
@@ -368,16 +372,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="form-label">Expiration:  <span class="text-danger">*</span></label>
-                                <input type="date" name="expiration" id="expiration" class="form-control disabled" >
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-expiration"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group" id="image-section">
                                 <label class="form-label">Image : <span class="text-danger">*</span></label>
                                 <input type="file" name="image1" class="form-control image1" accept="image/*" >
@@ -439,6 +434,15 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="col-sm-12 expiration_stock">
+                            <div class="form-group">
+                                <label class="form-label">Expiration:  <span class="text-danger">*</span></label>
+                                <input type="date" name="expiration_stock" id="expiration_stock" class="form-control">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-expiration_stock"></strong>
+                                </span>
+                            </div>
+                        </div>
                         <input type="hidden" name="hidden_id_stock" id="hidden_id_stock" />
 
                     </div>
@@ -466,6 +470,7 @@
 
         $('#scan_code').focus();
         $('.select2').select2();
+        $('.expiration_stock').hide();
 
         $('#scan_code').on("input", function() {
             var code = this.value;
@@ -483,10 +488,10 @@
                     $.each(data.product, function(key,value){
                             $('#td_'+key).text(value)
                             if(key == "expiration"){
-                                $('#td_expiration').text(moment(value).format('DD-MM-YYYY'));
+                                $('#td_expiration').text(moment(value).format('MM-DD-YYYY'));
                             }
                             if(key == "created_at"){
-                                $('#td_created_at').text(moment(value).format('DD-MM-YYYY'));
+                                $('#td_created_at').text(moment(value).format('MM-DD-YYYY'));
                             }
                             if(key == "image1"){
                                 if(value != null){
@@ -518,7 +523,7 @@
                                         <td>`+number_format(value.price, 2,'.', ',')+`</td>
                                         <td>`+value.qty+`</td>
                                         <td>`+number_format(value.amount, 2,'.', ',')+`</td>
-                                        <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                        <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
                                     </tr>
                             `;
                             console.log(value)
@@ -533,7 +538,7 @@
                                         <td>`+value.id+`</td>
                                         <td>`+value.stock+`</td>
                                         <td>`+value.remarks+`</td>
-                                        <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                        <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
                                     </tr>
                             `;
                             console.log(value)
@@ -544,10 +549,11 @@
                     $.each(data.expirations, function(key,value){
                         list_expi += `
                                     <tr>
+                                        <td><button type="button" name="editstockexpi" editstockexpi="`+value.id+`"  class="editstockexpi btn btn-sm btn-success form-control">Edit</button></td>
                                         <td>`+value.id+`</td>
                                         <td>`+value.stock_expi+`</td>
-                                        <td>`+moment(value.expiration).format('DD-MM-YYYY')+`</td>
-                                        <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                        <td>`+moment(value.expiration).format('MM-DD-YYYY')+`</td>
+                                        <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
                                     </tr>
                             `;
                             console.log(value)
@@ -614,13 +620,13 @@
                 }
             })
         });
-
+        var latest_stock;
         $(document).on('click', '.stock', function(){
             $('#formModalStock').modal('show');
             $('.modal-title').text('Manage Stock');
             $('#myFormStock')[0].reset();
             $('.form-control').removeClass('is-invalid');
-
+            $('.expiration_stock').hide();
             var id = $(this).attr('stock');
 
             $.ajax({
@@ -633,11 +639,19 @@
                 success:function(data){
                     $("#action_button_stock").attr("disabled", false);
                     $("#action_button_stock").attr("value", "Submit");
-
+                    latest_stock = data.stock;
                     $('#manage_stock').val(data.stock);
                     $('#hidden_id_stock').val(id);
                 }
             })
+        });
+        $('#manage_stock').on("input", function() {
+            var manage_stock = parseFloat($('#manage_stock').val());
+            if(manage_stock > latest_stock){
+                $('.expiration_stock').show();
+            }else{
+                $('.expiration_stock').hide();
+            }
         });
 
         $('#myForm').on('submit', function(event){
@@ -761,8 +775,8 @@
 
                 dataType:"json",
                 beforeSend:function(){
-                    $("#action_button_stock").attr("disabled", true);
-                    $("#action_button_stock").attr("value", "Loading..");
+                    // $("#action_button_stock").attr("disabled", true);
+                    // $("#action_button_stock").attr("value", "Loading..");
                 },
                 success:function(data){
 
@@ -836,7 +850,7 @@
                                                             <td>`+number_format(value.price, 2,'.', ',')+`</td>
                                                             <td>`+value.qty+`</td>
                                                             <td>`+number_format(value.amount, 2,'.', ',')+`</td>
-                                                            <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                                            <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
                                                         </tr>
                                                 `;
                                                 console.log(value)
@@ -851,12 +865,27 @@
                                                             <td>`+value.id+`</td>
                                                             <td>`+value.stock+`</td>
                                                             <td>`+value.remarks+`</td>
-                                                            <td>`+moment(value.created_at).format('DD-MM-YYYY')+`</td>
+                                                            <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
                                                         </tr>
                                                 `;
                                                 console.log(value)
                                         })
                                         $('#list_stocks').empty().append(list_stocks);
+
+                                        var list_expi = "";
+                                        $.each(data.expirations, function(key,value){
+                                            list_expi += `
+                                                        <tr>
+                                                            <td><button type="button" name="editstockexpi" editstockexpi="`+value.id+`"  class="editstockexpi btn btn-sm btn-success form-control">Edit</button></td>
+                                                            <td>`+value.id+`</td>
+                                                            <td>`+value.stock_expi+`</td>
+                                                            <td>`+moment(value.expiration).format('MM-DD-YYYY')+`</td>
+                                                            <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
+                                                        </tr>
+                                                `;
+                                                console.log(value)
+                                        })
+                                        $('#list_expiration').empty().append(list_expi);
 
                                         console.log(data.order);
                                     }

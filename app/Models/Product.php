@@ -46,4 +46,8 @@ class Product extends Model
     {
         return $this->hasMany(StockHistory::class, 'product_code' , 'code')->where('isOrder', false);
     }
+    public function stocksWExpiFirst()
+    {
+        return $this->hasMany(StockHistory::class, 'product_code' , 'code')->where('isOrder', false)->orderBy('id','desc')->first();
+    }
 }

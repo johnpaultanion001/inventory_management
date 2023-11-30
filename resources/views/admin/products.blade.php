@@ -106,7 +106,9 @@
                                             {{ $product->price ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $product->expiration->format('M j , Y') }}
+                                            @if($product->stocksWExpiFirst() != null)
+                                               {{  $product->stocksWExpiFirst()->expiration->format('M j , Y') }}
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $product->created_at->format('M j , Y h:i A') }}

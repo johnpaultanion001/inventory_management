@@ -97,6 +97,15 @@ class ProductController extends Controller
             'image1' => $file_name_to_save1 ?? "",
         ]);
 
+        \App\Models\StockHistory::create([
+            'product_code' => $request->input('code'),
+            'stock' => $request->input('stock'),
+            'stock_expi' => $request->input('stock'),
+            'expiration'=> $request->input('expiration'),
+            'isOrder' => false,
+            'remarks' => "Newly created",
+        ]);
+
         Activity::create([
             'activity' => 'Created product',
             'user_id' => Auth::user()->id
@@ -175,8 +184,25 @@ class ProductController extends Controller
     public function update_stock(Request $request, Product $product)
     {
         date_default_timezone_set('Asia/Manila');
+        $manage_stock = (float)$request->input('manage_stock');
+        $stock = (float)$product->stock;
+
+
+        if($stock > $manage_stock){
+            $expiration_valid = ['nullable','date'];
+            $isOrder = true;
+        }
+        elseif($stock == $manage_stock){
+            $expiration_valid = ['nullable','date'];
+            $isOrder = true;
+        }else{
+            $expiration_valid = ['required','date', 'after:today'];
+            $isOrder = false;
+        }
+
         $validated =  Validator::make($request->all(), [
             'manage_stock' => ['required','integer','min:1'],
+            'expiration_stock' => $expiration_valid,
         ]);
 
         if ($validated->fails()) {
@@ -184,14 +210,17 @@ class ProductController extends Controller
         }
 
         if($request->input('manage_stock') != $product->stock){
+            $stock_expi = $manage_stock - $stock;
             \App\Models\StockHistory::create([
                 'product_code' => $product->code,
                 'stock' => $request->manage_stock,
+                'stock_expi' => $stock_expi,
+                'expiration'=> $request->expiration_stock,
+                'isOrder' => $isOrder,
                 'remarks' => "Stock change from ".$product->stock." to ". $request->manage_stock,
             ]);
 
-            $manage_stock = (float)$request->input('manage_stock');
-            $stock = (float)$product->stock;
+
 
             if($stock > $manage_stock){
                 $qty = $stock - $manage_stock;
@@ -240,7 +269,8 @@ class ProductController extends Controller
             "stocks" =>  $product->stocks()->latest()->get(),
             "orders" => $product->orders()->latest()->get(),
             "category" => $product->category->name,
-            "critStock" => $critStock
+            "critStock" => $critStock,
+            "expirations" =>  $product->stocksWExpi()->latest()->get(),
         ]);
     }
 

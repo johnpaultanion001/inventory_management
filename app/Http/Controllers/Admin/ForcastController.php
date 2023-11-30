@@ -90,7 +90,7 @@ class ForcastController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'total' => ['required','integer','min:1'],
+            'total' => ['required','integer','min:0'],
         ]);
 
         if ($validated->fails()) {
