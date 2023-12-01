@@ -29,7 +29,7 @@ class CreateProductsTable extends Migration
 
             $table->string('category_id')->nullable();
             $table->string('discount')->default(0);
-            $table->date('expiration');
+            $table->date('expiration')->nullable();
             $table->timestamps();
         });
     }

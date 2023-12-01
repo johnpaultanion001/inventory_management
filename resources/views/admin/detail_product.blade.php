@@ -444,6 +444,7 @@
                             </div>
                         </div>
                         <input type="hidden" name="hidden_id_stock" id="hidden_id_stock" />
+                        <input type="hidden" name="type" id="type" />
 
                     </div>
                     <div class="modal-footer">
@@ -472,10 +473,7 @@
         $('.select2').select2();
         $('.expiration_stock').hide();
 
-        $('#scan_code').on("input", function() {
-            var code = this.value;
-            //console.log(code);
-
+        function scanCode(code){
             $.ajax({
                 url :"/admin/products/product/detail/"+code,
                 dataType:"json",
@@ -488,7 +486,7 @@
                     $.each(data.product, function(key,value){
                             $('#td_'+key).text(value)
                             if(key == "expiration"){
-                                $('#td_expiration').text(moment(value).format('MM-DD-YYYY'));
+                                $('#td_expiration').text(moment(data.expiration).format('MM-DD-YYYY'));
                             }
                             if(key == "created_at"){
                                 $('#td_created_at').text(moment(value).format('MM-DD-YYYY'));
@@ -563,6 +561,13 @@
 
                 }
             })
+        }
+        var code;
+        $('#scan_code').on("input", function() {
+            code = this.value;
+            //console.log(code);
+            scanCode(code);
+
         });
 
         $(document).on('click', '.edit', function(){
@@ -627,6 +632,8 @@
             $('#myFormStock')[0].reset();
             $('.form-control').removeClass('is-invalid');
             $('.expiration_stock').hide();
+            $('#manage_stock').attr('readonly',false);
+            $('#type').val(null);
             var id = $(this).attr('stock');
 
             $.ajax({
@@ -645,6 +652,38 @@
                 }
             })
         });
+        $(document).on('click', '.editstockexpi', function(){
+            $('#formModalStock').modal('show');
+            $('.modal-title').text('Edit Expiration Date');
+            $('#myFormStock')[0].reset();
+            $('.form-control').removeClass('is-invalid');
+            $('.expiration_stock').show();
+            $('#type').val("expi");
+
+            var id = $(this).attr('editstockexpi');
+
+            $.ajax({
+                url :"/admin/products/"+id+"/stock",
+                dataType:"json",
+                data: {type:'editexpi'},
+                beforeSend:function(){
+                    $("#action_button_stock").attr("disabled", true);
+                    $("#action_button_stock").attr("value", "Loading..");
+                },
+                success:function(data){
+                    $("#action_button_stock").attr("disabled", false);
+                    $("#action_button_stock").attr("value", "Submit");
+
+                    $('#manage_stock').val(data.stock);
+                    $('#manage_stock').attr('readonly',true);
+                    $('#expiration_stock').val(data.expiration);
+                    $('#hidden_id_stock').val(id);
+
+                    console.log(date.expiration);
+                }
+            })
+        });
+
         $('#manage_stock').on("input", function() {
             var manage_stock = parseFloat($('#manage_stock').val());
             if(manage_stock > latest_stock){
@@ -710,42 +749,7 @@
                                     btnClass: 'btn-blue',
                                     keys: ['enter', 'shift'],
                                     action: function(){
-                                        $.each(data.product, function(key,value){
-                                                $('#td_'+key).text(value)
-                                                if(key == "image1"){
-                                                    if(value != null){
-                                                        var img = '<img style="vertical-align: bottom;"  height="100" width="100" src="/assets/img/products/'+value+'" />'
-                                                    }else{
-                                                        var img = '<img style="vertical-align: bottom;"  height="100" width="100" src="/assets/img/products/no_image.png" />'
-                                                    }
-                                                    $('#td_'+key).empty().append(img);
-
-                                                }
-
-                                                if(key == "id"){
-                                                    var buttons = '<button type="button" name="edit" edit="'+value+'"  class="edit btn btn-sm btn-success form-control">Edit</button> <br>'
-                                                    buttons += '<button type="button" name="stock" stock="'+value+'" class="stock btn btn-sm btn-warning form-control">Manage Stock</button> <br>'
-                                                        buttons += '<button type="button" name="remove" remove="'+value+'" class="remove btn btn-sm btn-danger form-control">Remove</button> <br>'
-
-                                                    $('#td_action').empty().append(buttons);
-
-                                                }
-                                        })
-                                        $('#td_category').text(data.category);
-                                        var list_stocks = "";
-
-                                        $.each(data.stocks, function(key,value){
-                                            list_stocks += `
-                                                        <tr>
-                                                            <td>`+value.id+`</td>
-                                                            <td>`+value.stock+`</td>
-                                                            <td>`+value.remarks+`</td>
-                                                            <td>`+value.created_at+`</td>
-                                                        </tr>
-                                                `;
-                                                console.log(value)
-                                        })
-                                        $('#list_stocks').empty().append(list_stocks);
+                                        scanCode(code);
                                     }
                                 },
 
@@ -825,69 +829,7 @@
                                     btnClass: 'btn-blue',
                                     keys: ['enter', 'shift'],
                                     action: function(){
-                                        $.each(data.product, function(key,value){
-                                                $('#td_'+key).text(value)
-                                                if(key == "image1"){
-                                                    if(value != null){
-                                                        var img = '<img style="vertical-align: bottom;"  height="100" width="100" src="/assets/img/products/'+value+'" />'
-                                                    }else{
-                                                        var img = '<img style="vertical-align: bottom;"  height="100" width="100" src="/assets/img/products/no_image.png" />'
-                                                    }
-                                                    $('#td_'+key).empty().append(img);
-
-                                                }
-
-                                        })
-                                        $('#td_category').text(data.category);
-
-                                        var list_orders = "";
-
-                                        $.each(data.orders, function(key,value){
-                                            list_orders += `
-                                                        <tr>
-                                                            <td>`+value.id+`</td>
-                                                            <td>`+value.description+`</td>
-                                                            <td>`+number_format(value.price, 2,'.', ',')+`</td>
-                                                            <td>`+value.qty+`</td>
-                                                            <td>`+number_format(value.amount, 2,'.', ',')+`</td>
-                                                            <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
-                                                        </tr>
-                                                `;
-                                                console.log(value)
-                                        })
-                                        $('#list_orders').empty().append(list_orders);
-
-                                        var list_stocks = "";
-
-                                        $.each(data.stocks, function(key,value){
-                                            list_stocks += `
-                                                        <tr>
-                                                            <td>`+value.id+`</td>
-                                                            <td>`+value.stock+`</td>
-                                                            <td>`+value.remarks+`</td>
-                                                            <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
-                                                        </tr>
-                                                `;
-                                                console.log(value)
-                                        })
-                                        $('#list_stocks').empty().append(list_stocks);
-
-                                        var list_expi = "";
-                                        $.each(data.expirations, function(key,value){
-                                            list_expi += `
-                                                        <tr>
-                                                            <td><button type="button" name="editstockexpi" editstockexpi="`+value.id+`"  class="editstockexpi btn btn-sm btn-success form-control">Edit</button></td>
-                                                            <td>`+value.id+`</td>
-                                                            <td>`+value.stock_expi+`</td>
-                                                            <td>`+moment(value.expiration).format('MM-DD-YYYY')+`</td>
-                                                            <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
-                                                        </tr>
-                                                `;
-                                                console.log(value)
-                                        })
-                                        $('#list_expiration').empty().append(list_expi);
-
-                                        console.log(data.order);
+                                        scanCode(code);
                                     }
                                 },
 

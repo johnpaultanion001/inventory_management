@@ -12,6 +12,7 @@ use File;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailNotification;
 use App\Models\Activity;
+use App\Models\StockHistory;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -45,6 +46,7 @@ class ProductController extends Controller
         return response()->json(
             [
                 "product" =>  $productWCode,
+                "expiration" => $productWCode->stocksWExpiFirst()->expiration,
                 "category" => $productWCode->category->name,
                 "orders" =>  $productWCode->orders()->latest()->get(),
                 "stocks" =>  $productWCode->stocks()->latest()->get(),
@@ -123,11 +125,21 @@ class ProductController extends Controller
         ]);
     }
 
-    public function stock(Product $product)
+    public function stock($product, Request $request)
     {
-        return response()->json([
-            'stock' =>   $product->stock,
-        ]);
+        if($request->get('type')){
+            $products = StockHistory::where('id',$product)->first();
+            return response()->json([
+                'stock' =>   $products->stock_expi,
+                'expiration' => $products->expiration,
+            ]);
+        }else{
+            $products = Product::where('id',$product)->first();
+            return response()->json([
+                'stock' =>   $products->stock,
+            ]);
+        }
+
     }
 
     public function updateproduct(Request $request, Product $product)
@@ -138,7 +150,6 @@ class ProductController extends Controller
             'code' => ['required'],
             'unit' => ['required'],
             'category' => ['required'],
-            'expiration' => ['required','date', 'after:today'],
 
 
             'image1' =>  ['mimes:png,jpg,jpeg,svg,bmp,ico'],
@@ -181,97 +192,121 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update_stock(Request $request, Product $product)
+    public function update_stock(Request $request, $product)
     {
         date_default_timezone_set('Asia/Manila');
-        $manage_stock = (float)$request->input('manage_stock');
-        $stock = (float)$product->stock;
-
-
-        if($stock > $manage_stock){
-            $expiration_valid = ['nullable','date'];
-            $isOrder = true;
-        }
-        elseif($stock == $manage_stock){
-            $expiration_valid = ['nullable','date'];
-            $isOrder = true;
-        }else{
-            $expiration_valid = ['required','date', 'after:today'];
-            $isOrder = false;
-        }
-
-        $validated =  Validator::make($request->all(), [
-            'manage_stock' => ['required','integer','min:1'],
-            'expiration_stock' => $expiration_valid,
-        ]);
-
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
-        }
-
-        if($request->input('manage_stock') != $product->stock){
-            $stock_expi = $manage_stock - $stock;
-            \App\Models\StockHistory::create([
-                'product_code' => $product->code,
-                'stock' => $request->manage_stock,
-                'stock_expi' => $stock_expi,
-                'expiration'=> $request->expiration_stock,
-                'isOrder' => $isOrder,
-                'remarks' => "Stock change from ".$product->stock." to ". $request->manage_stock,
-            ]);
-
+        if($request->input('type') == null){
+            $product = Product::where('id', $product)->first();
+            $manage_stock = (float)$request->input('manage_stock');
+            $stock = (float)$product->stock;
 
 
             if($stock > $manage_stock){
-                $qty = $stock - $manage_stock;
-                $amount = $qty * $product->unit_price;
-
-                \App\Models\OrderProduct::create([
-                    'product_code' => $product->code,
-                    'description' => $product->description,
-                    'qty' => $qty,
-                    'amount' => $amount,
-                    'price' => $product->unit_price,
-                    'category' => $product->category->name,
-                ]);
-
+                $expiration_valid = ['nullable','date'];
+                $isOrder = true;
             }
-
-
-            //email sending
-            if($manage_stock < 6){
-                $emailNotif = [
-                    'msg'              => "PRODUCT LOWER STOCK",
-                    'code'              =>  $product->code,
-                    'description'              =>   $product->description,
-                    'stock'              =>   $product->stock,
-                    'updated_by'              =>  auth()->user()->name,
-                ];
-                $critStock = 1;
-                // Mail::to('johnpaultanion001@gmail.com')
-                // ->send(new EmailNotification($emailNotif));
+            elseif($stock == $manage_stock){
+                $expiration_valid = ['nullable','date'];
+                $isOrder = true;
             }else{
-                $critStock = 0;
+                $expiration_valid = ['required','date', 'after:today'];
+                $isOrder = false;
             }
 
-            Activity::create([
-                'activity' => 'Updated stock',
-                'user_id' => Auth::user()->id
+            $validated =  Validator::make($request->all(), [
+                'manage_stock' => ['required','integer','min:1'],
+                'expiration_stock' => $expiration_valid,
             ]);
 
-            $product->stock = $request->manage_stock;
-            $product->save();
+            if ($validated->fails()) {
+                return response()->json(['errors' => $validated->errors()]);
+            }
+
+            if($request->input('manage_stock') != $product->stock){
+                $stock_expi = $manage_stock - $stock;
+                \App\Models\StockHistory::create([
+                    'product_code' => $product->code,
+                    'stock' => $request->manage_stock,
+                    'stock_expi' => $stock_expi,
+                    'expiration'=> $request->expiration_stock,
+                    'isOrder' => $isOrder,
+                    'remarks' => "Stock change from ".$product->stock." to ". $request->manage_stock,
+                ]);
+
+
+
+                if($stock > $manage_stock){
+                    $qty = $stock - $manage_stock;
+                    $amount = $qty * $product->unit_price;
+
+                    \App\Models\OrderProduct::create([
+                        'product_code' => $product->code,
+                        'description' => $product->description,
+                        'qty' => $qty,
+                        'amount' => $amount,
+                        'price' => $product->unit_price,
+                        'category' => $product->category->name,
+                    ]);
+
+                }
+
+
+                //email sending
+                if($manage_stock < 6){
+                    $emailNotif = [
+                        'msg'              => "PRODUCT LOWER STOCK",
+                        'code'              =>  $product->code,
+                        'description'              =>   $product->description,
+                        'stock'              =>   $product->stock,
+                        'updated_by'              =>  auth()->user()->name,
+                    ];
+                    $critStock = 1;
+                    // Mail::to('johnpaultanion001@gmail.com')
+                    // ->send(new EmailNotification($emailNotif));
+                }else{
+                    $critStock = 0;
+                }
+
+                Activity::create([
+                    'activity' => 'Updated stock',
+                    'user_id' => Auth::user()->id
+                ]);
+
+                $product->stock = $request->manage_stock;
+                $product->save();
+            }
+
+            return response()->json([
+                'success' => 'Stock Updated Successfully.',
+                "product" =>  $product,
+                "stocks" =>  $product->stocks()->latest()->get(),
+                "orders" => $product->orders()->latest()->get(),
+                "category" => $product->category->name,
+                "critStock" => $critStock,
+                "expirations" =>  $product->stocksWExpi()->latest()->get(),
+            ]);
+        }else{
+            $expi_id = $request->input('hidden_id_stock');
+
+            $validated =  Validator::make($request->all(), [
+                'expiration_stock' =>  ['required','date', 'after:today']
+            ]);
+
+            if ($validated->fails()) {
+                return response()->json(['errors' => $validated->errors()]);
+            }
+            StockHistory::where('id',$expi_id)->update([
+                "expiration" => $request->input('expiration_stock')
+            ]);
+            $expi_product = StockHistory::where('id', $expi_id)->first();
+            $expi = Product::where('code',$expi_product->product_code)->first();
+
+            return response()->json([
+                'success' => 'Expiration Updated Successfully.',
+            ]);
+
         }
 
-        return response()->json([
-            'success' => 'Stock Updated Successfully.',
-            "product" =>  $product,
-            "stocks" =>  $product->stocks()->latest()->get(),
-            "orders" => $product->orders()->latest()->get(),
-            "category" => $product->category->name,
-            "critStock" => $critStock,
-            "expirations" =>  $product->stocksWExpi()->latest()->get(),
-        ]);
     }
 
 

@@ -160,7 +160,7 @@
                     <div class="modal-body">
                         <table class="table table-bordered">
                             <thead class="thead-dark text-center">
-                                <tr>
+                                <tr class="table-dark">
                                     <th scope="col">Category</th>
                                     <th scope="col">Year</th>
                                     <th scope="col">Month</th>
@@ -613,6 +613,7 @@ $(function () {
 
                     var list_2024 = "";
                     $.each(data.forcasting, function(key,value){
+
                         list_2024 += `
                                     <tr class=`+value.class+`>
                                         <td>`+value.category+`</td>
@@ -622,9 +623,30 @@ $(function () {
                                     </tr>
                             `;
                     })
+                    list_2024 += `
+                                    <tr class="table-dark">
+                                        <td><b>Top Products</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                            `;
+                    $.each(data.tp2024, function(key,value){
+                        var id = key + 1;
+                        list_2024 += `
+                                    <tr class="table-secondary">
+                                        <td><b>`+id+`</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><span class="bg-success badge">`+value.description+`</span></td>
+                                    </tr>
+                            `;
+                    })
+
+
                     $('#list_2024').empty().append(list_2024);
 
-                    console.log(data.forcasting);
+                    console.log(data.tp2024);
 
 
                 }

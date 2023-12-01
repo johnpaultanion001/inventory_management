@@ -9,7 +9,7 @@ class StockHistory extends Model
 {
     use HasFactory;
     protected $dates = [
-        'expiration',
+        'expiration'  => 'date:Y-m-d',
 
     ];
 
@@ -21,4 +21,5 @@ class StockHistory extends Model
         'expiration',
         'remarks',
     ];
+
 }

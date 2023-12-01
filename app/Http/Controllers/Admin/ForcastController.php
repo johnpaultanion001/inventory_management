@@ -24,7 +24,7 @@ class ForcastController extends Controller
             $var = ltrim($month, '0');
             $c2024 = Forcast::where('category', $category)->where('month', '=', $var)->sum('total');
 
-
+            $tp2024 = OrderProduct::groupBy('description')->where('category', $category)->whereMonth('created_at', '=', $month)->selectRaw('sum(qty) as total, description')->orderBy('total','desc')->take(3)->get();
 
 
             $forcasting = [
@@ -33,28 +33,32 @@ class ForcastController extends Controller
                     "year" => "2021",
                     "month" => $request->get('month'),
                     "demand" => $c2021,
-                    "class" => ""
+                    "class" => "",
+
                 ],
                 [
                     "category" => $category,
                     "year" => "2022",
                     "month" => $request->get('month'),
                     "demand" => $c2022,
-                    "class" => ""
+                    "class" => "",
+
                 ],
                 [
                     "category" => $category,
                     "year" => "2023",
                     "month" => $request->get('month'),
                     "demand" => $c2023,
-                    "class" => ""
+                    "class" => "",
+
                 ],
                 [
                     "category" => $category,
                     "year" => "2024",
                     "month" => $request->get('month'),
                     "demand" => $c2024,
-                    "class" => "table-primary"
+                    "class" => "table-success",
+
                 ],
 
             ];
@@ -63,6 +67,7 @@ class ForcastController extends Controller
             return response()->json(
                 [
                     'forcasting' =>  $forcasting,
+                    'tp2024' => $tp2024,
                 ]
             );
 
