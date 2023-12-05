@@ -1,19 +1,17 @@
 @extends('../layouts.customer')
-@section('navbar')
-    @include('../partials.customer.navbar')
-@endsection
 
 @section('content')
 <header class="py-5" style="
-background: #56ab2f;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: #F2994A;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #F2C94C, #F2994A);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #F2C94C, #F2994A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 ">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">{{ trans('panel.site_title') }}</h1>
-            <p class="lead fw-normal text-white-50 mb-0">{{ __('Reset Password') }}</p>
+    <div class="container ">
+        <div class="text-center">
+          <img src="/assets/img/logo.jpeg" alt="" width = "10%">
+          <h1 style="color:#C50901; -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #AE9E00; font-weight: bold;">Triple J Savers Mart</h1>
         </div>
     </div>
 </header>
@@ -44,16 +42,16 @@ background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, F
                         @enderror
                         <label class="form-label">Confirm Password</label>
                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                        
+
                     <div class="text-center">
-                    <button type="submit" class="btn btn-primary w-100 my-4 mb-2">
+                    <button type="submit" class="btn btn-primary text-primary w-100 my-4 mb-2">
                         {{ __('Reset Password') }}
                     </button>
                     </div>
-                      
+
                 </form>
               </div>
-          </div>  
+          </div>
         </div>
 </section>
 @endsection
