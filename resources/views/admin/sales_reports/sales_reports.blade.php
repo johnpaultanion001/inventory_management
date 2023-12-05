@@ -157,20 +157,26 @@
                     </button>
 
                     </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered">
-                            <thead class="thead-dark text-center">
-                                <tr class="table-dark">
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Year</th>
-                                    <th scope="col">Month</th>
-                                    <th scope="col">Demand</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center" id="list_2024">
+                    <div class="modal-body row  d-flex justify-content-center">
+                        <div class="col-md-12">
+                            <table class="table table-bordered">
+                                <thead class="thead-dark text-center">
+                                    <tr class="table-dark">
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Year</th>
+                                        <th scope="col">Month</th>
+                                        <th scope="col">Demand</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center" id="list_2024">
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-8">
+                            <img id="regression" width="100%" height="100%" class="d-inline-block align-top" alt="Loading">
+                        </div>
+
 
 
                         <input type="hidden" name="action" id="action" value="Add" />
@@ -645,6 +651,7 @@ $(function () {
 
 
                     $('#list_2024').empty().append(list_2024);
+                    $('#regression').attr('src',data.regression);
 
                     console.log(data.tp2024);
 

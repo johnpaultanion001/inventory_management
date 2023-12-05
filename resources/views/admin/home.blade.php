@@ -34,7 +34,7 @@
                 <div class="card">
                     <div class="card-header p-3 pt-2">
                     <div class="icon icon-lg icon-shape bg-gradient-dark shadow-success text-center mt-n4 position-absolute">
-                        <i class="material-icons opacity-10 text-primary">person</i>
+                        <i class="material-icons opacity-10">person</i>
                     </div>
                     <div class="text-end pt-1">
                         <p class="text-sm mb-0 text-capitalize">SOLD FOR TODAY</p>
@@ -51,7 +51,7 @@
                 <div class="card">
                     <div class="card-header p-3 pt-2">
                     <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center mt-n4 position-absolute">
-                        <i class="fas fa-shopping-cart text-dark" style="font-size: 17px"></i>
+                        <i class="fas fa-shopping-cart" style="font-size: 17px"></i>
                     </div>
                     <div class="text-end pt-1">
                         <p class="text-sm mb-0 text-capitalize">ORDERS FOR TODAY</p>
@@ -68,7 +68,7 @@
                 <div class="card">
                     <div class="card-header p-3 pt-2">
                     <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center mt-n4 position-absolute">
-                        <i class="fas fa-shopping-cart text-info" style="font-size: 17px"></i>
+                        <i class="fas fa-shopping-cart" style="font-size: 17px"></i>
                     </div>
                     <div class="text-end pt-1">
                         <p class="text-sm mb-0 text-capitalize">SALES AS OF TODAY</p>
@@ -337,20 +337,12 @@
                 label: "SALES:",
                 data: dataSales.data,
 
-                lineTension: 0.3,
-                backgroundColor: "rgba(78, 115, 223, 0.05)",
-                borderColor: "rgba(78, 115, 223, 1)",
-                pointRadius: 3,
-                pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                pointBorderColor: "rgba(78, 115, 223, 1)",
-                pointHoverRadius: 3,
-                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                pointHitRadius: 10,
-                pointBorderWidth: 2,
+                borderColor: "#F2C94C",
+                fill: false,
+                tension: 0.1
 
             }
-            ]
+            ],
         };
 
         var dataSold = {
@@ -360,17 +352,9 @@
                 label: "SOLD:",
                 data: dataSold.data,
 
-                lineTension: 0.3,
-                backgroundColor: "rgba(78, 115, 223, 0.05)",
-                borderColor: "rgba(78, 115, 223, 1)",
-                pointRadius: 3,
-                pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                pointBorderColor: "rgba(78, 115, 223, 1)",
-                pointHoverRadius: 3,
-                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                pointHitRadius: 10,
-                pointBorderWidth: 2,
+                borderColor: "#F2C94C",
+                fill: false,
+                tension: 0.1
 
             }
             ]
@@ -390,12 +374,12 @@
                     display: false
                 },
                 tooltips: {
-                    backgroundColor: "rgb(255,255,255)",
-                    bodyFontColor: "#858796",
+                    backgroundColor: "#F2C94C",
+                    bodyFontColor: "#fff",
                     titleMarginBottom: 10,
-                    titleFontColor: '#6e707e',
+                    titleFontColor: '#fff',
                     titleFontSize: 15,
-                    borderColor: '#dddfeb',
+                    borderColor: '#F2C94C',
                     borderWidth: 1,
                     displayColors: false,
                     intersect: false,
@@ -409,6 +393,7 @@
             type: "line",
             data: dataSales,
             options: options,
+
 
 
         });

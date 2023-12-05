@@ -3,7 +3,9 @@
   <div class="sidenav-header">
     <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
     <a class="navbar-brand m-0 text-center" href="/admin/dashboard">
-    <img src="/assets/img/logo.jpeg" width="100" height="500" class="d-inline-block align-top" alt="">
+    <img src="/assets/img/logo.jpeg" width="30%" class="d-inline-block align-top" alt="">
+    <h5 class="mt-1" style="color:#C50901; -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #AE9E00; font-weight: bold;">Triple J Savers Mart</h5>
 
     </a>
   </div>

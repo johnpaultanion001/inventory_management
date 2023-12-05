@@ -62,12 +62,15 @@ class ForcastController extends Controller
                 ],
 
             ];
+            // /regression/jan/BEVERAGES.png
+            $regression = '/regression/' .$request->get('month').'/'.$category.'.png';
 
 
             return response()->json(
                 [
                     'forcasting' =>  $forcasting,
                     'tp2024' => $tp2024,
+                    'regression' => $regression,
                 ]
             );
 

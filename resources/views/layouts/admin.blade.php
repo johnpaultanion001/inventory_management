@@ -90,14 +90,40 @@
             padding: 0.625rem 0.75rem;
             line-height: 1.3 !important;
         }
+        .bg-gradient-dark{
+            background: #F2994A !important;
+            background: -webkit-linear-gradient(to right, #F2C94C, #F2994A) !important; /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #F2C94C, #F2994A) !important;/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+        }
+        .text-primary  , .page-link{
+            color: #C50901 !important;
+            font-weight: bold !important;
+        }
+
+        .btn-dark {
+            color: #fff !important;
+            background-color: #F2C94C !important;
+            border-color: #F2C94C !important;
+        }
+
+        .btn-primary , .bg-primary {
+            color: #fff !important;
+            background-color: #F2C94C !important;
+            border-color: #F2C94C !important;
+        }
+
+        .btn-check:checked + .btn-outline-dark, .btn-check:active + .btn-outline-dark, .btn-outline-dark:active, .btn-outline-dark.active, .btn-outline-dark.dropdown-toggle.show {
+            color: #fff;
+            background-color: #F2C94C !important;
+            border-color: #F2C94C !important;
+        }
+
 
     </style>
 </head>
     <body class="g-sidenav-show " style="
-  background: #0F2027;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+background: #C50901;
 ">
         <!-- sidebar -->
         @yield('sidebar')
