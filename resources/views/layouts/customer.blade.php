@@ -7,12 +7,13 @@
         <meta name="author" content="" />
         <title>{{ trans('panel.site_title') }}</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="/assets/img/sample_image/logo_white.png" />
+        <link rel="icon" href="/assets/img/logo.jpeg" type="image/icon type">
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ asset('/customer/css/styles.css') }}" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
 
         <style>
             .modal-footer{

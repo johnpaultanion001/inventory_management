@@ -10,7 +10,8 @@
     <title>@yield('sub-title') | {{ trans('panel.site_title') }}</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/img/sample_image/logo_white.png" />
+    <!-- <link rel="icon" type="image/x-icon" href="/assets/img/sample_image/logo_white.png" /> -->
+    <link rel="icon" href="/assets/img/logo.jpeg" type="image/icon type">
 
     <!-- Fonts -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
