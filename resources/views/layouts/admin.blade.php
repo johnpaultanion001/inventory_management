@@ -83,8 +83,10 @@
         }
         .form-control{
             border: solid 1px gray !important;
-            padding: 0.625rem 0.75rem !important; */
+            padding: 0.625rem 0.75rem !important;
             line-height: 1.3 !important;
+            -webkit-appearance: auto !important;
+            appearance: auto !important;
         }
         .form-control .is-invalid{
             border: 1px solid red !important;

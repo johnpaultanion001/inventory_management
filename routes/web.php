@@ -64,4 +64,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
      Route::resource('roles', 'RolesController');
      Route::resource('accounts', 'AccountController');
+
+     // purchase_order
+     Route::get('purchase_order', 'PurchaseOrderController@index')->name('purchase_order.index');
+     Route::post('purchase_order/order', 'PurchaseOrderController@order')->name('purchase_order.order');
+     Route::get('purchase_order/delete/{id}', 'PurchaseOrderController@delete_order')->name('purchase_order.delete');
+     Route::get('purchase_order/confirm', 'PurchaseOrderController@confirm_order')->name('purchase_order.confirm');
+     Route::get('purchase_order/orders', 'PurchaseOrderController@orders')->name('purchase_order.orders');
+     Route::get('purchase_order/receipt/{id}', 'PurchaseOrderController@receipt_order')->name('purchase_order.receipt');
+     Route::get('purchase_order/deliveries', 'PurchaseOrderController@deliveries')->name('purchase_order.deliveries');
+
+     // inventory reports
+     Route::get('inventory_reports', 'InventoryReportsController@index')->name('inventory_reports.index');
+
 });

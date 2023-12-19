@@ -8,18 +8,18 @@
           <li class="breadcrumb-item text-sm text-white active" aria-current="page">Dashboard</li>
         @elseif(request()->is('admin/products'))
           <li class="breadcrumb-item text-sm text-white active" aria-current="page">Inventories</li>
-        @elseif(request()->is('admin/orders'))
-          <li class="breadcrumb-item text-sm text-white active" aria-current="page">Orders</li>
-        @elseif(request()->is('admin/customer_list'))
-          <li class="breadcrumb-item text-sm text-white active" aria-current="page">Customers</li>
+        @elseif(request()->is('admin/inventory_reports'))
+          <li class="breadcrumb-item text-sm text-white active" aria-current="page">Inventory Reports</li>
+        @elseif(request()->is('admin/purchase_order/deliveries'))
+          <li class="breadcrumb-item text-sm text-white active" aria-current="page">All Deliveries</li>
         @elseif(request()->is('admin/categories'))
         <li class="breadcrumb-item text-sm text-white active" aria-current="page">Collections</li>
         @elseif(request()->is('admin/sales_reports/*'))
         <li class="breadcrumb-item text-sm text-white active" aria-current="page">Salesforcast</li>
         @elseif(request()->is('admin/salesforcast/*'))
         <li class="breadcrumb-item text-sm text-white active" aria-current="page">Salesforcast</li>
-        @elseif(request()->is('admin/styles'))
-        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Styles</li>
+        @elseif(request()->is('admin/purchase_order'))
+        <li class="breadcrumb-item text-sm text-white active" aria-current="page">Purchase Order</li>
         @endif
 
       </ol>
@@ -27,18 +27,18 @@
         <h6 class="font-weight-bolder mb-0 text-white">Dashboard</h6>
       @elseif(request()->is('admin/products'))
         <h6 class="font-weight-bolder mb-0 text-white">Inventories</h6>
-      @elseif(request()->is('admin/orders'))
-        <h6 class="font-weight-bolder mb-0 text-white">Orders</h6>
-      @elseif(request()->is('admin/customer_list'))
-        <h6 class="font-weight-bolder mb-0 text-white">Customers</h6>
+      @elseif(request()->is('admin/inventory_reports'))
+        <h6 class="font-weight-bolder mb-0 text-white">Inventory Reports</h6>
+      @elseif(request()->is('admin/purchase_order/deliveries'))
+        <h6 class="font-weight-bolder mb-0 text-white">All Deliveries</h6>
       @elseif(request()->is('admin/categories'))
         <h6 class="font-weight-bolder mb-0 text-white">Collections</h6>
       @elseif(request()->is('admin/sales_reports/*'))
         <h6 class="font-weight-bolder mb-0 text-white">Salesforcast</h6>
       @elseif(request()->is('admin/salesforcast/*'))
         <h6 class="font-weight-bolder mb-0 text-white">Salesforcast</h6>
-      @elseif(request()->is('admin/styles'))
-      <h6 class="font-weight-bolder mb-0 text-white">Manage Styles</h6>
+      @elseif(request()->is('admin/purchase_order'))
+      <h6 class="font-weight-bolder mb-0 text-white">Purchase Order</h6>
       @endif
 
     </nav>

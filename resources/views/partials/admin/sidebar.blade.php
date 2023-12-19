@@ -22,6 +22,7 @@
             </a>
         </li>
       @endcan
+      <hr class="bg-primary">
       @can('inventories')
       <li class="nav-item"  data-toggle="collapse" data-target="#products" class="collapsed active">
         <a class="nav-link text-dark" href="#">
@@ -56,28 +57,76 @@
             </li>
             @endcan
         </div>
-
-
-        @can('salesforcast')
-        <li class="nav-item">
-          <a class="nav-link text-dark {{ request()->is('admin/sales_reports') || request()->is('admin/sales_reports/*') || request()->is('admin/salesforcast/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/sales_reports/daily/daily/daily">
+        <hr class="bg-primary">
+        <li class="nav-item"  data-toggle="collapse" data-target="#supplier" class="collapsed active">
+            <a class="nav-link text-dark" href="#">
             <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="fas fa-list {{ request()->is('admin/sales_reports') || request()->is('admin/sales_reports/*') || request()->is('admin/salesforcast/*') ? 'text-white' : '' }}" style="font-size: 17px"></i>
+                <i class="fas fa-caret-down " style="font-size: 17px"></i>
+
             </div>
-            <span class="nav-link-text ms-1 text-uppercase">Saleforecast</span>
-          </a>
+            <span class="nav-link-text ms-1 text-uppercase">Suppliers</span>
+            </a>
         </li>
-        @endcan
-        @can('activities')
-        <li class="nav-item">
-          <a class="nav-link text-dark {{ request()->is('admin/activities') || request()->is('admin/activities/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/activities">
+
+        <div class="sub-menu collapse show" id="supplier">
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ request()->is('admin/purchase_order') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.purchase_order.index") }}">
+                    <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-list text-dark {{ request()->is('admin/purchase_order') ? 'text-white' : '' }}" style="font-size: 17px"></i>
+                    </div>
+                    <span class="nav-link-text ms-1 text-uppercase">Purchase Order</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark {{ request()->is('admin/purchase_order/deliveries') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.purchase_order.deliveries") }}">
+                    <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-list text-dark {{ request()->is('admin/purchase_order/deliveries') ? 'text-white' : '' }}" style="font-size: 17px"></i>
+                    </div>
+                    <span class="nav-link-text ms-1 text-uppercase">Deliveries</span>
+                </a>
+            </li>
+        </div>
+        <hr class="bg-primary">
+        <li class="nav-item"  data-toggle="collapse" data-target="#reports" class="collapsed active">
+            <a class="nav-link text-dark" href="#">
             <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="fas fa-list {{ request()->is('admin/activities') || request()->is('admin/activities/*') ? 'text-white' : '' }}" style="font-size: 17px"></i>
+                <i class="fas fa-caret-down " style="font-size: 17px"></i>
+
             </div>
-            <span class="nav-link-text ms-1 text-uppercase">Activities</span>
-          </a>
+            <span class="nav-link-text ms-1 text-uppercase">Reports</span>
+            </a>
         </li>
-        @endcan
+        <div class="sub-menu collapse show" id="reports">
+            @can('salesforcast')
+            <li class="nav-item">
+            <a class="nav-link text-dark {{ request()->is('admin/sales_reports') || request()->is('admin/sales_reports/*') || request()->is('admin/salesforcast/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/sales_reports/daily/daily/daily">
+                <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-list {{ request()->is('admin/sales_reports') || request()->is('admin/sales_reports/*') || request()->is('admin/salesforcast/*') ? 'text-white' : '' }}" style="font-size: 17px"></i>
+                </div>
+                <span class="nav-link-text ms-1 text-uppercase">Saleforecast</span>
+            </a>
+            </li>
+            @endcan
+            <li class="nav-item">
+            <a class="nav-link text-dark {{ request()->is('admin/inventory_reports') || request()->is('admin/inventory_reports/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/inventory_reports">
+                <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-list {{ request()->is('admin/inventory_reports') || request()->is('admin/inventory_reports/*') ? 'text-white' : '' }}" style="font-size: 17px"></i>
+                </div>
+                <span class="nav-link-text ms-1 text-uppercase">Inventory Reports</span>
+            </a>
+            </li>
+            @can('activities')
+            <li class="nav-item">
+            <a class="nav-link text-dark {{ request()->is('admin/activities') || request()->is('admin/activities/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/activities">
+                <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-list {{ request()->is('admin/activities') || request()->is('admin/activities/*') ? 'text-white' : '' }}" style="font-size: 17px"></i>
+                </div>
+                <span class="nav-link-text ms-1 text-uppercase">Activities</span>
+            </a>
+            </li>
+            @endcan
+        </div>
+        <hr class="bg-primary">
         @can('accounts')
         <li class="nav-item"  data-toggle="collapse" data-target="#accounts" class="collapsed active">
             <a class="nav-link text-dark" href="#">

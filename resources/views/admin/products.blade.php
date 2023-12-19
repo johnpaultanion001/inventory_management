@@ -29,7 +29,6 @@
                                         <option value="">FILTER UNIT</option>
                                         <option value="PCS">PCS</option>
                                         <option value="CS">CS</option>
-                                        <option value="CASE">CASE</option>
                                     </select>
                                 </div>
                             </div>

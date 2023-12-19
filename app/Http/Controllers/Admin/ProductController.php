@@ -198,14 +198,14 @@ class ProductController extends Controller
         if($request->input('type') == null){
             $product = Product::where('id', $product)->first();
             $manage_stock = (float)$request->input('manage_stock');
+            $receiving = (float)$request->input('receiving');
+            $transaction = (float)$request->input('transaction');
+            $bad_order = (float)$request->input('bad_order');
+
             $stock = (float)$product->stock;
 
 
-            if($stock > $manage_stock){
-                $expiration_valid = ['nullable','date'];
-                $isOrder = true;
-            }
-            elseif($stock == $manage_stock){
+            if($receiving < 1){
                 $expiration_valid = ['nullable','date'];
                 $isOrder = true;
             }else{
@@ -215,66 +215,63 @@ class ProductController extends Controller
 
             $validated =  Validator::make($request->all(), [
                 'manage_stock' => ['required','integer','min:1'],
+                'receiving' => ['required','integer','min:0'],
+                'transaction' => ['required','integer','min:0'],
+                'bad_order' => ['required','integer','min:0'],
                 'expiration_stock' => $expiration_valid,
             ]);
 
             if ($validated->fails()) {
                 return response()->json(['errors' => $validated->errors()]);
             }
+            //computation of stock
+            $final_stock = $stock + $receiving - $transaction - $bad_order;
+            \App\Models\StockHistory::create([
+                'product_code' => $product->code,
+                'stock' => $final_stock,
+                'stock_expi' => $receiving,
+                'expiration'=> $request->expiration_stock,
+                'isOrder' => $isOrder,
+                'remarks' => "RECEIVING: ".$receiving ."<br> TRANSACTION: ".$transaction."<br> B.O: ".$bad_order."<br> TOTAL STOCK: ".$final_stock,
+            ]);
 
-            if($request->input('manage_stock') != $product->stock){
-                $stock_expi = $manage_stock - $stock;
-                \App\Models\StockHistory::create([
+            if($transaction > 1){
+                $qty = $transaction;
+                $amount = $qty * $product->unit_price;
+
+                \App\Models\OrderProduct::create([
                     'product_code' => $product->code,
-                    'stock' => $request->manage_stock,
-                    'stock_expi' => $stock_expi,
-                    'expiration'=> $request->expiration_stock,
-                    'isOrder' => $isOrder,
-                    'remarks' => "Stock change from ".$product->stock." to ". $request->manage_stock,
+                    'description' => $product->description,
+                    'qty' => $qty,
+                    'amount' => $amount,
+                    'price' => $product->unit_price,
+                    'category' => $product->category->name,
                 ]);
 
-
-
-                if($stock > $manage_stock){
-                    $qty = $stock - $manage_stock;
-                    $amount = $qty * $product->unit_price;
-
-                    \App\Models\OrderProduct::create([
-                        'product_code' => $product->code,
-                        'description' => $product->description,
-                        'qty' => $qty,
-                        'amount' => $amount,
-                        'price' => $product->unit_price,
-                        'category' => $product->category->name,
-                    ]);
-
-                }
-
-
-                //email sending
-                if($manage_stock < 6){
-                    $emailNotif = [
-                        'msg'              => "PRODUCT LOWER STOCK",
-                        'code'              =>  $product->code,
-                        'description'              =>   $product->description,
-                        'stock'              =>   $product->stock,
-                        'updated_by'              =>  auth()->user()->name,
-                    ];
-                    $critStock = 1;
-                    // Mail::to('johnpaultanion001@gmail.com')
-                    // ->send(new EmailNotification($emailNotif));
-                }else{
-                    $critStock = 0;
-                }
-
-                Activity::create([
-                    'activity' => 'Updated stock',
-                    'user_id' => Auth::user()->id
-                ]);
-
-                $product->stock = $request->manage_stock;
-                $product->save();
             }
+            //email sending
+            if($final_stock < 6){
+                $emailNotif = [
+                    'msg'              => "PRODUCT LOWER STOCK",
+                    'code'              =>  $product->code,
+                    'description'              =>   $product->description,
+                    'stock'              =>   $product->stock,
+                    'updated_by'              =>  auth()->user()->name,
+                ];
+                $critStock = 1;
+                //Mail::to('johnpaultanion001@gmail.com')
+                //->send(new EmailNotification($emailNotif));
+            }else{
+                $critStock = 0;
+            }
+
+            Activity::create([
+                'activity' => 'Updated stock',
+                'user_id' => Auth::user()->id
+            ]);
+
+            $product->stock = $final_stock;
+            $product->save();
 
             return response()->json([
                 'success' => 'Stock Updated Successfully.',
@@ -308,6 +305,123 @@ class ProductController extends Controller
         }
 
     }
+
+    // public function update_stock(Request $request, $product)
+    // {
+    //     date_default_timezone_set('Asia/Manila');
+    //     if($request->input('type') == null){
+    //         $product = Product::where('id', $product)->first();
+    //         $manage_stock = (float)$request->input('manage_stock');
+    //         $stock = (float)$product->stock;
+
+
+    //         if($stock > $manage_stock){
+    //             $expiration_valid = ['nullable','date'];
+    //             $isOrder = true;
+    //         }
+    //         elseif($stock == $manage_stock){
+    //             $expiration_valid = ['nullable','date'];
+    //             $isOrder = true;
+    //         }else{
+    //             $expiration_valid = ['required','date', 'after:today'];
+    //             $isOrder = false;
+    //         }
+
+    //         $validated =  Validator::make($request->all(), [
+    //             'manage_stock' => ['required','integer','min:1'],
+    //             'expiration_stock' => $expiration_valid,
+    //         ]);
+
+    //         if ($validated->fails()) {
+    //             return response()->json(['errors' => $validated->errors()]);
+    //         }
+
+    //         if($request->input('manage_stock') != $product->stock){
+    //             $stock_expi = $manage_stock - $stock;
+    //             \App\Models\StockHistory::create([
+    //                 'product_code' => $product->code,
+    //                 'stock' => $request->manage_stock,
+    //                 'stock_expi' => $stock_expi,
+    //                 'expiration'=> $request->expiration_stock,
+    //                 'isOrder' => $isOrder,
+    //                 'remarks' => "Stock change from ".$product->stock." to ". $request->manage_stock,
+    //             ]);
+
+
+
+    //             if($stock > $manage_stock){
+    //                 $qty = $stock - $manage_stock;
+    //                 $amount = $qty * $product->unit_price;
+
+    //                 \App\Models\OrderProduct::create([
+    //                     'product_code' => $product->code,
+    //                     'description' => $product->description,
+    //                     'qty' => $qty,
+    //                     'amount' => $amount,
+    //                     'price' => $product->unit_price,
+    //                     'category' => $product->category->name,
+    //                 ]);
+
+    //             }
+
+
+    //             //email sending
+    //             if($manage_stock < 6){
+    //                 $emailNotif = [
+    //                     'msg'              => "PRODUCT LOWER STOCK",
+    //                     'code'              =>  $product->code,
+    //                     'description'              =>   $product->description,
+    //                     'stock'              =>   $product->stock,
+    //                     'updated_by'              =>  auth()->user()->name,
+    //                 ];
+    //                 $critStock = 1;
+    //                 // Mail::to('johnpaultanion001@gmail.com')
+    //                 // ->send(new EmailNotification($emailNotif));
+    //             }else{
+    //                 $critStock = 0;
+    //             }
+
+    //             Activity::create([
+    //                 'activity' => 'Updated stock',
+    //                 'user_id' => Auth::user()->id
+    //             ]);
+
+    //             $product->stock = $request->manage_stock;
+    //             $product->save();
+    //         }
+
+    //         return response()->json([
+    //             'success' => 'Stock Updated Successfully.',
+    //             "product" =>  $product,
+    //             "stocks" =>  $product->stocks()->latest()->get(),
+    //             "orders" => $product->orders()->latest()->get(),
+    //             "category" => $product->category->name,
+    //             "critStock" => $critStock,
+    //             "expirations" =>  $product->stocksWExpi()->latest()->get(),
+    //         ]);
+    //     }else{
+    //         $expi_id = $request->input('hidden_id_stock');
+
+    //         $validated =  Validator::make($request->all(), [
+    //             'expiration_stock' =>  ['required','date', 'after:today']
+    //         ]);
+
+    //         if ($validated->fails()) {
+    //             return response()->json(['errors' => $validated->errors()]);
+    //         }
+    //         StockHistory::where('id',$expi_id)->update([
+    //             "expiration" => $request->input('expiration_stock')
+    //         ]);
+    //         $expi_product = StockHistory::where('id', $expi_id)->first();
+    //         $expi = Product::where('code',$expi_product->product_code)->first();
+
+    //         return response()->json([
+    //             'success' => 'Expiration Updated Successfully.',
+    //         ]);
+
+    //     }
+
+    // }
 
 
 
