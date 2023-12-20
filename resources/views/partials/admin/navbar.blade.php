@@ -8,7 +8,7 @@
           <li class="breadcrumb-item text-sm text-white active" aria-current="page">Dashboard</li>
         @elseif(request()->is('admin/products'))
           <li class="breadcrumb-item text-sm text-white active" aria-current="page">Inventories</li>
-        @elseif(request()->is('admin/inventory_reports'))
+        @elseif(request()->is('admin/inventory_reports/*'))
           <li class="breadcrumb-item text-sm text-white active" aria-current="page">Inventory Reports</li>
         @elseif(request()->is('admin/purchase_order/deliveries'))
           <li class="breadcrumb-item text-sm text-white active" aria-current="page">All Deliveries</li>
@@ -27,7 +27,7 @@
         <h6 class="font-weight-bolder mb-0 text-white">Dashboard</h6>
       @elseif(request()->is('admin/products'))
         <h6 class="font-weight-bolder mb-0 text-white">Inventories</h6>
-      @elseif(request()->is('admin/inventory_reports'))
+      @elseif(request()->is('admin/inventory_reports/*'))
         <h6 class="font-weight-bolder mb-0 text-white">Inventory Reports</h6>
       @elseif(request()->is('admin/purchase_order/deliveries'))
         <h6 class="font-weight-bolder mb-0 text-white">All Deliveries</h6>

@@ -33,6 +33,7 @@
                                         <th  scope="col">CODE</th>
                                         <th scope="col">DESCRIPTION</th>
                                         <th scope="col">CATEGORY</th>
+                                        <th scope="col">EXPIRATION</th>
                                         <th scope="col">UNIT</th>
                                         <th scope="col">QTY</th>
                                         <th scope="col">UNIT PRICE</th>
@@ -301,8 +302,17 @@
                                 </span>
                             </div>
                         </div>
-
                         <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label">Expiration:  <span class="text-danger">*</span></label>
+                                <input type="date" name="expiration_order" id="expiration_order" class="form-control">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-expiration_order"></strong>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="form-label">Qty:  <span class="text-danger">*</span></label>
                                 <input type="number" name="qty_order" id="qty_order" class="form-control disabled"  step="any">
@@ -450,6 +460,7 @@ function orders(){
                                     <td>
                                         `+value.product.category.name+`
                                     </td>
+                                    <td>`+moment(value.expiration).format('MM-DD-YYYY')+`</td>
                                     <td>
                                         `+value.unit+`
                                     </td>

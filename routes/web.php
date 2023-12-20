@@ -75,6 +75,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
      Route::get('purchase_order/deliveries', 'PurchaseOrderController@deliveries')->name('purchase_order.deliveries');
 
      // inventory reports
-     Route::get('inventory_reports', 'InventoryReportsController@index')->name('inventory_reports.index');
+     Route::get('inventory_reports/{date}', 'InventoryReportsController@index')->name('inventory_reports.index');
 
 });

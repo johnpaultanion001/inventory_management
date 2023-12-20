@@ -8,6 +8,7 @@ use App\Models\Delivery;
 use App\Models\PurchaseOrder;
 use App\Models\Category;
 use App\Models\Activity;
+use App\Models\StockHistory;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,7 @@ class PurchaseOrderController extends Controller
         $validated =  Validator::make($request->all(), [
             'unit_order' => ['required'],
             'qty_order' => ['required','integer','min:1'],
+            'expiration_order' => ['required','date', 'after:today'],
         ]);
 
         if ($validated->fails()) {
@@ -46,6 +48,7 @@ class PurchaseOrderController extends Controller
             'unit' => $request->input('unit_order'),
             'qty' => $request->input('qty_order'),
             'unit_price' => $unit_price,
+            'expiration' => $request->input('expiration_order'),
             'total' => $total,
         ]);
 
@@ -88,6 +91,22 @@ class PurchaseOrderController extends Controller
                 'isConfirm' => true,
                 'purchase_order_id' => $pid,
             ]);
+
+            foreach($porder->deliveries()->get() as $order){
+                $product = Product::where('code',$order->product_code)
+                                ->increment('stock', $order->qty);
+                $stockProduct = Product::where('code',$order->product_code)->first();
+
+                StockHistory::create([
+                    'product_code' => $order->product_code,
+                    'stock' => $stockProduct->stock,
+                    'stock_expi' => $order->qty,
+                    'isOrder' => false,
+                    'expiration' => $order->expiration,
+                    'remarks' => "RECEIVING: ".$order->qty ."<br> TRANSACTION: 0<br> B.O: 0<br> TOTAL STOCK: ".$stockProduct->stock,
+                ]);
+            }
+
         }
 
         return response()->json(['success' => 'Confirm Orders Successfully.']);

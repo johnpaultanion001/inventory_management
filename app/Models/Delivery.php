@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Delivery extends Model
 {
     use HasFactory;
+    protected $dates = [
+        'expiration'  => 'date:Y-m-d',
+
+    ];
     protected $fillable = [
         'purchase_order_id',
         'product_id',
@@ -17,6 +21,7 @@ class Delivery extends Model
         'unit_price',
         'total',
         'isConfirm',
+        'expiration',
     ];
 
     public function product()

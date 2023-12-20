@@ -27,7 +27,7 @@ class DataImport implements ToCollection, WithHeadingRow
             $cat = Category::where('name' ,$row['category'])->first();
             if($cat){
                 $product_data = [
-                    'stock' => 250,
+                    'stock' => 100,
                     'unit' => $row['unit'],
                     'code' => $row['code'],
                     'description' => $row['description'],
@@ -63,16 +63,7 @@ class DataImport implements ToCollection, WithHeadingRow
                 'amount' => $row['amount'],
                 'price' => $row['price'],
                 'category' => $row['category'],
-                'created_at' => Carbon::today()->subMonths(rand(0, 12))->subYears(rand(0, 2)),
-            ];
-
-            $stock_histories = [
-                'product_code' => $row['code'],
-                'stock' => 5000,
-                'stock_expi' => 5000,
-                'isOrder' => false,
-                'expiration' =>  '2024/12/1',
-                'created_at' =>  '2023/10/1',
+                'created_at' => rand(strtotime("Jan 01 2021"), strtotime("Nov 30 2023") ),
             ];
 
             $product = Product::updateOrCreate(
@@ -83,20 +74,10 @@ class DataImport implements ToCollection, WithHeadingRow
 
             );
 
-            $stocks = \App\Models\StockHistory::updateOrCreate(
-                [
-                    'product_code' => $row['code'],
-                ],
-                $stock_histories
 
-            );
 
             $orders = OrderProduct::create($order_products);
-
-
-
             DB::commit();
-
         }
 
     }

@@ -17,7 +17,7 @@
                     <div class="card-header border-0">
                         <div class="row ">
                             <div class="col-md-6">
-                                <h4 class="mb-0 text-uppercase" id="titletable">Inventory Reports</h4>
+                                <h4 class="mb-0 text-uppercase" id="titletable">Inventory Reports as OF ({{$ldate}})</h4>
                             </div>
                             <div class="col-md-6 row">
                                 <div class="col-md-6">
@@ -39,10 +39,15 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="filter_date">Filter Date: </label>
+                                        <input type="date" id="filter_date" name="filter_date" class="form-control">
+                                    </div>
+                                </div>
                             </div>
-
-
-
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -52,10 +57,12 @@
                                     <th scope="col">CATEGORY</th>
                                     <th  scope="col">CODE</th>
                                     <th scope="col">DESCRIPTION</th>
-                                    <th scope="col">SALES INVENTORY</th>
-                                    <th scope="col">DELIVERY INVENTORY</th>
                                     <th scope="col">BEGINNING INVENTORY</th>
                                     <th scope="col">ENDING INVENTORY</th>
+                                    <th scope="col">SALES INVENTORY</th>
+                                    <th scope="col">DELIVERY INVENTORY</th>
+                                    <th scope="col">BAD ORDER</th>
+
                                 </tr>
                             </thead>
 
@@ -73,17 +80,21 @@
                                             {{  $product['description'] ?? '' }}
                                         </td>
                                         <td>
+                                             {{  $product['beginning_inventory'] ?? '' }}
+                                        </td>
+                                        <td>
+                                             {{  $product['ending_inventory'] ?? '' }}
+                                        </td>
+                                        <td>
                                              {{  $product['sales_inventory'] ?? '' }}
                                         </td>
                                         <td>
                                              {{  $product['delivery_inventory'] ?? '' }}
                                         </td>
                                         <td>
-                                             {{  $product['beginning_inventory'] ?? '' }}
+                                             {{  $product['bad_order'] ?? '' }}
                                         </td>
-                                        <td>
-                                             {{  $product['ending_inventory'] ?? '' }}
-                                        </td>
+
 
                                     </tr>
                                 @endforeach
@@ -125,6 +136,13 @@ $(function () {
     $('#unit_dd').on('change', function () {
     table.columns(2).search( this.value ).draw();
     });
+
+});
+
+$('#filter_date').on("input", function() {
+    filter_date = this.value;
+    console.log(filter_date);
+    window.location.href = '/admin/inventory_reports/'+filter_date;
 
 });
 

@@ -710,7 +710,7 @@
 
         $('#receiving').on("input", function() {
             var receiving = parseFloat($('#receiving').val());
-            if(receiving > 1){
+            if(receiving > 0){
                 $('.expiration_stock').show();
             }else{
                 $('.expiration_stock').hide();

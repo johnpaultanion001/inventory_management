@@ -17,6 +17,7 @@ class StockHistory extends Model
         'product_code',
         'stock',
         'stock_expi',
+        'bad_order',
         'isOrder',
         'expiration',
         'remarks',

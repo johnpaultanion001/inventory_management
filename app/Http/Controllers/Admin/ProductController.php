@@ -212,11 +212,12 @@ class ProductController extends Controller
                 $expiration_valid = ['required','date', 'after:today'];
                 $isOrder = false;
             }
+            $final_stock = $stock + $receiving - $transaction - $bad_order;
 
             $validated =  Validator::make($request->all(), [
                 'manage_stock' => ['required','integer','min:1'],
                 'receiving' => ['required','integer','min:0'],
-                'transaction' => ['required','integer','min:0'],
+                'transaction' => ['required','integer','min:0',"max:$stock"],
                 'bad_order' => ['required','integer','min:0'],
                 'expiration_stock' => $expiration_valid,
             ]);
@@ -225,13 +226,15 @@ class ProductController extends Controller
                 return response()->json(['errors' => $validated->errors()]);
             }
             //computation of stock
-            $final_stock = $stock + $receiving - $transaction - $bad_order;
+
+
             \App\Models\StockHistory::create([
                 'product_code' => $product->code,
                 'stock' => $final_stock,
                 'stock_expi' => $receiving,
                 'expiration'=> $request->expiration_stock,
                 'isOrder' => $isOrder,
+                'bad_order' => $bad_order,
                 'remarks' => "RECEIVING: ".$receiving ."<br> TRANSACTION: ".$transaction."<br> B.O: ".$bad_order."<br> TOTAL STOCK: ".$final_stock,
             ]);
 

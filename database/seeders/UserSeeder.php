@@ -104,6 +104,15 @@ class UserSeeder extends Seeder
             [
                 'title' => 'accounts',
             ],
+            [
+                'title' => 'inventoryReport',
+            ],
+            [
+                'title' => 'purchaseOrder',
+            ],
+            [
+                'title' => 'deliveries',
+            ],
 
         ];
 

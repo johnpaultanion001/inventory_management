@@ -57,6 +57,7 @@
             </li>
             @endcan
         </div>
+        @canany(['purchaseOrder', 'deliveries'])
         <hr class="bg-primary">
         <li class="nav-item"  data-toggle="collapse" data-target="#supplier" class="collapsed active">
             <a class="nav-link text-dark" href="#">
@@ -67,8 +68,10 @@
             <span class="nav-link-text ms-1 text-uppercase">Suppliers</span>
             </a>
         </li>
+        @endcanany
 
         <div class="sub-menu collapse show" id="supplier">
+            @can('purchaseOrder')
             <li class="nav-item">
                 <a class="nav-link text-dark {{ request()->is('admin/purchase_order') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.purchase_order.index") }}">
                     <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -77,6 +80,8 @@
                     <span class="nav-link-text ms-1 text-uppercase">Purchase Order</span>
                 </a>
             </li>
+            @endcan
+            @can('deliveries')
             <li class="nav-item">
                 <a class="nav-link text-dark {{ request()->is('admin/purchase_order/deliveries') ? 'bg-gradient-dark text-white' : '' }}" href="{{ route("admin.purchase_order.deliveries") }}">
                     <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
@@ -85,7 +90,9 @@
                     <span class="nav-link-text ms-1 text-uppercase">Deliveries</span>
                 </a>
             </li>
+            @endcan
         </div>
+        @canany(['salesforcast', 'inventoryReport', 'activities'])
         <hr class="bg-primary">
         <li class="nav-item"  data-toggle="collapse" data-target="#reports" class="collapsed active">
             <a class="nav-link text-dark" href="#">
@@ -96,6 +103,7 @@
             <span class="nav-link-text ms-1 text-uppercase">Reports</span>
             </a>
         </li>
+        @endcanany
         <div class="sub-menu collapse show" id="reports">
             @can('salesforcast')
             <li class="nav-item">
@@ -107,14 +115,16 @@
             </a>
             </li>
             @endcan
+            @can('inventoryReport')
             <li class="nav-item">
-            <a class="nav-link text-dark {{ request()->is('admin/inventory_reports') || request()->is('admin/inventory_reports/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/inventory_reports">
+            <a class="nav-link text-dark {{ request()->is('admin/inventory_reports') || request()->is('admin/inventory_reports/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/inventory_reports/today">
                 <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fas fa-list {{ request()->is('admin/inventory_reports') || request()->is('admin/inventory_reports/*') ? 'text-white' : '' }}" style="font-size: 17px"></i>
                 </div>
                 <span class="nav-link-text ms-1 text-uppercase">Inventory Reports</span>
             </a>
             </li>
+            @endcan
             @can('activities')
             <li class="nav-item">
             <a class="nav-link text-dark {{ request()->is('admin/activities') || request()->is('admin/activities/*') ? 'bg-gradient-dark text-white' : '' }}" href="/admin/activities">
