@@ -102,42 +102,23 @@
                 </div>
             </div>
             <div class="col-md-12 mt-2">
+
                 <div class = "card p-3">
-                        <div >
-                            <h6>FILTER BY YEAR:</h6>
-                            <input type="checkbox" class="btn-check" id="btn-check-2021"  autocomplete="off">
-                            <label class="btn btn-outline-dark" for="btn-check-2021">2021</label>
-
-                            <input type="checkbox" class="btn-check" id="btn-check-2022"  autocomplete="off">
-                            <label class="btn btn-outline-dark" for="btn-check-2022">2022</label>
-
-                            <input type="checkbox" class="btn-check" id="btn-check-2023" checked autocomplete="off">
-                            <label class="btn btn-outline-dark" for="btn-check-2023">2023</label>
-
-                            <input type="checkbox" class="btn-check" id="btn-check-2024"  autocomplete="off">
-                            <label class="btn btn-outline-dark" for="btn-check-2024">2024</label>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                    <b class="mb-0 text-uppercase" id="title_chart">Filter by year:</b>
+                                    <select name="filter_year" id="filter_year" class="select2 form-control" style="width: 100%;">
+                                        @foreach($years_dropdown as $years)
+                                            <option value="{{$years['year'] ?? ''}}"> {{$years['year'] ?? ''}} @if($years['year'] > date('Y') ) (Forcast) @endif</option>
+                                        @endforeach
+                                    </select>
+                            </div>
                         </div>
+                        <br>
 
                         <div class="row">
-                            <div class="chart_2023">
-                                <h5>PRODUCT DEMAND (2023)</h5>
-                                <h6>From: Jan 1, 2023 To: Dec 31, 2023</h6>
-                                <canvas id="salesChart"></canvas>
-                            </div>
-                            <div class="chart_2024">
-                                <h5>PRODUCT DEMAND (2024)</h5>
-                                <h6>From: Jan 1, 2024 To: Dec 31, 2024</h6>
-                                <canvas id="salesChart2024"></canvas>
-                            </div>
-                            <div class="chart_2021">
-                                <h5>PRODUCT DEMAND (2021)</h5>
-                                <h6>From: Jan 1, 2021 To: Dec 31, 2021</h6>
-                                <canvas id="salesChart2021"></canvas>
-                            </div>
-                            <div class="chart_2022">
-                                <h5>PRODUCT DEMAND (2022)</h5>
-                                <h6>From: Jan 1, 2022 To: Dec 31, 2022</h6>
-                                <canvas id="salesChart2022"></canvas>
+                            <div id="bar_chart_value">
+
                             </div>
                         </div>
 
@@ -201,52 +182,11 @@
 
 
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<script src="{{ asset('js/chart.js') }}"></script>
+
 <script>
 
 
 $(function () {
-    $('.chart_2023').show();
-    $('.chart_2024').hide();
-    $('.chart_2021').hide();
-    $('.chart_2022').hide();
-
-
-
-    $("#btn-check-2021").on("click", function(){
-        if($("#btn-check-2021").is(":checked")) {
-            $('.chart_2021').show();
-        } else {
-            $('.chart_2021').hide();
-
-        }
-    });
-
-    $("#btn-check-2022").on("click", function(){
-        if($("#btn-check-2022").is(":checked")) {
-            $('.chart_2022').show();
-        } else {
-            $('.chart_2022').hide();
-        }
-    });
-
-    $("#btn-check-2023").on("click", function(){
-        if($("#btn-check-2023").is(":checked")) {
-            $('.chart_2023').show();
-        } else {
-            $('.chart_2023').hide();
-        }
-    });
-
-    $("#btn-check-2024").on("click", function(){
-        if($("#btn-check-2024").is(":checked")) {
-            $('.chart_2024').show();
-        } else {
-            $('.chart_2024').hide();
-        }
-    });
 
     var title = 'title';
     var header =  'title';
@@ -300,370 +240,36 @@ $(function () {
         },
     });
 
-    //2023
-    let ctx = document.getElementById('salesChart');
-    let salesChart = new Chart(ctx, {
-        type: 'bar',
-        fill: true,
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: 'Beverages',
-                    data: @json($montly_sold[0]),
-                    borderColor: "gold",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Canned Foods',
-                    data: @json($montly_sold[1]),
-                    borderColor: "pink",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Condiments',
-                    data: @json($montly_sold[2]),
-                    borderColor: "rgba(153, 102, 255, 0.2)",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Food Area',
-                    data: @json($montly_sold[3]),
-                    borderColor: "blue",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Personal Care',
-                    data: @json($montly_sold[4]),
-                    borderColor: "green",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Soap Area',
-                    data: @json($montly_sold[5]),
-                    borderColor: "red",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Others',
-                    data: @json($montly_sold[6]),
-                    borderColor: "#111",
-                    borderWidth: 3
-                },
+    var currentTime = new Date()
+    var year = currentTime.getFullYear()
+    $('#filter_year').val(year);
 
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+    $('#filter_year').on("change", function(event){
+        filter_year = $(this).val();
+        bar_chart_value(filter_year);
     });
-
-
-
-
-
-    //2021
-    let ctx2021 = document.getElementById('salesChart2021');
-    let salesChart2021 = new Chart(ctx2021, {
-        type: 'bar',
-        fill: true,
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: 'Beverages',
-                    data: @json($montly_sold2021[0]),
-                    borderColor: "gold",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Canned Foods',
-                    data: @json($montly_sold2021[1]),
-                    borderColor: "pink",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Condiments',
-                    data: @json($montly_sold2021[3]),
-                    borderColor: "rgba(153, 102, 255, 0.2)",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Food Area',
-                    data: @json($montly_sold2021[2]),
-                    borderColor: "blue",
-                    borderWidth: 3
-                },
-
-                {
-                    label: 'Personal Care',
-                    data: @json($montly_sold2021[4]),
-                    borderColor: "green",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Soap Area',
-                    data: @json($montly_sold2021[5]),
-                    borderColor: "red",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Others',
-                    data: @json($montly_sold2021[6]),
-                    borderColor: "#111",
-                    borderWidth: 3
-                },
-
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    //2022
-    let ctx2022 = document.getElementById('salesChart2022');
-    let salesChart2022 = new Chart(ctx2022, {
-        type: 'bar',
-        fill: true,
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: 'Beverages',
-                    data: @json($montly_sold2022[0]),
-                    borderColor: "gold",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Canned Foods',
-                    data: @json($montly_sold2022[1]),
-                    borderColor: "pink",
-                    borderWidth: 3
-                },
-
-                {
-                    label: 'Condiments',
-                    data: @json($montly_sold2022[3]),
-                    borderColor: "rgba(153, 102, 255, 0.2)",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Food Area',
-                    data: @json($montly_sold2022[2]),
-                    borderColor: "blue",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Personal Care',
-                    data: @json($montly_sold2022[4]),
-                    borderColor: "green",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Soap Area',
-                    data: @json($montly_sold2022[5]),
-                    borderColor: "red",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Others',
-                    data: @json($montly_sold2022[6]),
-                    borderColor: "#111",
-                    borderWidth: 3
-                },
-
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    //2024
-    let ctx2024 = document.getElementById('salesChart2024');
-    let salesChart2024 = new Chart(ctx2024, {
-        type: 'bar',
-        fill: true,
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: 'Beverages',
-                    data: @json($montly_sold2024[0]),
-                    borderColor: "gold",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Canned Foods',
-                    data: @json($montly_sold2024[1]),
-                    borderColor: "pink",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Condiments',
-                    data: @json($montly_sold2024[3]),
-                    borderColor: "rgba(153, 102, 255, 0.2)",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Food Area',
-                    data: @json($montly_sold2024[2]),
-                    borderColor: "blue",
-                    borderWidth: 3
-                },
-
-                {
-                    label: 'Personal Care',
-                    data: @json($montly_sold2024[4]),
-                    borderColor: "green",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Soap Area',
-                    data: @json($montly_sold2024[5]),
-                    borderColor: "red",
-                    borderWidth: 3
-                },
-                {
-                    label: 'Others',
-                    data: @json($montly_sold2024[6]),
-                    borderColor: "#111",
-                    borderWidth: 3
-                },
-
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    console.log("test:"+@json($montly_sold2024));
-
-
-
-    ctx.addEventListener('click', function(evt) {
-        var firstPoint = salesChart.getElementAtEvent(evt)[0];
-        if (firstPoint) {
-            var label = salesChart.data.labels[firstPoint._index];
-            var value = salesChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
-            var legend =  salesChart.data.datasets[firstPoint._datasetIndex].label;
-
-
-            window.open("/admin/salesforcast/"+legend+"/"+label+"/2023");
-
-        }
-
-
-    });
-
-    ctx2021.addEventListener('click', function(evt) {
-        var firstPoint = salesChart2021.getElementAtEvent(evt)[0];
-        if (firstPoint) {
-            var label = salesChart2021.data.labels[firstPoint._index];
-            var value = salesChart2021.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
-            var legend =  salesChart2021.data.datasets[firstPoint._datasetIndex].label;
-
-            // alert('Label: ' + label + "\nValue: " + value);
-            window.open("/admin/salesforcast/"+legend+"/"+label+"/2021");
-        }
-
-
-    });
-    ctx2022.addEventListener('click', function(evt) {
-        var firstPoint = salesChart2022.getElementAtEvent(evt)[0];
-        if (firstPoint) {
-            var label = salesChart2022.data.labels[firstPoint._index];
-            var value = salesChart2022.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
-            var legend =  salesChart2022.data.datasets[firstPoint._datasetIndex].label;
-
-            window.open("/admin/salesforcast/"+legend+"/"+label+"/2022");
-        }
-
-
-    });
-
-    ctx2024.addEventListener('click', function(evt) {
-        var firstPoint = salesChart2024.getElementAtEvent(evt)[0];
-        if (firstPoint) {
-            var label = salesChart2024.data.labels[firstPoint._index];
-            var value = salesChart2024.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
-            var legend =  salesChart2024.data.datasets[firstPoint._datasetIndex].label;
-
-            $('#formModal').modal('show');
-            $('.modal-title').text('View Chart');
-            $.ajax({
-                url :"/admin/forcast/2024/edit",
-                dataType:"json",
-                data:{'month':label, 'category':legend},
-                beforeSend:function(){
-                },
-                success:function(data){
-
-                    var list_2024 = "";
-                    $.each(data.forcasting, function(key,value){
-
-                        list_2024 += `
-                                    <tr class=`+value.class+`>
-                                        <td>`+value.category+`</td>
-                                        <td>`+value.year+`</td>
-                                        <td>`+value.month+`</td>
-                                        <td>`+value.demand+`</td>
-                                    </tr>
-                            `;
-                    })
-                    list_2024 += `
-                                    <tr class="table-dark">
-                                        <td><b>Top Products</b></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                            `;
-                    $.each(data.tp2024, function(key,value){
-                        var id = key + 1;
-                        list_2024 += `
-                                    <tr class="table-secondary">
-                                        <td><b>`+id+`</b></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><span class="bg-success badge">`+value.description+`</span></td>
-                                    </tr>
-                            `;
-                    })
-
-
-                    $('#list_2024').empty().append(list_2024);
-                    $('#regression').attr('src',data.regression);
-
-                    console.log(data.tp2024);
-
-
-                }
-            })
-
-        }
-
-
-    });
+    bar_chart_value(year)
 });
+
+
+
+function bar_chart_value(filter_year){
+    $.ajax({
+        url :"/admin/forcasts/bar_charts_value/"+filter_year,
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('#bar_chart_value').hide();
+            $('#title_chart').text('Processing...')
+        },
+        success: function(response){
+            $('#title_chart').text('Filter by year:')
+            $('#bar_chart_value').show();
+            $("#bar_chart_value").html(response);
+        }
+    })
+}
+
 
 function table_chart(){
     $('#table_chart').DataTable({
@@ -673,8 +279,6 @@ function table_chart(){
         scrollCollapse: true,
     });
 }
-
-
 
 
 var filter_type = "";

@@ -108,7 +108,7 @@
                 <div class="col-xl-12 mt-3">
                 <div class="card">
                     <div class="card-body">
-                    <h4 class="text-sm mb-0 text-capitalize text-primary">Product lower stock ( < 5 )</h4>
+                    <h4 class="text-sm mb-0 text-capitalize text-primary">Product lower stock ( < 10 )</h4>
                         <div class="card-body">
                             <div class="table-responsive">
                                     <table class="table display datatable-table" cellspacing="0" width="100%">
@@ -183,7 +183,7 @@
                 <div class="col-xl-12 mt-3">
                 <div class="card">
                     <div class="card-body">
-                    <h4 class="text-sm mb-0 text-capitalize text-primary">1 month before expiration ( {{$exp_label}} )</h4>
+                    <h4 class="text-sm mb-0 text-capitalize text-primary">3 months before expiration ( {{$exp_label}} )</h4>
                         <div class="card-body">
                             <div class="table-responsive">
                                     <table class="table datatable-table display" cellspacing="0" width="100%">

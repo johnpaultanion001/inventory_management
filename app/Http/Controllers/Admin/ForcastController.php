@@ -27,41 +27,25 @@ class ForcastController extends Controller
             $tp2024 = OrderProduct::groupBy('description')->where('category', $category)->whereMonth('created_at', '=', $month)->selectRaw('sum(qty) as total, description')->orderBy('total','desc')->take(3)->get();
 
 
-            $forcasting = [
-                [
-                    "category" => $category,
-                    "year" => "2021",
-                    "month" => $request->get('month'),
-                    "demand" => $c2021,
-                    "class" => "",
+            $years_dropdown  = OrderProduct::selectRaw('YEAR(created_at) as year , sum(qty) as sold')
+                            ->where('category',$category)
+                            ->whereMonth('created_at', '=', $month)
+                            ->orderBy('year')
+                            ->groupBy('year')->get();
+            $forcasting = array();
+            foreach($years_dropdown as $year ){
+                array_push($forcasting,
+                    [
+                        "category" => $category,
+                        "year" => $year->year,
+                        "month" => $request->get('month'),
+                        "demand" => $year->sold,
+                        "class" => "",
 
-                ],
-                [
-                    "category" => $category,
-                    "year" => "2022",
-                    "month" => $request->get('month'),
-                    "demand" => $c2022,
-                    "class" => "",
+                    ],
+                );
+            }
 
-                ],
-                [
-                    "category" => $category,
-                    "year" => "2023",
-                    "month" => $request->get('month'),
-                    "demand" => $c2023,
-                    "class" => "",
-
-                ],
-                [
-                    "category" => $category,
-                    "year" => "2024",
-                    "month" => $request->get('month'),
-                    "demand" => $c2024,
-                    "class" => "table-success",
-
-                ],
-
-            ];
             // /regression/jan/BEVERAGES.png
             $regression = '/regression/' .$request->get('month').'/'.$category.'.png';
 

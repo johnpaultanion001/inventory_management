@@ -43,6 +43,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // chart_reports
     Route::get('chart_reports/{filter_date}', 'OrderController@chart_reports')->name('chart_reports');
     Route::get('salesforcast/{category}/{m}/{y}', 'OrderController@chart_category')->name('chart_category');
+    Route::get('forcasts', 'BarChartValueController@forcast')->name('forcast');
+    Route::get('forcasts/bar_charts_value/{year}', 'BarChartValueController@index')->name('line_charts_value.index');
+
 
 
      // Admin List
@@ -76,5 +79,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
      // inventory reports
      Route::get('inventory_reports/{date}', 'InventoryReportsController@index')->name('inventory_reports.index');
+
+
 
 });

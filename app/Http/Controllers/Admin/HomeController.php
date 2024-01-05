@@ -31,12 +31,12 @@ class HomeController extends Controller
         $userrole = auth()->user()->role;
 
             $products = Product::latest()->get();
-            $productsLowerStocks = Product::latest()->where('stock', '<', 6)->get();
+            $productsLowerStocks = Product::latest()->where('stock', '<', 11)->get();
 
 
 
-            $productsExpiration = Product::where("expiration","<", Carbon::now()->addMonths(1))->get();
-            $exp_label  = 'From: ' . date('F d, Y') . ' To: ' . Carbon::now()->addMonths(1)->format('F d, Y');
+            $productsExpiration = Product::where("expiration","<", Carbon::now()->addMonths(3))->get();
+            $exp_label  = 'From: ' . date('F d, Y') . ' To: ' . Carbon::now()->addMonths(3)->format('F d, Y');
 
             $products_today = Product::whereDate('created_at', Carbon::today())->get();
 

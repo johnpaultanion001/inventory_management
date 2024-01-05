@@ -253,7 +253,7 @@ class ProductController extends Controller
 
             }
             //email sending
-            if($final_stock < 6){
+            if($final_stock < 11){
                 $emailNotif = [
                     'msg'              => "PRODUCT LOWER STOCK",
                     'code'              =>  $product->code,
