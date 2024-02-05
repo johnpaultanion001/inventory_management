@@ -14,7 +14,7 @@
                 <div class="card p-2">
                     <div class="card-header border-0">
                         <div class="row ">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <h4 class="mb-0 text-uppercase" id="titletable">Salesforcast</h4>
                                 <b class="mb-0 text-uppercase">{{$title_filter}}</b>
                             </div>
@@ -30,7 +30,7 @@
                                 @endif
 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <div class="form-group">
                                     <select name="filter_dd" id="filter_dd" class="select2" style="width: 100%;">
                                         <option value="fbd" {{ request()->is('admin/sales_reports/fbd/*') ? 'selected' : '' }}>FILTER BY FROM AND TO DATE</option>
@@ -129,47 +129,75 @@
 
 
     <div class="modal fade" id="formModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fas fa-times text-primary"></i>
-                    </button>
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-primary"></i>
+                </button>
 
+                </div>
+                <div class="modal-body row  d-flex justify-content-center">
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark text-center">
+                                <tr class="table-dark">
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Month</th>
+                                    <th scope="col">Demand</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center" id="list_2024">
+
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="modal-body row  d-flex justify-content-center">
-                        <div class="col-md-12">
-                            <table class="table table-bordered">
-                                <thead class="thead-dark text-center">
-                                    <tr class="table-dark">
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Year</th>
-                                        <th scope="col">Month</th>
-                                        <th scope="col">Demand</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center" id="list_2024">
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-8">
-                            <img id="regression" width="100%" height="100%" class="d-inline-block align-top" alt="Loading">
-                        </div>
+                    <!-- <div class="col-md-8">
+                        <img id="regression" width="100%" height="100%" class="d-inline-block align-top" alt="Loading">
+                    </div> -->
 
 
 
-                        <input type="hidden" name="action" id="action" value="Add" />
-                        <input type="hidden" name="hidden_id" id="hidden_id" />
+                    <input type="hidden" name="action" id="action" value="Add" />
+                    <input type="hidden" name="hidden_id" id="hidden_id" />
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="buckupModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Buckup File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-primary"></i>
+                </button>
+
+                </div>
+                <div class="modal-body row  d-flex justify-content-center">
+                        <div class="form-group">
+                                <b class="mb-0 text-uppercase" id="title_chart">Choose a year to buckup:</b>
+                                <select name="filter_buckup" id="filter_buckup" class="select2 form-control" style="width: 100%;">
+                                    @foreach($years_dropdown as $years)
+                                        <option value="{{$years['year'] ?? ''}}"> {{$years['year'] ?? ''}}</option>
+                                    @endforeach
+                                </select>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" >Buckup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -195,22 +223,7 @@ $(function () {
         responsive: true,
         scrollY: 500,
         scrollCollapse: true,
-        buttons: [
-            {
-                extend: 'excel',
-                className: 'btn btn-dark m-2',
-                footer: true,
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'print',
-                footer: true,
-                className: 'btn btn-dark m-2',
 
-            }
-        ],
         footerCallback: function (row, data, start, end, display) {
             var api = this.api();
             var intVal = function (i) {
@@ -300,6 +313,10 @@ $('.btn_filter_date').on("click", function(event){
         else{
             window.location.href = '/admin/sales_reports/fbd/'+from+'/'+to;
         }
+});
+
+$('#buckup_btn').on("click", function(event){
+        $('#buckupModal').modal('show');
 });
 
 

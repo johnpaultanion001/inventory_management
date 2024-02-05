@@ -16,6 +16,8 @@ class CreatePurchaseOrdersTable extends Migration
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
+            $table->string('supplier')->nullable();
+            $table->boolean('isRecieve')->default(false);
             $table->timestamps();
         });
     }

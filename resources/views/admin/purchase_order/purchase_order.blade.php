@@ -716,26 +716,6 @@ $(document).on('click', '.confirm_order', function(){
                                                 action: function(){
 
                                                 }
-                                            },
-                                            cancel:  {
-                                                text: 'View Receipt',
-                                                btnClass: 'btn-green',
-                                                keys: ['enter', 'shift'],
-                                                action: function(){
-                                                    $('#receiptModal').modal('show');
-                                                    $.ajax({
-                                                        url :"/admin/purchase_order/receipt/new_created",
-                                                        type: "get",
-                                                        dataType: "HTMl",
-                                                        beforeSend: function() {
-                                                            $('.modal-title-receipt').text('Loading Records...');
-                                                        },
-                                                        success: function(response){
-                                                            $('.modal-title-receipt').text('Receipt');
-                                                            $("#receipt_data").html(response);
-                                                        }
-                                                    })
-                                                }
                                             }
                                         }
                                     });
@@ -827,7 +807,7 @@ $(document).on('click', '#btn_print', function(){
     frameDoc.document.write('</head><body>');
     //Append the external CSS file.
     frameDoc.document.write('<link href="/admin/css/material-dashboard.css" rel="stylesheet" type="text/css" />');
-    frameDoc.document.write('<style>size: A5 portrait;</style>');
+    frameDoc.document.write('<style>size: A5 portrait; </style>');
     var source = 'bootstrap.min.js';
     var script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');

@@ -216,7 +216,7 @@ background: #C50901;
         let csvButtonTrans = 'CSV'
         let excelButtonTrans = 'EXCEL'
         let pdfButtonTrans = 'PDF'
-        let printButtonTrans = 'PRINT'
+        let printButtonTrans = 'PRINT / PDF'
         let colvisButtonTrans = 'VIEW'
 
         let languages = {
@@ -245,20 +245,28 @@ background: #C50901;
             footer: true
             },
             {
-            extend: 'pdf',
-            className: 'btn-dark btn-sm m-2',
-            text: pdfButtonTrans,
-            exportOptions: {
-                columns: ':visible'
-            },
-            footer: true
-            },
-            {
             extend: 'print',
             className: 'btn-dark btn-sm m-2',
             text: printButtonTrans,
+            orientation : 'landscape',
             exportOptions: {
                 columns: ':visible'
+            },
+            customize: function ( win ) {
+                    $(win.document.body).find('h1')
+                        .css( 'font-size', '25px' )
+                        .css('margin-top', '30px')
+                        .css('margin-bottom', '30px');
+                    $(win.document.body)
+                        .css( 'font-size', '10pt' )
+                        .prepend(
+                            '<img src="/assets/img/logo.jpeg" style="position:absolute;  right:0; " />'
+                        );
+                    $(win.document.body).find( 'table' )
+                        .addClass( 'compact' )
+                        .css( 'font-size', '8px' );
+
+
             },
             footer: true
             },

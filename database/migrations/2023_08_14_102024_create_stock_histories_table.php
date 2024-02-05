@@ -18,6 +18,8 @@ class CreateStockHistoriesTable extends Migration
             $table->string("product_code");
             $table->string("stock");
             $table->string("stock_expi");
+            $table->string("phy_add")->default(0);
+            $table->string("phy_minus")->default(0);
             $table->string("bad_order")->default(0);
             $table->date('expiration')->nullable();
             $table->boolean('isOrder')->default(false);

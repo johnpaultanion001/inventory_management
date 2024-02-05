@@ -20,15 +20,7 @@
                                 <h4 class="mb-0 text-uppercase" id="titletable">Inventory Reports as OF ({{$ldate}})</h4>
                             </div>
                             <div class="col-md-6 row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <select name="unit_dd" id="unit_dd" class="select2" style="width: 100%;">
-                                            <option value="">FILTER UNIT</option>
-                                            <option value="PCS">PCS</option>
-                                            <option value="CS">CS</option>
-                                        </select>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <select name="category_dd" id="category_dd" class="select2" style="width: 100%;">
@@ -58,10 +50,12 @@
                                     <th  scope="col">CODE</th>
                                     <th scope="col">DESCRIPTION</th>
                                     <th scope="col">BEGINNING INVENTORY</th>
-                                    <th scope="col">ENDING INVENTORY</th>
                                     <th scope="col">SALES INVENTORY</th>
                                     <th scope="col">DELIVERY INVENTORY</th>
-                                    <th scope="col">BAD ORDER</th>
+                                    <th scope="col">BACK ORDER</th>
+                                    <th scope="col">PHYSICAL COUNT(+)</th>
+                                    <th scope="col">PHYSICAL COUNT(-)</th>
+                                    <th scope="col">ENDING INVENTORY</th>
 
                                 </tr>
                             </thead>
@@ -83,9 +77,6 @@
                                              {{  $product['beginning_inventory'] ?? '' }}
                                         </td>
                                         <td>
-                                             {{  $product['ending_inventory'] ?? '' }}
-                                        </td>
-                                        <td>
                                              {{  $product['sales_inventory'] ?? '' }}
                                         </td>
                                         <td>
@@ -94,7 +85,15 @@
                                         <td>
                                              {{  $product['bad_order'] ?? '' }}
                                         </td>
-
+                                        <td>
+                                             {{  $product['phy_add'] ?? '' }}
+                                        </td>
+                                        <td>
+                                             {{  $product['phy_minus'] ?? '' }}
+                                        </td>
+                                        <td>
+                                             {{  $product['ending_inventory'] ?? '' }}
+                                        </td>
 
                                     </tr>
                                 @endforeach
@@ -130,12 +129,9 @@ $(function () {
     $('.select2').select2();
 
     $('#category_dd').on('change', function () {
-    table.columns(5).search( this.value ).draw();
+        table.columns(0).search( this.value ).draw();
     });
 
-    $('#unit_dd').on('change', function () {
-    table.columns(2).search( this.value ).draw();
-    });
 
 });
 

@@ -166,7 +166,7 @@
                                                     {{ $product->price ?? '' }}
                                                     </td>
                                                     <td>
-                                                    {{ $product->expiration->format('M j , Y') }}
+                                                    {{$product->stocksWExpiFirst()->expiration ?? ''}}
                                                     </td>
                                                     <td>
                                                     {{ $product->created_at->format('M j , Y h:i A') }}
@@ -206,42 +206,42 @@
                                             @foreach($productsExpiration as $product)
                                                 <tr>
                                                     <td>
-                                                    {{  $product->id ?? '' }}
+                                                    {{  $product->product->id ?? '' }}
                                                     </td>
 
                                                     <td>
-                                                    @if($product->image1 == null)
+                                                    @if($product->product->image1 == null)
                                                     <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/products/no_image.png')}}" />
                                                     @else
-                                                    <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/products/'.$product->image1)}}" />
+                                                    <img style="vertical-align: bottom;"  height="100" width="100" src="{{URL::asset('/assets/img/products/'.$product->product->image1)}}" />
                                                     @endif
 
                                                     </td>
                                                     <td>
-                                                    {{  $product->unit ?? '' }}
+                                                    {{  $product->product->unit ?? '' }}
                                                     </td>
                                                     <td>
-                                                    <span class="badge bg-warning">{{  $product->code ?? '' }}</span>
-                                                    </td>
-
-                                                    <td>
-                                                    {{\Illuminate\Support\Str::limit($product->description,50)}}
-                                                    </td>
-                                                    <td>
-                                                    {{  $product->category->name ?? '' }}
+                                                    <span class="badge bg-warning">{{  $product->product->code ?? '' }}</span>
                                                     </td>
 
                                                     <td>
-                                                    {{ $product->stock ?? '' }}
+                                                    {{\Illuminate\Support\Str::limit($product->product->description,50)}}
                                                     </td>
                                                     <td>
-                                                    {{ $product->unit_price ?? '' }}
+                                                    {{  $product->product->category->name ?? '' }}
+                                                    </td>
+
+                                                    <td>
+                                                    {{ $product->stock_expi ?? '' }}
                                                     </td>
                                                     <td>
-                                                    {{ $product->price ?? '' }}
+                                                    {{ $product->product->unit_price ?? '' }}
                                                     </td>
                                                     <td>
-                                                    {{ $product->expiration->format('M j , Y') }}
+                                                    {{ $product->product->price ?? '' }}
+                                                    </td>
+                                                    <td>
+                                                    {{$product->expiration ?? ''}}
                                                     </td>
                                                     <td>
                                                     {{ $product->created_at->format('M j , Y h:i A') }}

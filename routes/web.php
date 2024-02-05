@@ -40,10 +40,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Sales Reports
     Route::get('sales_reports/{filter}/{from}/{to}', 'OrderController@sales_reports')->name('sales_reports');
 
+    // buckup
+    Route::get('backup', 'OrderController@backup')->name('orders.backup');
+
     // chart_reports
     Route::get('chart_reports/{filter_date}', 'OrderController@chart_reports')->name('chart_reports');
     Route::get('salesforcast/{category}/{m}/{y}', 'OrderController@chart_category')->name('chart_category');
-    Route::get('forcasts', 'BarChartValueController@forcast')->name('forcast');
+    Route::get('forcasts', 'OrderController@forcast')->name('forcast');
     Route::get('forcasts/bar_charts_value/{year}', 'BarChartValueController@index')->name('line_charts_value.index');
 
 
@@ -75,6 +78,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
      Route::get('purchase_order/confirm', 'PurchaseOrderController@confirm_order')->name('purchase_order.confirm');
      Route::get('purchase_order/orders', 'PurchaseOrderController@orders')->name('purchase_order.orders');
      Route::get('purchase_order/receipt/{id}', 'PurchaseOrderController@receipt_order')->name('purchase_order.receipt');
+     Route::get('purchase_order/verify/{id}', 'PurchaseOrderController@verify_order')->name('purchase_order.verify');
+     Route::post('purchase_order/verify', 'PurchaseOrderController@verify')->name('purchase_order.verify');
+     Route::get('purchase_order/recieve/{id}', 'PurchaseOrderController@recieve_order')->name('purchase_order.recieve');
+
      Route::get('purchase_order/deliveries', 'PurchaseOrderController@deliveries')->name('purchase_order.deliveries');
 
      // inventory reports

@@ -36,10 +36,10 @@
                                 @foreach($categories as $category)
                                     <tr>
                                         <td>
-                                         
+
                                             <button type="button" name="edit" edit="{{  $category->id ?? '' }}"  class="edit btn btn-sm btn-success">Edit</button>
                                             <button type="button" name="remove" remove="{{  $category->id ?? '' }}" class="remove btn btn-sm btn-danger">Remove</button>
-                                            
+
                                         </td>
                                         <td>
                                             {{  $category->name ?? '' }}
@@ -72,24 +72,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fas fa-times text-primary"></i>
                     </button>
-        
+
                     </div>
                     <div class="modal-body">
 
                         <div class="form-group">
-                        
+
                             <label class="form-label">Name: <span class="text-danger">*</span></label>
                             <input type="text" name="name" id="name" class="form-control disabled" >
                             <span class="invalid-feedback" role="alert">
                                 <strong id="error-name"></strong>
                             </span>
-                            
-                            
+
+
                         </div>
 
                         <input type="hidden" name="action" id="action" value="Add" />
                         <input type="hidden" name="hidden_id" id="hidden_id" />
-                        
+
                     </div>
                     <div class="modal-footer">
                         <input type="submit" name="action_button" id="action_button" class="btn  btn-primary" value="Save" />
@@ -106,7 +106,7 @@
 
 
 @section('script')
-<script> 
+<script>
     $(function () {
     let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
@@ -154,7 +154,7 @@ $('#myForm').on('submit', function(event){
         },
         success:function(data){
            $("#action_button").attr("disabled", false);
-          
+
             if(data.errors){
                 $.each(data.errors, function(key,value){
                     if(key == $('#'+key).attr('id')){
@@ -183,12 +183,12 @@ $('#myForm').on('submit', function(event){
                                 location.reload();
                             }
                         },
-                        
+
                     }
                 });
                 $('#formModal').modal('hide');
             }
-            
+
         }
     });
 });
@@ -209,7 +209,7 @@ $(document).on('click', '.edit', function(){
         },
         success:function(data){
             $("#action_button").attr("disabled", false);
-            
+
             $.each(data.result, function(key,value){
                 if(key == $('#'+key).attr('id')){
                     $('#'+key).val(value)
@@ -260,7 +260,7 @@ $(document).on('click', '.remove', function(){
                                               location.reload();
                                           }
                                       },
-                                      
+
                                   }
                               });
                           }

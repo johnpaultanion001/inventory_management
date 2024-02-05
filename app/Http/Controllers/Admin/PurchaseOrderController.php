@@ -92,22 +92,13 @@ class PurchaseOrderController extends Controller
                 'purchase_order_id' => $pid,
             ]);
 
-            foreach($porder->deliveries()->get() as $order){
-                $product = Product::where('code',$order->product_code)
-                                ->increment('stock', $order->qty);
-                $stockProduct = Product::where('code',$order->product_code)->first();
-
-                StockHistory::create([
-                    'product_code' => $order->product_code,
-                    'stock' => $stockProduct->stock,
-                    'stock_expi' => $order->qty,
-                    'isOrder' => false,
-                    'expiration' => $order->expiration,
-                    'remarks' => "RECEIVING: ".$order->qty ."<br> TRANSACTION: 0<br> B.O: 0<br> TOTAL STOCK: ".$stockProduct->stock,
-                ]);
-            }
 
         }
+        Activity::create([
+            'activity' => 'Pruchase Order',
+            'user_id' => Auth::user()->id
+        ]);
+
 
         return response()->json(['success' => 'Confirm Orders Successfully.']);
     }
@@ -122,12 +113,91 @@ class PurchaseOrderController extends Controller
     }
 
 
+    public function verify_order($id){
+        $deliveries = Delivery::where('isConfirm', true)->where('purchase_order_id',$id)->latest()->get();
+        $order = PurchaseOrder::where('id',$id)->first();
+
+        return response()->json([
+            'deliveries' =>   $deliveries,
+            'supplier' => $order->supplier,
+        ]);
+    }
+    public function verify(Request $request){
+
+        foreach($request->ids as $key => $id_deli)
+        {
+            $delivery = Delivery::where('id',$id_deli)->first();
+            $unit_price = $delivery->unit_price;
+            $total = $unit_price * $request->qty[$key];
+
+
+            Delivery::where('id',$id_deli)->update([
+                'unit' => $request->unit[$key],
+                'expiration' => $request->expiration[$key],
+                'qty' => $request->qty[$key],
+                'total' => $total
+            ]);
+        }
+
+        PurchaseOrder::where('id',$delivery->purchase_order_id)->update([
+            'supplier' => $request->input('supplier_name'),
+        ]);
+
+        Activity::create([
+            'activity' => 'Verify Pruchase Order',
+            'user_id' => Auth::user()->id
+        ]);
+
+
+
+        return response()->json([
+            'success' =>   'Successfully updated',
+        ]);
+    }
+
+
+
     public function deliveries(){
         $orders = PurchaseOrder::latest()->get();
 
         return view('admin.purchase_order.deliveries' ,compact('orders'));
     }
 
+    public function recieve_order($id){
+
+        PurchaseOrder::where('id',$id)->update([
+            'isRecieve' => true,
+        ]);
+
+        $orders =  PurchaseOrder::where('id',$id)->first();
+
+        foreach($orders->deliveries()->get() as $order){
+            $product = Product::where('code',$order->product_code)
+                            ->increment('stock', $order->qty);
+            $stockProduct = Product::where('code',$order->product_code)->first();
+
+            StockHistory::create([
+                'product_code' => $order->product_code,
+                'stock' => $stockProduct->stock,
+                'stock_expi' => $order->qty,
+                'isOrder' => false,
+                'expiration' => $order->expiration,
+                'remarks' => "RECEIVING: ".$order->qty ."<br> TRANSACTION: 0<br> B.O: 0<br> TOTAL STOCK: ".$stockProduct->stock,
+            ]);
+        }
+
+        Activity::create([
+            'activity' => 'Recieve Pruchase Order',
+            'user_id' => Auth::user()->id
+        ]);
+
+
+
+
+        return response()->json([
+            'success' =>   'Successfully updated',
+        ]);
+    }
 
 
 

@@ -2,7 +2,19 @@
     <div class="chart">
         <h5>PRODUCT DEMAND ({{$year}})</h5>
         <h6>{{$chart_filter}}</h6>
-        <canvas id="lineChart"></canvas>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-1 text-center" style =" writing-mode: vertical-lr; transform: scale(-1, -1);">
+                    <h6 >NO. OF SOLD PRODUCTS</h6>
+                </div>
+                <div class="col-11">
+                    <canvas id="lineChart"></canvas>
+                    <h6 class="text-center">MONTHS OF THE YEAR ({{$year}})</h6>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
@@ -12,10 +24,9 @@
 
 <script>
     $(function () {
-        let ctx = document.getElementById('lineChart');
-        let salesChart = new Chart(ctx, {
+
+        var test = {
             type: 'bar',
-            fill: true,
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
                 datasets: [
@@ -64,14 +75,41 @@
                 ]
             },
             options: {
+                responsive: true,
+                plugins: {
+                title: {
+                    display: true,
+                    text: 'Chart.js Line Chart'
+                },
+                },
+                interaction: {
+                mode: 'index',
+                intersect: false
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        title: {
+                        display: true,
+                        text: 'yTitle'
+                        }
+                    },
+                    x: {
+                        title: {
+                        display: true,
+                        text: 'xTitle'
+                        }
                     }
                 }
-            }
-        });
+            },
+        };
         console.log(@json($montly_sold));
+
+        var ctx = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctx, test);
+
+
+
+
 
         ctx.addEventListener('click', function(evt) {
             var firstPoint = salesChart.getElementAtEvent(evt)[0];
@@ -128,7 +166,7 @@
 
 
                             $('#list_2024').empty().append(list_2024);
-                            $('#regression').attr('src',data.regression);
+                            //$('#regression').attr('src',data.regression);
 
                             console.log(data.tp2024);
 

@@ -63,7 +63,7 @@ class DataImport implements ToCollection, WithHeadingRow
                 'amount' => $row['amount'],
                 'price' => $row['price'],
                 'category' => $row['category'],
-                'created_at' => rand(strtotime("Jan 01 2021"), strtotime("Nov 30 2023") ),
+                'created_at' => rand(strtotime("Jan 01 2021"), strtotime("Dec 31 2023") ),
             ];
 
             $product = Product::updateOrCreate(

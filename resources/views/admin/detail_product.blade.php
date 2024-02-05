@@ -131,6 +131,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>ID</th>
+                                        <th>PRODUCT</th>
                                         <th>STOCKS</th>
                                         <th>REMARKS</th>
                                         <th>CREATED AT</th>
@@ -138,6 +139,9 @@
                                 </thead>
                                 <tbody class="text-uppercase font-weight-bold text-center" id="list_stocks">
                                         <tr>
+                                            <td>
+
+                                            </td>
                                             <td>
 
                                             </td>
@@ -432,15 +436,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-12 transaction_field">
-                            <div class="form-group">
-                                <label class="form-label">Receiving:  <span class="text-danger">*</span></label>
-                                <input type="number" name="receiving" id="receiving" class="form-control disabled" value="0" step="any">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-receiving"></strong>
-                                </span>
-                            </div>
-                        </div>
+
                         <div class="col-sm-12 transaction_field">
                             <div class="form-group">
                                 <label class="form-label">Transaction:  <span class="text-danger">*</span></label>
@@ -456,6 +452,24 @@
                                 <input type="number" name="bad_order" id="bad_order" class="form-control disabled"  value="0" step="any">
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-bad_order"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 transaction_field">
+                            <div class="form-group">
+                                <label class="form-label">Physical Count(+):  <span class="text-danger">*</span></label>
+                                <input type="number" name="phy_add" id="phy_add" class="form-control disabled" value="0" step="any">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-phy_add"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 transaction_field">
+                            <div class="form-group">
+                                <label class="form-label">Physical Count(-):  <span class="text-danger">*</span></label>
+                                <input type="number" name="phy_minus" id="phy_minus" class="form-control disabled" value="0" step="any">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-phy_minus"></strong>
                                 </span>
                             </div>
                         </div>
@@ -498,6 +512,7 @@
         $('.expiration_stock').hide();
 
         function scanCode(code){
+            var product_name;
             $.ajax({
                 url :"/admin/products/product/detail/"+code,
                 dataType:"json",
@@ -533,6 +548,9 @@
                                 $('#td_action').empty().append(buttons);
 
                             }
+                            if(key == 'description'){
+                                product_name = value;
+                            }
                             $('#td_category').text(data.category);
                     })
                     var list_orders = "";
@@ -558,6 +576,7 @@
                         list_stocks += `
                                     <tr>
                                         <td>`+value.id+`</td>
+                                        <td>`+product_name+`</td>
                                         <td>`+value.stock+`</td>
                                         <td>`+value.remarks+`</td>
                                         <td>`+moment(value.created_at).format('MM-DD-YYYY')+`</td>
@@ -566,7 +585,7 @@
                             console.log(value)
                     })
                     $('#list_stocks').empty().append(list_stocks);
-
+                    console.log(data.stocks)
                     var list_expi = "";
                     $.each(data.expirations, function(key,value){
                         list_expi += `
@@ -708,8 +727,8 @@
             })
         });
 
-        $('#receiving').on("input", function() {
-            var receiving = parseFloat($('#receiving').val());
+        $('#phy_add').on("input", function() {
+            var receiving = parseFloat($('#phy_add').val());
             if(receiving > 0){
                 $('.expiration_stock').show();
             }else{

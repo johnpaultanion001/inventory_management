@@ -255,22 +255,6 @@ $(function () {
         responsive: true,
         scrollY: 500,
         scrollCollapse: true,
-        buttons: [
-            {
-                extend: 'excel',
-                className: 'btn btn-dark m-2',
-                footer: true,
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'print',
-                footer: true,
-                className: 'btn btn-dark m-2',
-
-            }
-        ],
         footerCallback: function (row, data, start, end, display) {
             var api = this.api();
             var intVal = function (i) {

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Order;
+use App\Models\StockHistory;
 use App\Models\OrderProduct;
 use App\Models\User;
 use Carbon\Carbon;
@@ -35,7 +35,7 @@ class HomeController extends Controller
 
 
 
-            $productsExpiration = Product::where("expiration","<", Carbon::now()->addMonths(3))->get();
+            $productsExpiration = StockHistory::where("expiration","<", Carbon::now()->addMonths(3))->where("expiration","!=", null)->get();
             $exp_label  = 'From: ' . date('F d, Y') . ' To: ' . Carbon::now()->addMonths(3)->format('F d, Y');
 
             $products_today = Product::whereDate('created_at', Carbon::today())->get();

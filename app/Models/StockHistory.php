@@ -17,10 +17,16 @@ class StockHistory extends Model
         'product_code',
         'stock',
         'stock_expi',
+        'phy_add',
+        'phy_minus',
         'bad_order',
         'isOrder',
         'expiration',
         'remarks',
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_code','code');
+    }
 
 }

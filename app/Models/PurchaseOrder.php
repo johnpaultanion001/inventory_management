@@ -11,6 +11,8 @@ class PurchaseOrder extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'supplier',
+        'isRecieve',
     ];
     public function deliveries()
     {

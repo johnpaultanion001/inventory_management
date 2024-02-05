@@ -198,7 +198,8 @@ class ProductController extends Controller
         if($request->input('type') == null){
             $product = Product::where('id', $product)->first();
             $manage_stock = (float)$request->input('manage_stock');
-            $receiving = (float)$request->input('receiving');
+            $receiving = (float)$request->input('phy_add');
+            $phy_minus = (float)$request->input('phy_minus');
             $transaction = (float)$request->input('transaction');
             $bad_order = (float)$request->input('bad_order');
 
@@ -212,11 +213,12 @@ class ProductController extends Controller
                 $expiration_valid = ['required','date', 'after:today'];
                 $isOrder = false;
             }
-            $final_stock = $stock + $receiving - $transaction - $bad_order;
+            $final_stock = $stock + $receiving - $transaction - $bad_order - $phy_minus;
 
             $validated =  Validator::make($request->all(), [
                 'manage_stock' => ['required','integer','min:1'],
-                'receiving' => ['required','integer','min:0'],
+                'phy_add' => ['required','integer','min:0'],
+                'phy_minus' => ['required','integer','min:0'],
                 'transaction' => ['required','integer','min:0',"max:$stock"],
                 'bad_order' => ['required','integer','min:0'],
                 'expiration_stock' => $expiration_valid,
@@ -231,11 +233,13 @@ class ProductController extends Controller
             \App\Models\StockHistory::create([
                 'product_code' => $product->code,
                 'stock' => $final_stock,
-                'stock_expi' => $receiving,
+                'stock_expi' => 0,
+                'phy_add' => $receiving,
+                'phy_minus' => $phy_minus,
                 'expiration'=> $request->expiration_stock,
                 'isOrder' => $isOrder,
                 'bad_order' => $bad_order,
-                'remarks' => "RECEIVING: ".$receiving ."<br> TRANSACTION: ".$transaction."<br> B.O: ".$bad_order."<br> TOTAL STOCK: ".$final_stock,
+                'remarks' => "TRANSACTION: ".$transaction."<br> B.O: ".$bad_order."<br> PHYSICAL COUNT(+): ".$receiving."<br> PHYSICAL COUNT(-): ".$phy_minus ."<br> TOTAL STOCK: ".$final_stock,
             ]);
 
             if($transaction > 1){
@@ -279,7 +283,7 @@ class ProductController extends Controller
             return response()->json([
                 'success' => 'Stock Updated Successfully.',
                 "product" =>  $product,
-                "stocks" =>  $product->stocks()->latest()->get(),
+                "stocks" =>  $product->stocks()->with('product')->latest()->get(),
                 "orders" => $product->orders()->latest()->get(),
                 "category" => $product->category->name,
                 "critStock" => $critStock,
