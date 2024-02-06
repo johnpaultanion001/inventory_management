@@ -121,6 +121,9 @@
             background-color: #F2C94C !important;
             border-color: #F2C94C !important;
         }
+        .ui-autocomplete{
+            z-index:1050 !important;
+        }
 
 
     </style>
@@ -259,8 +262,9 @@ background: #C50901;
                         .css('margin-bottom', '30px');
                     $(win.document.body)
                         .css( 'font-size', '10pt' )
+                        .addClass( 'text-center mt-2' )
                         .prepend(
-                            '<img src="/assets/img/logo.jpeg" style="position:absolute;  right:0; " />'
+                            '<img src="/assets/img/logo.jpeg"/>'
                         );
                     $(win.document.body).find( 'table' )
                         .addClass( 'compact' )

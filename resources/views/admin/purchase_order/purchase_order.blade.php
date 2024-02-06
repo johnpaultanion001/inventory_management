@@ -304,16 +304,6 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="form-label">Expiration:  <span class="text-danger">*</span></label>
-                                <input type="date" name="expiration_order" id="expiration_order" class="form-control">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-expiration_order"></strong>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <div class="form-group">
                                 <label class="form-label">Qty:  <span class="text-danger">*</span></label>
                                 <input type="number" name="qty_order" id="qty_order" class="form-control disabled"  step="any">
                                 <span class="invalid-feedback" role="alert">

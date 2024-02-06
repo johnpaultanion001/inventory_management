@@ -186,6 +186,8 @@
 
 
 @section('script')
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 $(function () {
 
@@ -206,6 +208,14 @@ $(function () {
         table.columns(0).search( this.value ).draw();
     });
 
+
+
+
+    var availableTags = @json($suppliers);
+    console.log(availableTags)
+    $( "#supplier_name" ).autocomplete({
+      source: availableTags
+    });
 
 });
 

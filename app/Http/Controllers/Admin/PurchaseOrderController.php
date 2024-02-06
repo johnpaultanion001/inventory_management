@@ -30,7 +30,7 @@ class PurchaseOrderController extends Controller
         $validated =  Validator::make($request->all(), [
             'unit_order' => ['required'],
             'qty_order' => ['required','integer','min:1'],
-            'expiration_order' => ['required','date', 'after:today'],
+            //'expiration_order' => ['required','date', 'after:today'],
         ]);
 
         if ($validated->fails()) {
@@ -48,7 +48,7 @@ class PurchaseOrderController extends Controller
             'unit' => $request->input('unit_order'),
             'qty' => $request->input('qty_order'),
             'unit_price' => $unit_price,
-            'expiration' => $request->input('expiration_order'),
+            //'expiration' => $request->input('expiration_order'),
             'total' => $total,
         ]);
 
@@ -159,8 +159,9 @@ class PurchaseOrderController extends Controller
 
     public function deliveries(){
         $orders = PurchaseOrder::latest()->get();
+        $suppliers = PurchaseOrder::latest()->select('supplier')->groupBy('supplier')->pluck('supplier')->toArray();
 
-        return view('admin.purchase_order.deliveries' ,compact('orders'));
+        return view('admin.purchase_order.deliveries' ,compact('orders','suppliers'));
     }
 
     public function recieve_order($id){
