@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailNotification;
 use App\Models\Category;
 use App\Models\Forcast;
+use Attribute;
 use Illuminate\Support\Facades\Artisan;
 use League\Flysystem\Plugin\ForcedCopy;
 use Illuminate\Support\Facades\DB;
+use App\Rules\MatchOldPassword;
 
 
 class OrderController extends Controller
@@ -311,8 +313,7 @@ class OrderController extends Controller
         return view('admin.sales_reports.data_chart', compact('sales','ldate','title_filter'));
     }
 
-    public function backup(){
-
+    public function download_backup(){
         $DbName             = env('DB_DATABASE');
         $get_all_table_query = "SHOW TABLES ";
         $result = DB::select(DB::raw($get_all_table_query));
@@ -321,8 +322,6 @@ class OrderController extends Controller
         foreach ($result as $res){
             $tables[] =  $res->$prep;
         }
-
-
 
         $connect = DB::connection()->getPdo();
 
@@ -359,7 +358,7 @@ class OrderController extends Controller
                 $output .= "'" . implode("','", $table_value_array) . "');\n";
             }
         }
-        $file_name = 'database_backup_on_' . date('y-m-d') . '.sql';
+        $file_name = 'database_backup_on_' . date('y-m-d') . '.(sql)';
         $file_handle = fopen($file_name, 'w+');
         fwrite($file_handle, $output);
         fclose($file_handle);
@@ -376,9 +375,26 @@ class OrderController extends Controller
         readfile($file_name);
         unlink($file_name);
 
+    }
+
+    public function backup(Request $request){
+
+        $validated =  Validator::make($request->all(), [
+            'current_password' => ['required',new MatchOldPassword],
+
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+
         Activity::create([
             'activity' => 'Backup Data',
             'user_id' => Auth::user()->id
+        ]);
+
+        return response()->json([
+            'success' =>   'Successfully downloaded',
         ]);
 
     }

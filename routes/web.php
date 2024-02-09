@@ -41,7 +41,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('sales_reports/{filter}/{from}/{to}', 'OrderController@sales_reports')->name('sales_reports');
 
     // buckup
-    Route::get('backup', 'OrderController@backup')->name('orders.backup');
+    Route::post('backup', 'OrderController@backup')->name('orders.backup');
+    Route::get('download_backup', 'OrderController@download_backup')->name('orders.download_backup');
+
+
 
     // chart_reports
     Route::get('chart_reports/{filter_date}', 'OrderController@chart_reports')->name('chart_reports');

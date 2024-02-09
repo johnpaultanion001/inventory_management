@@ -114,7 +114,7 @@ class PurchaseOrderController extends Controller
 
 
     public function verify_order($id){
-        $deliveries = Delivery::where('isConfirm', true)->where('purchase_order_id',$id)->latest()->get();
+        $deliveries = Delivery::with('product')->where('isConfirm', true)->where('purchase_order_id',$id)->latest()->get();
         $order = PurchaseOrder::where('id',$id)->first();
 
         return response()->json([
@@ -144,7 +144,7 @@ class PurchaseOrderController extends Controller
         ]);
 
         Activity::create([
-            'activity' => 'Verify Pruchase Order',
+            'activity' => 'Verify Purchase Order',
             'user_id' => Auth::user()->id
         ]);
 
@@ -159,7 +159,7 @@ class PurchaseOrderController extends Controller
 
     public function deliveries(){
         $orders = PurchaseOrder::latest()->get();
-        $suppliers = PurchaseOrder::latest()->select('supplier')->groupBy('supplier')->pluck('supplier')->toArray();
+        $suppliers = PurchaseOrder::latest()->orWhereNotNull('supplier')->select('supplier')->groupBy('supplier')->pluck('supplier')->toArray();
 
         return view('admin.purchase_order.deliveries' ,compact('orders','suppliers'));
     }
@@ -188,7 +188,7 @@ class PurchaseOrderController extends Controller
         }
 
         Activity::create([
-            'activity' => 'Recieve Pruchase Order',
+            'activity' => 'Recieve Purchase Order',
             'user_id' => Auth::user()->id
         ]);
 

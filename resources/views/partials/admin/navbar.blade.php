@@ -69,10 +69,10 @@
           </a>
           <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
             <li class="mb-2">
-              <a href="/admin/backup" class="dropdown-item border-radius-md">
+              <button id="btn_backup" class="dropdown-item border-radius-md">
                 <i class="fas fa-download fa-lg p-2"></i>
                 <span>Backup Data</span>
-              </a>
+              </button>
             </li>
 
             <li class="mb-2">

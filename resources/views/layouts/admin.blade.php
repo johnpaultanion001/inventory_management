@@ -148,6 +148,40 @@ background: #C50901;
             {{ csrf_field() }}
         </form>
 
+        <form method="post" id="myBackupForm" class="contact-form">
+            @csrf
+            <div class="modal fade" id="formBackupModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title">Verify your password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times text-primary"></i>
+                        </button>
+
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group">
+
+                                <label class="form-label">Input your current password to confirm  <span class="text-danger">*</span></label>
+                                <input type="password" name="current_password" id="current_password" class="form-control disabled" >
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-current_password"></strong>
+                                </span>
+
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn  btn-primary" value="Submit" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
         <!-- JQuery Scripts -->
         <script src="{{ asset('/admin/vendor/jquery/dist/jquery.min.js') }}"></script>
         <script src="{{ asset('/admin/vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -317,25 +351,59 @@ background: #C50901;
         }
 
 
-        $(document).on('click', '#click_notif', function(){
-            var id = $(this).attr('click_notif');
-            $.ajax({
-                    url:"../patient/notification/"+id,
-                    method:'PUT',
-                    data: {
-                        _token: '{!! csrf_token() !!}',
-                    },
-                    dataType:"json",
-                    beforeSend:function(){
-                    },
-
-                    success:function(data){
-                    location.href = data.success;
-                    }
-                })
-
+        $(document).on('click', '#btn_backup', function(){
+           $('#formBackupModal').modal('show');
         });
-        </script>
+
+        $('#myBackupForm').on('submit', function(event){
+        event.preventDefault();
+        $('.form-control').removeClass('is-invalid')
+        var action_url = "{{ route('admin.orders.backup') }}";
+        var type = "POST";
+
+
+            $.ajax({
+                url: action_url,
+                method:type,
+                data:$(this).serialize(),
+                dataType:"json",
+                beforeSend:function(){
+                },
+                success:function(data){
+                    if(data.errors){
+                        $.each(data.errors, function(key,value){
+                            if(key == $('#'+key).attr('id')){
+                                $('#'+key).addClass('is-invalid')
+                                $('#error-'+key).text(value)
+                            }
+                        })
+                    }
+                    if(data.success){
+                        $('.form-control').removeClass('is-invalid')
+                        $('#myBackupForm')[0].reset();
+                        $.confirm({
+                        title: 'Confirmation',
+                        content: data.success,
+                        type: 'green',
+                        buttons: {
+                                confirm: {
+                                    text: 'confirm',
+                                    btnClass: 'btn-blue',
+                                    keys: ['enter', 'shift'],
+                                    action: function(){
+                                        window.location.href = '/admin/download_backup';
+                                    }
+                                },
+
+                            }
+                        });
+                        $('#formBackupModal').modal('hide');
+                    }
+
+                }
+            });
+        });
+    </script>
         @yield('script')
     </body>
 </html>

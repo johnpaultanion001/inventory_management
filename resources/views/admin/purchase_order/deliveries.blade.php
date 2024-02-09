@@ -125,7 +125,7 @@
                             <table class="table table-bordered display text-center" cellspacing="0" width="100%">
                                 <thead class="thead-dark font-weight-bold">
                                     <tr>
-                                        <th scope="col">CODE</th>
+                                        <th scope="col">DESCRIPTION</th>
                                         <th scope="col">UNIT</th>
                                         <th scope="col">EXPIRATION</th>
                                         <th scope="col">QTY</th>
@@ -255,7 +255,7 @@ $(document).on('click', '.verify', function(){
             $.each(data.deliveries, function(key,value){
                 records += `
                             <tr>
-                                <td>`+value.product_code+`</td>
+                                <td>`+value.product.description+`</td>
                                 <td>
                                     <select name="unit[]"class="form-control">
                                             <option value="`+value.unit+`">`+value.unit+`</option>
