@@ -23,6 +23,7 @@ class CreateDeliveriesTable extends Migration
             $table->float('unit_price');
             $table->float('total');
             $table->date('expiration')->nullable();
+            $table->string('supplier')->nullable();
             $table->string("isConfirm")->default(0);
             $table->timestamps();
         });

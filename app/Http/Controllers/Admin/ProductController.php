@@ -29,7 +29,7 @@ class ProductController extends Controller
         $categories = Category::latest()->get();
         $ldate = date('M j , Y');
 
-        return view('admin.products', compact('products', 'categories','ldate'));
+        return view('admin.products', compact('products', 'categories', 'ldate'));
 
         return abort('403');
     }
@@ -42,15 +42,15 @@ class ProductController extends Controller
 
     public function scan_product($code)
     {
-        $productWCode = Product::where('code',$code)->first();
+        $productWCode = Product::where('code', $code)->first();
         return response()->json(
             [
                 "product" =>  $productWCode,
                 "expiration" => $productWCode->stocksWExpiFirst()->expiration,
                 "category" => $productWCode->category->name,
                 "orders" =>  $productWCode->orders()->latest()->get(),
-                "stocks" =>  $productWCode->stocks()->latest()->get(),
-                "expirations" =>  $productWCode->stocksWExpi()->latest()->get(),
+                "stocks" =>  $productWCode->stocks()->orderBy('id')->get(),
+                "expirations" =>  $productWCode->stocksWExpi()->orderBy('id')->get(),
 
             ],
 
@@ -64,13 +64,13 @@ class ProductController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'description' => ['required'],
-            'code' => ['required','unique:products'],
+            'code' => ['required', 'unique:products'],
             'unit' => ['required'],
             'category' => ['required'],
-            'stock' => ['required','integer','min:1'],
-            'unit_price' => ['required','integer','min:1'],
+            'stock' => ['required', 'integer', 'min:0'],
+            'unit_price' => ['required', 'integer', 'min:1'],
             //'price' => ['required'],
-            'expiration' => ['required','date', 'after:today'],
+            'expiration' => ['nullable', 'date', 'after:today'],
             'image1' =>  ['mimes:png,jpg,jpeg,svg,bmp,ico'],
         ]);
 
@@ -80,7 +80,7 @@ class ProductController extends Controller
         if ($request->file('image1')) {
             $imgs1 = $request->file('image1');
             $extension1 = $imgs1->getClientOriginalExtension();
-            $file_name_to_save1 = time()."_1".".".$extension1;
+            $file_name_to_save1 = time() . "_1" . "." . $extension1;
             $imgs1->move('assets/img/products/', $file_name_to_save1);
         }
 
@@ -103,7 +103,7 @@ class ProductController extends Controller
             'product_code' => $request->input('code'),
             'stock' => $request->input('stock'),
             'stock_expi' => $request->input('stock'),
-            'expiration'=> $request->input('expiration'),
+            'expiration' => $request->input('expiration'),
             'isOrder' => false,
             'remarks' => "Newly created",
         ]);
@@ -127,19 +127,18 @@ class ProductController extends Controller
 
     public function stock($product, Request $request)
     {
-        if($request->get('type')){
-            $products = StockHistory::where('id',$product)->first();
+        if ($request->get('type')) {
+            $products = StockHistory::where('id', $product)->first();
             return response()->json([
                 'stock' =>   $products->stock_expi,
                 'expiration' => $products->expiration,
             ]);
-        }else{
-            $products = Product::where('id',$product)->first();
+        } else {
+            $products = Product::where('id', $product)->first();
             return response()->json([
                 'stock' =>   $products->stock,
             ]);
         }
-
     }
 
     public function updateproduct(Request $request, Product $product)
@@ -162,10 +161,10 @@ class ProductController extends Controller
         }
 
         if ($request->file('image1')) {
-            File::delete(public_path('assets/img/products/'.$product->image1));
+            File::delete(public_path('assets/img/products/' . $product->image1));
             $imgs1 = $request->file('image1');
             $extension1 = $imgs1->getClientOriginalExtension();
-            $file_name_to_save1 = time()."_1".".".$extension1;
+            $file_name_to_save1 = time() . "_1" . "." . $extension1;
             $imgs1->move('assets/img/products/', $file_name_to_save1);
 
             $product->image1 = $file_name_to_save1;
@@ -195,7 +194,7 @@ class ProductController extends Controller
     public function update_stock(Request $request, $product)
     {
         date_default_timezone_set('Asia/Manila');
-        if($request->input('type') == null){
+        if ($request->input('type') == null) {
             $product = Product::where('id', $product)->first();
             $manage_stock = (float)$request->input('manage_stock');
             $receiving = (float)$request->input('phy_add');
@@ -206,21 +205,28 @@ class ProductController extends Controller
             $stock = (float)$product->stock;
 
 
-            if($receiving < 1){
-                $expiration_valid = ['nullable','date'];
+            if ($receiving < 1) {
+                $expiration_valid = ['nullable', 'date'];
                 $isOrder = true;
-            }else{
-                $expiration_valid = ['required','date', 'after:today'];
+            } else {
+                $expiration_valid = ['required', 'date', 'after:today'];
                 $isOrder = false;
+            }
+
+            if ($bad_order > 1) {
+                Activity::create([
+                    'activity' => 'Update B.O Product',
+                    'user_id' => Auth::user()->id
+                ]);
             }
             $final_stock = $stock + $receiving - $transaction - $bad_order - $phy_minus;
 
             $validated =  Validator::make($request->all(), [
-                'manage_stock' => ['required','integer','min:1'],
-                'phy_add' => ['required','integer','min:0'],
-                'phy_minus' => ['required','integer','min:0'],
-                'transaction' => ['required','integer','min:0',"max:$stock"],
-                'bad_order' => ['required','integer','min:0'],
+                'manage_stock' => ['required', 'integer', 'min:1'],
+                'phy_add' => ['required', 'integer', 'min:0'],
+                'phy_minus' => ['required', 'integer', 'min:0'],
+                'transaction' => ['required', 'integer', 'min:0', "max:$stock"],
+                'bad_order' => ['required', 'integer', 'min:0'],
                 'expiration_stock' => $expiration_valid,
             ]);
 
@@ -236,13 +242,13 @@ class ProductController extends Controller
                 'stock_expi' => 0,
                 'phy_add' => $receiving,
                 'phy_minus' => $phy_minus,
-                'expiration'=> $request->expiration_stock,
+                'expiration' => $request->expiration_stock,
                 'isOrder' => $isOrder,
                 'bad_order' => $bad_order,
-                'remarks' => "TRANSACTION: ".$transaction."<br> B.O: ".$bad_order."<br> PHYSICAL COUNT(+): ".$receiving."<br> PHYSICAL COUNT(-): ".$phy_minus ."<br> TOTAL STOCK: ".$final_stock,
+                'remarks' => "TRANSACTION: " . $transaction . "<br> B.O: " . $bad_order . "<br> PHYSICAL COUNT(+): " . $receiving . "<br> PHYSICAL COUNT(-): " . $phy_minus . "<br> TOTAL STOCK: " . $final_stock,
             ]);
 
-            if($transaction > 1){
+            if ($transaction > 0) {
                 $qty = $transaction;
                 $amount = $qty * $product->unit_price;
 
@@ -254,10 +260,9 @@ class ProductController extends Controller
                     'price' => $product->unit_price,
                     'category' => $product->category->name,
                 ]);
-
             }
             //email sending
-            if($final_stock < 11){
+            if ($final_stock < 11) {
                 $emailNotif = [
                     'msg'              => "PRODUCT LOWER STOCK",
                     'code'              =>  $product->code,
@@ -268,7 +273,7 @@ class ProductController extends Controller
                 $critStock = 1;
                 //Mail::to('johnpaultanion001@gmail.com')
                 //->send(new EmailNotification($emailNotif));
-            }else{
+            } else {
                 $critStock = 0;
             }
 
@@ -289,28 +294,26 @@ class ProductController extends Controller
                 "critStock" => $critStock,
                 "expirations" =>  $product->stocksWExpi()->latest()->get(),
             ]);
-        }else{
+        } else {
             $expi_id = $request->input('hidden_id_stock');
 
             $validated =  Validator::make($request->all(), [
-                'expiration_stock' =>  ['required','date', 'after:today']
+                'expiration_stock' =>  ['required', 'date', 'after:today']
             ]);
 
             if ($validated->fails()) {
                 return response()->json(['errors' => $validated->errors()]);
             }
-            StockHistory::where('id',$expi_id)->update([
+            StockHistory::where('id', $expi_id)->update([
                 "expiration" => $request->input('expiration_stock')
             ]);
             $expi_product = StockHistory::where('id', $expi_id)->first();
-            $expi = Product::where('code',$expi_product->product_code)->first();
+            $expi = Product::where('code', $expi_product->product_code)->first();
 
             return response()->json([
                 'success' => 'Expiration Updated Successfully.',
             ]);
-
         }
-
     }
 
     // public function update_stock(Request $request, $product)
@@ -434,7 +437,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        File::delete(public_path('assets/img/products/'.$product->image1));
+        File::delete(public_path('assets/img/products/' . $product->image1));
         $product->delete();
         Activity::create([
             'activity' => 'Delete product',

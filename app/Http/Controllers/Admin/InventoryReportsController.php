@@ -20,9 +20,9 @@ class InventoryReportsController extends Controller
 
         $products    = Product::latest()->get();
 
-        foreach($products as $product){
+        foreach ($products as $product) {
 
-            if($date == 'today'){
+            if ($date == 'today') {
                 $ldate = date('M j , Y');
 
                 //PREVIOS DATE
@@ -44,14 +44,14 @@ class InventoryReportsController extends Controller
 
                 $phy_add = StockHistory::where('product_code', $product->code)->whereDate('created_at', Carbon::today())->sum('phy_add');
                 $phy_minus = StockHistory::where('product_code', $product->code)->whereDate('created_at', Carbon::today())->sum('phy_minus');
-            }else{
+            } else {
                 $ldate = $date;
 
                 //PREVIOS DATE
                 $sales_inventory_prev = OrderProduct::where('product_code', $product->code)
-                ->whereBetween('created_at', ['2001-01-01', $date])->sum('qty');
+                    ->whereBetween('created_at', ['2001-01-01', $date])->sum('qty');
                 $delivery_inventory_prev = StockHistory::where('product_code', $product->code)
-                ->whereBetween('created_at', ['2001-01-01', $date])->sum('stock_expi');
+                    ->whereBetween('created_at', ['2001-01-01', $date])->sum('stock_expi');
                 $prev_bad_order = StockHistory::where('product_code', $product->code)
                     ->whereBetween('created_at', ['2001-01-01', $date])->sum('bad_order');
                 $prev_phy_add = StockHistory::where('product_code', $product->code)
@@ -82,11 +82,14 @@ class InventoryReportsController extends Controller
                 'phy_add'  => $phy_add,
                 'phy_minus'  => $phy_minus,
                 'ending_inventory'     => $ending_inventory,
+                'created_at' => $product->created_at,
+                'isModifyToday' => $beginning_inventory != $ending_inventory ? "isModify" : "notModify",
             );
-
-
-
         }
-        return view('admin.inventory_reports', compact('productss', 'categories','ldate'));
+        //$productss = collect($productss)->where('isModifyToday', true)->toArray();
+        $productss = collect($productss)->toArray();
+
+
+        return view('admin.inventory_reports', compact('productss', 'categories', 'ldate'));
     }
 }

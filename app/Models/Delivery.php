@@ -21,12 +21,13 @@ class Delivery extends Model
         'unit_price',
         'total',
         'isConfirm',
+        'supplier',
         'expiration',
     ];
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_code','code');
+        return $this->belongsTo(Product::class, 'product_code', 'code');
     }
 
 
