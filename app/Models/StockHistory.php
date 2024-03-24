@@ -22,11 +22,13 @@ class StockHistory extends Model
         'bad_order',
         'isOrder',
         'expiration',
+        'sold',
+        'receive',
+        'beg_inv',
         'remarks',
     ];
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_code','code');
+        return $this->belongsTo(Product::class, 'product_code', 'code');
     }
-
 }

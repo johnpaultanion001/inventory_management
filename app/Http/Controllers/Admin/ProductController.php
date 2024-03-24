@@ -43,13 +43,14 @@ class ProductController extends Controller
     public function scan_product($code)
     {
         $productWCode = Product::where('code', $code)->first();
+
         return response()->json(
             [
                 "product" =>  $productWCode,
                 "expiration" => $productWCode->stocksWExpiFirst()->expiration,
                 "category" => $productWCode->category->name,
                 "orders" =>  $productWCode->orders()->latest()->get(),
-                "stocks" =>  $productWCode->stocks()->orderBy('id')->get(),
+                "stocks" =>  $productWCode->stocks()->with('product')->orderBy('id')->get(),
                 "expirations" =>  $productWCode->stocksWExpi()->orderBy('id')->get(),
 
             ],
@@ -213,14 +214,15 @@ class ProductController extends Controller
                 $isOrder = false;
             }
 
-            if ($bad_order > 1) {
+            if ($bad_order > 0) {
                 Activity::create([
                     'activity' => 'Update B.O Product',
                     'user_id' => Auth::user()->id
                 ]);
             }
             $final_stock = $stock + $receiving - $transaction - $bad_order - $phy_minus;
-
+            $begInv1 = $product->stock - $final_stock;
+            $begInv = $final_stock + $begInv1;
             $validated =  Validator::make($request->all(), [
                 'manage_stock' => ['required', 'integer', 'min:1'],
                 'phy_add' => ['required', 'integer', 'min:0'],
@@ -245,6 +247,8 @@ class ProductController extends Controller
                 'expiration' => $request->expiration_stock,
                 'isOrder' => $isOrder,
                 'bad_order' => $bad_order,
+                'sold' => $transaction,
+                'beg_inv' => $begInv,
                 'remarks' => "TRANSACTION: " . $transaction . "<br> B.O: " . $bad_order . "<br> PHYSICAL COUNT(+): " . $receiving . "<br> PHYSICAL COUNT(-): " . $phy_minus . "<br> TOTAL STOCK: " . $final_stock,
             ]);
 

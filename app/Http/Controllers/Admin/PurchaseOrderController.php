@@ -194,13 +194,15 @@ class PurchaseOrderController extends Controller
             $product = Product::where('code', $order->product_code)
                 ->increment('stock', $order->qty);
             $stockProduct = Product::where('code', $order->product_code)->first();
-
+            $begInv =  $stockProduct->stock - $order->qty;
             StockHistory::create([
                 'product_code' => $order->product_code,
                 'stock' => $stockProduct->stock,
                 'stock_expi' => $order->qty,
                 'isOrder' => false,
                 'expiration' => $order->expiration,
+                'receive' => $order->qty,
+                "beg_inv" => $begInv,
                 'remarks' => "RECEIVING: " . $order->qty . "<br> TRANSACTION: 0<br> B.O: 0<br> TOTAL STOCK: " . $stockProduct->stock,
             ]);
         }

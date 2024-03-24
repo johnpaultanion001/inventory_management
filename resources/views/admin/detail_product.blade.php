@@ -122,32 +122,28 @@
                     <table class="table datatable-table display text-center" cellspacing="0" width="100%">
                         <thead class="thead-light">
                             <tr>
-                                <th>ID</th>
-                                <th>PRODUCT</th>
-                                <th>STOCKS</th>
-                                <th>REMARKS</th>
+                                <th>DESCRIPTION</th>
+                                <th>BEGINNING INVENTORY</th>
+                                <th>SOLD PRODUCT</th>
+                                <th>RECEIVE ITEM</th>
+                                <th>BACK ORDER</th>
+                                <th>PHYSICAL COUNT +</th>
+                                <th>PHYSICAL COUNT -</th>
+                                <th>TOTAL STOCK</th>
                                 <th>CREATED AT</th>
                             </tr>
                         </thead>
                         <tbody class="text-uppercase font-weight-bold text-center" id="list_stocks">
                             <tr>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-
-                                <td>
-
-                                </td>
-
-                                <td>
-
-                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -567,16 +563,21 @@
                     $.each(data.stocks, function(key, value) {
                         list_stocks += `
                                     <tr>
-                                        <td>STK1` + value.id + `</td>
-                                        <td>` + product_name + `</td>
+                                        <td>` + value.product.description + `</td>
+                                        <td>` + value.beg_inv + `</td>
+                                        <td>` + value.sold + `</td>
+                                        <td>` + value.receive + `</td>
+                                        <td>` + value.bad_order + `</td>
+                                        <td>` + value.phy_add + `</td>
+                                        <td>` + value.phy_minus + `</td>
                                         <td>` + value.stock + `</td>
-                                        <td>` + value.remarks + `</td>
                                         <td>` + moment(value.created_at).format('MM-DD-YYYY') + `</td>
                                     </tr>
                             `;
                         console.log(value)
                     })
                     $('#list_stocks').empty().append(list_stocks);
+
                     console.log(data.stocks)
                     var list_expi = "";
                     $.each(data.expirations, function(key, value) {

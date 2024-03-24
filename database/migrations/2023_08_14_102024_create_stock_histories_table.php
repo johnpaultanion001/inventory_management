@@ -21,6 +21,9 @@ class CreateStockHistoriesTable extends Migration
             $table->string("phy_add")->default(0);
             $table->string("phy_minus")->default(0);
             $table->string("bad_order")->default(0);
+            $table->string("sold")->default(0);
+            $table->string("receive")->default(0);
+            $table->string("beg_inv")->default(0);
             $table->date('expiration')->nullable();
             $table->boolean('isOrder')->default(false);
             $table->string("remarks")->nullable();
